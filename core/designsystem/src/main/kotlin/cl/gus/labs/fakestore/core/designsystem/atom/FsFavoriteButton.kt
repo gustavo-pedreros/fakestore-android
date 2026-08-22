@@ -34,7 +34,11 @@ fun FsFavoriteButton(
     contentDescription: String,
     modifier: Modifier = Modifier,
     saving: Boolean = false,
+    size: FsSize = FsSize.Default,
 ) {
+    val compact = size == FsSize.Compact
+    val discSize = if (compact) 36.dp else 40.dp
+    val glyphSize = if (compact) 19.dp else 21.dp
     val colors = FakeStoreTheme.colors
     val discColor = when {
         saving -> MaterialTheme.colorScheme.surfaceContainer
@@ -67,7 +71,7 @@ fun FsFavoriteButton(
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
+                .size(discSize)
                 .background(discColor, FakeStoreTheme.favoriteDiscShape)
                 .border(1.dp, discBorder, FakeStoreTheme.favoriteDiscShape),
             contentAlignment = Alignment.Center,
@@ -76,7 +80,7 @@ fun FsFavoriteButton(
                 painter = painterResource(glyph),
                 contentDescription = contentDescription,
                 tint = glyphColor,
-                modifier = Modifier.size(21.dp),
+                modifier = Modifier.size(glyphSize),
             )
         }
     }
@@ -110,6 +114,12 @@ private fun FsFavoriteButtonPreview() {
                     onCheckedChange = {},
                     contentDescription = "Guardando favorito",
                     saving = true,
+                )
+                FsFavoriteButton(
+                    checked = true,
+                    onCheckedChange = {},
+                    contentDescription = "Quitar de favoritos",
+                    size = FsSize.Compact,
                 )
             }
         }

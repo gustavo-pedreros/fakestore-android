@@ -15,25 +15,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 
 @Composable
 fun FsCategoryBadge(
     category: String,
     modifier: Modifier = Modifier,
+    size: FsSize = FsSize.Default,
 ) {
     val color = FakeStoreTheme.colors.categoryBadge
+    val height = if (size == FsSize.Compact) 20.dp else 24.dp
+    val horizontalPadding = if (size == FsSize.Compact) 6.dp else FakeStoreTheme.spacing.sm
+    val style = MaterialTheme.typography.labelSmall.let {
+        if (size == FsSize.Compact) it.copy(fontSize = 9.sp) else it
+    }
     Box(
         modifier = modifier
-            .height(24.dp)
+            .height(height)
             .border(1.dp, color, MaterialTheme.shapes.small)
-            .padding(horizontal = FakeStoreTheme.spacing.sm),
+            .padding(horizontal = horizontalPadding),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = category.uppercase(),
             color = color,
-            style = MaterialTheme.typography.labelSmall,
+            style = style,
             maxLines = 1,
         )
     }
@@ -55,7 +62,7 @@ private fun FsCategoryBadgePreview() {
                 FsCategoryBadge("electronics")
                 FsCategoryBadge("jewelery")
                 FsCategoryBadge("men's clothing")
-                FsCategoryBadge("women's clothing")
+                FsCategoryBadge("women's clothing", size = FsSize.Compact)
             }
         }
     }

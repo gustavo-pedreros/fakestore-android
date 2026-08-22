@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cl.gus.labs.fakestore.core.designsystem.R
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
@@ -29,7 +30,6 @@ import cl.gus.labs.fakestore.core.designsystem.theme.StoneSoft
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 
-private val ImageInset = 14.dp
 private val MissingGlyphSize = 26.dp
 
 @Composable
@@ -38,6 +38,8 @@ fun FsImageTile(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     ratio: Float = 1f,
+    contentPadding: Dp = 14.dp,
+    showBorder: Boolean = true,
 ) {
     val colors = FakeStoreTheme.colors
     val painter = rememberAsyncImagePainter(model = url)
@@ -48,7 +50,9 @@ fun FsImageTile(
         modifier = modifier
             .aspectRatio(ratio)
             .background(if (loading) colors.skeleton else colors.imageTile)
-            .border(1.dp, colors.imageTileBorder),
+            .then(
+                if (showBorder) Modifier.border(1.dp, colors.imageTileBorder) else Modifier,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         when (state) {
@@ -59,7 +63,7 @@ fun FsImageTile(
                 contentDescription = contentDescription,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(ImageInset),
+                    .padding(contentPadding),
                 contentScale = ContentScale.Fit,
             )
 

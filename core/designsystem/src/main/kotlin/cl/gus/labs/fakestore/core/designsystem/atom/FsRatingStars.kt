@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cl.gus.labs.fakestore.core.designsystem.R
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 import java.util.Locale
@@ -34,7 +35,11 @@ fun FsRatingStars(
     rate: Double,
     count: Int,
     modifier: Modifier = Modifier,
+    size: FsSize = FsSize.Default,
 ) {
+    val compact = size == FsSize.Compact
+    val starSize = if (compact) 13.dp else 15.dp
+    val gap = if (compact) 6.dp else FakeStoreTheme.spacing.sm
     val rateText = String.format(Locale.US, "%.1f", rate)
     val description = pluralStringResource(
         R.plurals.fs_rating_content_description,
@@ -48,7 +53,7 @@ fun FsRatingStars(
     Row(
         modifier = modifier.clearAndSetSemantics { contentDescription = description },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.sm),
+        horizontalArrangement = Arrangement.spacedBy(gap),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
             repeat(StarCount) { index ->
@@ -62,19 +67,23 @@ fun FsRatingStars(
                             else -> EmptyAlpha
                         },
                     ),
-                    modifier = Modifier.size(15.dp),
+                    modifier = Modifier.size(starSize),
                 )
             }
         }
         Text(
             text = rateText,
             color = FakeStoreTheme.colors.ratingStar,
-            style = FakeStoreTheme.textStyles.ratingValue,
+            style = FakeStoreTheme.textStyles.ratingValue.let {
+                if (compact) it.copy(fontSize = 11.sp) else it
+            },
         )
         Text(
             text = "($count)",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = FakeStoreTheme.textStyles.ratingCount,
+            style = FakeStoreTheme.textStyles.ratingCount.let {
+                if (compact) it.copy(fontSize = 11.sp) else it
+            },
         )
     }
 }
@@ -95,6 +104,7 @@ private fun FsRatingStarsPreview() {
                 FsRatingStars(rate = 2.1, count = 430)
                 FsRatingStars(rate = 4.8, count = 679)
                 FsRatingStars(rate = 1.9, count = 70)
+                FsRatingStars(rate = 3.9, count = 120, size = FsSize.Compact)
             }
         }
     }
