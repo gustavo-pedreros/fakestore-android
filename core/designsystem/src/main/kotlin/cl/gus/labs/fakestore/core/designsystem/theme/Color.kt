@@ -18,6 +18,7 @@ internal val Charcoal = Color(0xFF202024)
 internal val StoneLight = Color(0xFFC9C9C0)
 internal val Stone = Color(0xFF5C5C56)
 internal val StoneMuted = Color(0xFF9C9C95)
+internal val StoneSoft = Color(0xFF8A8A82)
 internal val StoneDark = Color(0xFF3D3D42)
 
 internal val Mist = Color(0xFFE3E3DB)
