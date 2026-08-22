@@ -84,6 +84,3 @@ val FakeStorePriceStyles = FsTextStyles(
         lineHeight = 20.sp,
     ),
 )
-
-val FakeStoreTheme.priceStyles: FsTextStyles
-    get() = FakeStorePriceStyles

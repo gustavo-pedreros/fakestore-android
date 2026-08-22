@@ -24,6 +24,3 @@ val FakeStoreSpacing = FsSpacing(
     xxl = 32.dp,
     huge = 48.dp,
 )
-
-val FakeStoreTheme.spacing: FsSpacing
-    get() = FakeStoreSpacing

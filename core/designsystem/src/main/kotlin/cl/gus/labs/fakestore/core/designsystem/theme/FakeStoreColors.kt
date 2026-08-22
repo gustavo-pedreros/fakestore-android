@@ -1,6 +1,5 @@
 package cl.gus.labs.fakestore.core.designsystem.theme
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
@@ -52,9 +51,3 @@ internal val FakeStoreColorsDark = FakeStoreColors(
 )
 
 internal val LocalFakeStoreColors = staticCompositionLocalOf { FakeStoreColorsLight }
-
-object FakeStoreTheme {
-    val colors: FakeStoreColors
-        @Composable
-        get() = LocalFakeStoreColors.current
-}

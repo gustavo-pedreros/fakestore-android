@@ -1,9 +1,7 @@
 package cl.gus.labs.fakestore.core.designsystem.theme
 
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 
 val FakeStoreShapes = Shapes(
@@ -13,6 +11,3 @@ val FakeStoreShapes = Shapes(
     large = RoundedCornerShape(4.dp),
     extraLarge = RoundedCornerShape(4.dp),
 )
-
-val FakeStoreTheme.favoriteDiscShape: Shape
-    get() = CircleShape
