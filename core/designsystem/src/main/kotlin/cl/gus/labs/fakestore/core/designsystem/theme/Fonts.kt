@@ -12,5 +12,6 @@ val FsSans = FontFamily(
 )
 
 val FsMono = FontFamily(
+    Font(R.font.jetbrains_mono_variable, FontWeight.Normal),
     Font(R.font.jetbrains_mono_variable, FontWeight.Bold),
 )

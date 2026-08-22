@@ -120,12 +120,12 @@ private fun TypeSection() {
         Text("Electronics".uppercase(), style = MaterialTheme.typography.labelSmall)
         Text(
             "$599.90",
-            style = FakeStoreTheme.priceStyles.priceLarge,
+            style = FakeStoreTheme.textStyles.priceLarge,
             color = FakeStoreTheme.colors.priceText,
         )
         Text(
             "$29.90",
-            style = FakeStoreTheme.priceStyles.priceMedium,
+            style = FakeStoreTheme.textStyles.priceMedium,
             color = FakeStoreTheme.colors.priceText,
         )
     }

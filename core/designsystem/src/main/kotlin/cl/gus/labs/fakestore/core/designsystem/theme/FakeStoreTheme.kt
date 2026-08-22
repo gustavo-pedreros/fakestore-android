@@ -67,7 +67,7 @@ object FakeStoreTheme {
 
     val spacing: FsSpacing get() = FakeStoreSpacing
 
-    val priceStyles: FsTextStyles get() = FakeStorePriceStyles
+    val textStyles: FsTextStyles get() = FakeStoreTextStyles
 
     val favoriteDiscShape: Shape get() = CircleShape
 }

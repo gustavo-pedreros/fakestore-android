@@ -1,0 +1,6 @@
+<resources>
+    <plurals name="fs_rating_content_description">
+        <item quantity="one">%1$s de 5 estrellas, %2$d valoración</item>
+        <item quantity="other">%1$s de 5 estrellas, %2$d valoraciones</item>
+    </plurals>
+</resources>
