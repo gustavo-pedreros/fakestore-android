@@ -23,6 +23,14 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+
+    implementation(platform(libs.retrofit.bom))
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
+
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.bundles.test.unit)
     testRuntimeOnly(libs.junit.platform.launcher)
