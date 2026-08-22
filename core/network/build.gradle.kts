@@ -17,12 +17,21 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 }
 
+kotlin {
+    jvmToolchain(libs.versions.jvmTarget.get().toInt())
+}
+
 dependencies {
+    api(project(":shared:kernel"))
+    api(project(":core:common"))
+
+    implementation(libs.kotlinx.coroutines.core)
+
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
 
@@ -30,6 +39,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.bundles.test.unit)
