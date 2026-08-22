@@ -25,3 +25,5 @@ dependencyResolutionManagement {
 rootProject.name = "Fakestore"
 include(":app")
 include(":core:common")
+include(":core:network")
+include(":shared:kernel")
