@@ -16,6 +16,10 @@ android {
         minSdk = 24
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -34,6 +38,7 @@ dependencies {
 
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
 
     implementation(platform(libs.retrofit.bom))
     implementation(libs.retrofit)
