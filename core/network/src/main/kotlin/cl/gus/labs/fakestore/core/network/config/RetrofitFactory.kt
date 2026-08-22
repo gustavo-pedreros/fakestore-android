@@ -17,6 +17,6 @@ object RetrofitFactory {
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(client)
-        .addConverterFactory(json.asConverterFactory(jsonMediaType))
+        .addConverterFactory(EmptyBodyAwareConverterFactory(json.asConverterFactory(jsonMediaType)))
         .build()
 }
