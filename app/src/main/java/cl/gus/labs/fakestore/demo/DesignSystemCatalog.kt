@@ -22,11 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cl.gus.labs.fakestore.core.designsystem.atom.FsButton
 import cl.gus.labs.fakestore.core.designsystem.atom.FsChip
 import cl.gus.labs.fakestore.core.designsystem.atom.FsDivider
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.model.FsUiState
 import cl.gus.labs.fakestore.core.designsystem.model.ProductCardUiModel
 import cl.gus.labs.fakestore.core.designsystem.model.ProductDetailUiModel
@@ -34,7 +35,7 @@ import cl.gus.labs.fakestore.core.designsystem.molecule.CategoryFilterRow
 import cl.gus.labs.fakestore.core.designsystem.molecule.FsDetailTopBar
 import cl.gus.labs.fakestore.core.designsystem.molecule.FsListTopBar
 import cl.gus.labs.fakestore.core.designsystem.molecule.FsStateBlock
-import cl.gus.labs.fakestore.core.designsystem.molecule.OfflineBanner
+import cl.gus.labs.fakestore.core.designsystem.molecule.FsStatusBanner
 import cl.gus.labs.fakestore.core.designsystem.organism.FsStateHost
 import cl.gus.labs.fakestore.core.designsystem.organism.ProductDetailBody
 import cl.gus.labs.fakestore.core.designsystem.organism.ProductDetailHeader
@@ -42,6 +43,7 @@ import cl.gus.labs.fakestore.core.designsystem.organism.ProductGrid
 import cl.gus.labs.fakestore.core.designsystem.organism.ProductGridSkeleton
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 import cl.gus.labs.fakestore.core.designsystem.R as DesignSystemR
+
 
 private val TitleRevealOffset = 240.dp
 
@@ -107,7 +109,10 @@ private fun ListScreen(
 
     Column(modifier = modifier.fillMaxSize()) {
         FsListTopBar(onFavoritesClick = {})
-        OfflineBanner(visible = state is FsUiState.Content && state.fromCache)
+        FsStatusBanner(
+            visible = state is FsUiState.Content && state.fromCache,
+            message = stringResource(DesignSystemR.string.fs_offline_banner),
+        )
         CategoryFilterRow(
             categories = SampleCategories,
             selected = category,
@@ -119,7 +124,7 @@ private fun ListScreen(
             empty = {
                 CenteredBlock {
                     FsStateBlock(
-                        icon = painterResource(DesignSystemR.drawable.ic_fs_box),
+                        icon = FsIcons.Box,
                         title = "Sin productos en esta categoría",
                         modifier = Modifier.fillMaxWidth(),
                         body = "Prueba con otro filtro.",
@@ -129,7 +134,7 @@ private fun ListScreen(
             failure = { message ->
                 CenteredBlock {
                     FsStateBlock(
-                        icon = painterResource(DesignSystemR.drawable.ic_fs_alert),
+                        icon = FsIcons.Alert,
                         title = "No pudimos cargar el catálogo",
                         modifier = Modifier.fillMaxWidth(),
                         body = message,
@@ -179,7 +184,10 @@ private fun DetailScreen(
             titleVisible = titleVisible,
             onBackClick = onBack,
         )
-        OfflineBanner(visible = showBanner)
+        FsStatusBanner(
+            visible = showBanner,
+            message = stringResource(DesignSystemR.string.fs_offline_banner),
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()

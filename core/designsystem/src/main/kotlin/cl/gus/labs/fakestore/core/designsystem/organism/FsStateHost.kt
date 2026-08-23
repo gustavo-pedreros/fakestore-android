@@ -14,11 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cl.gus.labs.fakestore.core.designsystem.R
 import cl.gus.labs.fakestore.core.designsystem.atom.FsButton
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.model.FsUiState
 import cl.gus.labs.fakestore.core.designsystem.model.ProductCardUiModel
 import cl.gus.labs.fakestore.core.designsystem.molecule.FsStateBlock
@@ -82,7 +81,7 @@ private fun StateSample(
             loading = { ProductGridSkeleton(modifier = Modifier.fillMaxSize()) },
             empty = {
                 FsStateBlock(
-                    icon = painterResource(R.drawable.ic_fs_box),
+                    icon = FsIcons.Box,
                     title = "Sin productos en esta categoría",
                     modifier = Modifier.fillMaxWidth(),
                     body = "Prueba con otro filtro.",
@@ -90,7 +89,7 @@ private fun StateSample(
             },
             failure = { message ->
                 FsStateBlock(
-                    icon = painterResource(R.drawable.ic_fs_alert),
+                    icon = FsIcons.Alert,
                     title = "No pudimos cargar el catálogo",
                     modifier = Modifier.fillMaxWidth(),
                     body = message,

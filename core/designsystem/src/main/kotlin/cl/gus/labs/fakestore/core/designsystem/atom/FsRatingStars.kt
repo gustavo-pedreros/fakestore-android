@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -21,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cl.gus.labs.fakestore.core.designsystem.R
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 import java.util.Locale
 import kotlin.math.floor
@@ -55,10 +55,11 @@ fun FsRatingStars(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(gap),
     ) {
+        val star = FsIcons.Star
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
             repeat(StarCount) { index ->
                 Icon(
-                    painter = painterResource(R.drawable.ic_fs_star),
+                    painter = star,
                     contentDescription = null,
                     tint = FakeStoreTheme.colors.ratingStar.copy(
                         alpha = when {

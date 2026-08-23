@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -36,6 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import cl.gus.labs.fakestore.core.designsystem.R
 import cl.gus.labs.fakestore.core.designsystem.atom.FsDivider
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 
 private val BarHeight = 60.dp
@@ -72,13 +72,13 @@ fun FsListTopBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 TopBarAction(
-                    icon = painterResource(R.drawable.ic_fs_heart_outline),
+                    icon = FsIcons.HeartOutline,
                     contentDescription = stringResource(R.string.fs_action_favorites),
                     onClick = onFavoritesClick,
                 )
                 if (onThemeToggleClick != null) {
                     TopBarAction(
-                        icon = painterResource(R.drawable.ic_fs_moon),
+                        icon = FsIcons.Moon,
                         contentDescription = stringResource(R.string.fs_action_theme),
                         onClick = onThemeToggleClick,
                     )
@@ -108,7 +108,7 @@ fun FsDetailTopBar(
             horizontalArrangement = Arrangement.spacedBy(ActionGap),
         ) {
             TopBarAction(
-                icon = painterResource(R.drawable.ic_fs_arrow_back),
+                icon = FsIcons.ArrowBack,
                 contentDescription = stringResource(R.string.fs_action_back),
                 onClick = onBackClick,
             )
@@ -119,7 +119,7 @@ fun FsDetailTopBar(
             )
             if (onShareClick != null) {
                 TopBarAction(
-                    icon = painterResource(R.drawable.ic_fs_share),
+                    icon = FsIcons.Share,
                     contentDescription = stringResource(R.string.fs_action_share),
                     onClick = onShareClick,
                 )

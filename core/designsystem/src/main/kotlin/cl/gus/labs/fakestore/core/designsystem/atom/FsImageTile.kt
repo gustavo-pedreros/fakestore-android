@@ -20,11 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cl.gus.labs.fakestore.core.designsystem.R
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 import cl.gus.labs.fakestore.core.designsystem.theme.StoneSoft
 import coil3.compose.AsyncImagePainter
@@ -70,7 +69,7 @@ fun FsImageTile(
             is AsyncImagePainter.State.Error,
             is AsyncImagePainter.State.Empty,
             -> Icon(
-                painter = painterResource(R.drawable.ic_fs_image_missing),
+                painter = FsIcons.ImageMissing,
                 contentDescription = contentDescription,
                 tint = StoneSoft,
                 modifier = Modifier.size(MissingGlyphSize),

@@ -20,7 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import cl.gus.labs.fakestore.core.designsystem.R
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 
 private val BannerHeight = 40.dp
@@ -38,9 +39,11 @@ private val IconSize = 17.dp
 private val ContentGap = 10.dp
 
 @Composable
-fun OfflineBanner(
+fun FsStatusBanner(
     visible: Boolean,
+    message: String,
     modifier: Modifier = Modifier,
+    icon: Painter = FsIcons.WifiOff,
 ) {
     AnimatedVisibility(
         visible = visible,
@@ -60,13 +63,13 @@ fun OfflineBanner(
             horizontalArrangement = Arrangement.spacedBy(ContentGap),
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_fs_wifi_off),
+                painter = icon,
                 contentDescription = null,
                 tint = colors.offlineText,
                 modifier = Modifier.size(IconSize),
             )
             Text(
-                text = stringResource(R.string.fs_offline_banner).uppercase(),
+                text = message.uppercase(),
                 color = colors.offlineText,
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontSize = 11.sp,
@@ -82,15 +85,22 @@ fun OfflineBanner(
 
 @PreviewLightDark
 @Composable
-private fun OfflineBannerPreview() {
+private fun FsStatusBannerPreview() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(
                 modifier = Modifier.padding(vertical = FakeStoreTheme.spacing.lg),
                 verticalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.lg),
             ) {
-                OfflineBanner(visible = true)
-                OfflineBanner(visible = false)
+                FsStatusBanner(
+                    visible = true,
+                    message = stringResource(R.string.fs_offline_banner),
+                )
+                FsStatusBanner(
+                    visible = true,
+                    message = "Datos del 22 de agosto, 14:30",
+                )
+                FsStatusBanner(visible = false, message = "")
             }
         }
     }

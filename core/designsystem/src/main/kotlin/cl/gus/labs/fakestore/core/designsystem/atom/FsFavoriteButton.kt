@@ -18,11 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import cl.gus.labs.fakestore.core.designsystem.R
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 
 private const val SavingAlpha = 0.5f
@@ -55,7 +54,7 @@ fun FsFavoriteButton(
         checked -> colors.favoriteOnGlyph
         else -> colors.favoriteOffGlyph
     }
-    val glyph = if (checked && !saving) R.drawable.ic_fs_heart_filled else R.drawable.ic_fs_heart_outline
+    val glyph = if (checked && !saving) FsIcons.HeartFilled else FsIcons.HeartOutline
 
     Box(
         modifier = modifier
@@ -77,7 +76,7 @@ fun FsFavoriteButton(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(glyph),
+                painter = glyph,
                 contentDescription = contentDescription,
                 tint = glyphColor,
                 modifier = Modifier.size(glyphSize),
