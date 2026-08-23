@@ -23,7 +23,7 @@ class ProductDaoTest {
     private val product = ProductEntity(
         id = 1,
         title = "widget",
-        price = "9.99",
+        price = 9.99,
         description = "a widget",
         category = "misc",
         imageUrl = "https://example.com/widget.png",
