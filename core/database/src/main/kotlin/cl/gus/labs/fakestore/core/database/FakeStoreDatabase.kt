@@ -1,0 +1,14 @@
+package cl.gus.labs.fakestore.core.database
+
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import cl.gus.labs.fakestore.core.database.dao.ProductDao
+import cl.gus.labs.fakestore.core.database.entity.ProductEntity
+
+@Database(
+    entities = [ProductEntity::class],
+    version = 1,
+)
+abstract class FakeStoreDatabase : RoomDatabase() {
+    abstract fun productDao(): ProductDao
+}
