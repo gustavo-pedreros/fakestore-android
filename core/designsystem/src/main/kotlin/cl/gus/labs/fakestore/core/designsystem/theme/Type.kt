@@ -66,6 +66,7 @@ val FakeStoreTypography = Typography(
 
 @Immutable
 data class FsTextStyles(
+    val wordmark: TextStyle,
     val priceLarge: TextStyle,
     val priceMedium: TextStyle,
     val ratingValue: TextStyle,
@@ -73,6 +74,13 @@ data class FsTextStyles(
 )
 
 val FakeStoreTextStyles = FsTextStyles(
+    wordmark = TextStyle(
+        fontFamily = FsSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 17.sp,
+        lineHeight = 15.sp,
+        letterSpacing = (-0.03f).em,
+    ),
     priceLarge = TextStyle(
         fontFamily = FsMono,
         fontWeight = FontWeight.Bold,
