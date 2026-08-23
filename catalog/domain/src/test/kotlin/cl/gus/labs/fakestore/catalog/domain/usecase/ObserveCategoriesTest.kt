@@ -7,6 +7,7 @@ import cl.gus.labs.fakestore.catalog.domain.model.Rating
 import cl.gus.labs.fakestore.core.common.result.Either
 import cl.gus.labs.fakestore.shared.kernel.AppError
 import cl.gus.labs.fakestore.shared.kernel.ProductId
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -83,5 +84,6 @@ private fun product(id: Int, category: String) = Product(
 private class FakeCatalogRepository(private val products: List<Product>) : CatalogRepository {
     override fun observeAll(category: Category?): Flow<List<Product>> = flowOf(products)
     override fun observeById(id: ProductId): Flow<Product?> = flowOf(null)
+    override fun observeLastSyncedAt(): Flow<Instant?> = flowOf(null)
     override suspend fun refresh(): Either<AppError, Unit> = Either.Success(Unit)
 }
