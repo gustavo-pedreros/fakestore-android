@@ -25,6 +25,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Fakestore"
 include(":app")
+include(":catalog:data")
 include(":catalog:domain")
 include(":core:common")
 include(":core:database")
