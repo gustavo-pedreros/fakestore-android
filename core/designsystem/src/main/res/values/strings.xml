@@ -1,0 +1,16 @@
+<resources>
+    <string name="fs_favorite_add">Añadir a favoritos</string>
+    <string name="fs_favorite_remove">Quitar de favoritos</string>
+    <string name="fs_offline_banner">Sin conexión · Catálogo guardado</string>
+
+    <string name="fs_action_favorites">Favoritos</string>
+    <string name="fs_action_theme">Cambiar tema</string>
+    <string name="fs_action_back">Volver</string>
+    <string name="fs_action_share">Compartir</string>
+    <string name="fs_category_all">Todos</string>
+
+    <plurals name="fs_rating_content_description">
+        <item quantity="one">%1$s de 5 estrellas, %2$d valoración</item>
+        <item quantity="other">%1$s de 5 estrellas, %2$d valoraciones</item>
+    </plurals>
+</resources>
