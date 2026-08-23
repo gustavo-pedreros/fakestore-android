@@ -31,6 +31,17 @@ class ProductDaoTest {
         ratingCount = 10,
     )
 
+    private val otherProduct = ProductEntity(
+        id = 2,
+        title = "gadget",
+        price = 19.99,
+        description = "a gadget",
+        category = "tools",
+        imageUrl = "https://example.com/gadget.png",
+        ratingRate = 3.5,
+        ratingCount = 5,
+    )
+
     @Before
     fun setUp() {
         val context = RuntimeEnvironment.getApplication()
@@ -48,7 +59,21 @@ class ProductDaoTest {
     fun `upsertAll then observeAll emits what was inserted`() = runTest {
         dao.upsertAll(listOf(product))
 
-        assertEquals(listOf(product), dao.observeAll().first())
+        assertEquals(listOf(product), dao.observeAll(category = null).first())
+    }
+
+    @Test
+    fun `observeAll with a category returns only matching rows`() = runTest {
+        dao.upsertAll(listOf(product, otherProduct))
+
+        assertEquals(listOf(otherProduct), dao.observeAll(category = "tools").first())
+    }
+
+    @Test
+    fun `observeAll orders by id ascending regardless of insert order`() = runTest {
+        dao.upsertAll(listOf(otherProduct, product))
+
+        assertEquals(listOf(product, otherProduct), dao.observeAll(category = null).first())
     }
 
     @Test
@@ -70,6 +95,24 @@ class ProductDaoTest {
 
         dao.upsertAll(listOf(updated))
 
-        assertEquals(listOf(updated), dao.observeAll().first())
+        assertEquals(listOf(updated), dao.observeAll(category = null).first())
+    }
+
+    @Test
+    fun `syncAll prunes rows that were not in the new snapshot`() = runTest {
+        dao.upsertAll(listOf(product, otherProduct))
+
+        dao.syncAll(listOf(otherProduct))
+
+        assertEquals(listOf(otherProduct), dao.observeAll(category = null).first())
+    }
+
+    @Test
+    fun `syncAll with an empty list empties the table`() = runTest {
+        dao.upsertAll(listOf(product, otherProduct))
+
+        dao.syncAll(emptyList())
+
+        assertEquals(emptyList<ProductEntity>(), dao.observeAll(category = null).first())
     }
 }
