@@ -13,6 +13,7 @@ composeBom = "2026.08.00"
 coil = "3.5.0"
 
 junitJupiter = "5.14.4"
+junit4 = "4.13.2"
 androidJunit5 = "2.0.1"
 espressoCore = "3.7.0"
 
@@ -23,6 +24,7 @@ kotlinxCoroutines = "1.10.1"
 hilt = "2.60.1"
 ksp = "2.3.9"
 room = "2.8.4"
+robolectric = "4.16.1"
 
 [libraries]
 # Gradle plugins, for build-logic to compile against
@@ -62,6 +64,9 @@ junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform
 mannodermaus-android-test-core = { group = "de.mannodermaus.junit5", name = "android-test-core", version.ref = "androidJunit5" }
 mannodermaus-android-test-runner = { group = "de.mannodermaus.junit5", name = "android-test-runner", version.ref = "androidJunit5" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
 # Network
 retrofit-bom = { group = "com.squareup.retrofit2", name = "retrofit-bom", version.ref = "retrofitBom" }

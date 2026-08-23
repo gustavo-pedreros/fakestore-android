@@ -10,4 +10,7 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit4)
+    testImplementation(libs.robolectric)
+    testRuntimeOnly(libs.junit.vintage.engine)
 }
