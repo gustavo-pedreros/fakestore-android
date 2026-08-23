@@ -37,7 +37,7 @@ fun FsImageTile(
     url: String?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    ratio: Float = 1f,
+    ratio: Float? = 1f,
     contentPadding: Dp = 14.dp,
     showBorder: Boolean = true,
 ) {
@@ -48,7 +48,7 @@ fun FsImageTile(
 
     Box(
         modifier = modifier
-            .aspectRatio(ratio)
+            .then(if (ratio != null) Modifier.aspectRatio(ratio) else Modifier)
             .background(if (loading) colors.skeleton else colors.imageTile)
             .then(
                 if (showBorder) Modifier.border(1.dp, colors.imageTileBorder) else Modifier,
