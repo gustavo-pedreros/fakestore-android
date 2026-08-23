@@ -18,14 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cl.gus.labs.fakestore.core.designsystem.R
 import cl.gus.labs.fakestore.core.designsystem.atom.FsButton
 import cl.gus.labs.fakestore.core.designsystem.atom.FsButtonVariant
+import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 
 private val IconSize = 34.dp
@@ -95,7 +94,7 @@ private fun FsStateBlockPreview() {
                 verticalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.lg),
             ) {
                 FsStateBlock(
-                    icon = painterResource(R.drawable.ic_fs_alert),
+                    icon = FsIcons.Alert,
                     title = "No pudimos cargar el catálogo",
                     modifier = Modifier.fillMaxWidth(),
                     body = "Revisa tu conexión y vuelve a intentarlo.",
@@ -103,7 +102,7 @@ private fun FsStateBlockPreview() {
                     action = { FsButton("Reintentar", onClick = {}) },
                 )
                 FsStateBlock(
-                    icon = painterResource(R.drawable.ic_fs_box),
+                    icon = FsIcons.Box,
                     title = "Sin productos en esta categoría",
                     modifier = Modifier.fillMaxWidth(),
                     body = "Prueba con otro filtro.",
@@ -112,7 +111,7 @@ private fun FsStateBlockPreview() {
                     },
                 )
                 FsStateBlock(
-                    icon = painterResource(R.drawable.ic_fs_heart_outline),
+                    icon = FsIcons.HeartOutline,
                     title = "Aún no tienes favoritos",
                     modifier = Modifier.fillMaxWidth(),
                     body = "Toca el corazón en cualquier producto para guardarlo aquí.",
