@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import cl.gus.labs.fakestore.core.database.FakeStoreDatabase
 import cl.gus.labs.fakestore.core.database.dao.ProductDao
+import cl.gus.labs.fakestore.core.database.dao.SyncMetadataDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +24,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideProductDao(database: FakeStoreDatabase): ProductDao = database.productDao()
+
+    @Provides
+    @Singleton
+    fun provideSyncMetadataDao(database: FakeStoreDatabase): SyncMetadataDao = database.syncMetadataDao()
 }
