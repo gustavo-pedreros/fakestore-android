@@ -1,9 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-}
-
-kotlin {
-    jvmToolchain(libs.versions.jvmTarget.get().toInt())
+    id("fakestore.jvm.library")
 }
 
 tasks.test {

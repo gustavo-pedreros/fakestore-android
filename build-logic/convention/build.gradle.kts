@@ -17,3 +17,12 @@ dependencies {
     compileOnly(libs.ksp.gradle.plugin)
     compileOnly(libs.hilt.gradle.plugin)
 }
+
+gradlePlugin {
+    plugins {
+        register("jvmLibrary") {
+            id = "fakestore.jvm.library"
+            implementationClass = "cl.gus.labs.fakestore.convention.JvmLibraryConventionPlugin"
+        }
+    }
+}
