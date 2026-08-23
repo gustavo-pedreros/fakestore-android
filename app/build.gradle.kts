@@ -1,9 +1,8 @@
 plugins {
     id("fakestore.android.application")
     id("fakestore.android.compose")
+    id("fakestore.android.hilt")
     alias(libs.plugins.android.junit5)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
 }
 
 android {
@@ -35,8 +34,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.bundles.test.unit)
     testRuntimeOnly(libs.junit.platform.launcher)

@@ -1,8 +1,7 @@
 plugins {
     id("fakestore.android.library")
+    id("fakestore.android.hilt")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.android.junit5)
 }
 
@@ -28,9 +27,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.bundles.test.unit)

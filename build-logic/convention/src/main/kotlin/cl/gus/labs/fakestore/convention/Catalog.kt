@@ -1,8 +1,10 @@
 package cl.gus.labs.fakestore.convention
 
 import org.gradle.api.Project
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.getByType
 
 internal val Project.libs: VersionCatalog
@@ -14,3 +16,7 @@ internal fun VersionCatalog.version(name: String): String =
         .requiredVersion
 
 internal fun VersionCatalog.intVersion(name: String): Int = version(name).toInt()
+
+internal fun VersionCatalog.library(name: String): Provider<MinimalExternalModuleDependency> =
+    findLibrary(name)
+        .orElseThrow { IllegalStateException("No library '$name' in the version catalog") }

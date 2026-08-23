@@ -36,5 +36,9 @@ gradlePlugin {
             id = "fakestore.android.compose"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidComposeConventionPlugin"
         }
+        register("androidHilt") {
+            id = "fakestore.android.hilt"
+            implementationClass = "cl.gus.labs.fakestore.convention.AndroidHiltConventionPlugin"
+        }
     }
 }
