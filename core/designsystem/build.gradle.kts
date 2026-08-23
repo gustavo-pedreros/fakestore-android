@@ -1,15 +1,11 @@
 plugins {
     id("fakestore.android.library")
-    alias(libs.plugins.kotlin.compose)
+    id("fakestore.android.compose")
     alias(libs.plugins.android.junit5)
 }
 
 android {
     namespace = "cl.gus.labs.fakestore.core.designsystem"
-
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {

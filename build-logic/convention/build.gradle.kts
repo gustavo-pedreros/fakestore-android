@@ -32,5 +32,9 @@ gradlePlugin {
             id = "fakestore.android.library"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidLibraryConventionPlugin"
         }
+        register("androidCompose") {
+            id = "fakestore.android.compose"
+            implementationClass = "cl.gus.labs.fakestore.convention.AndroidComposeConventionPlugin"
+        }
     }
 }

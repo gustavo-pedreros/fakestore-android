@@ -1,6 +1,6 @@
 plugins {
     id("fakestore.android.application")
-    alias(libs.plugins.kotlin.compose)
+    id("fakestore.android.compose")
     alias(libs.plugins.android.junit5)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
@@ -21,10 +21,6 @@ android {
                 enable = false
             }
         }
-    }
-
-    buildFeatures {
-        compose = true
     }
 }
 
