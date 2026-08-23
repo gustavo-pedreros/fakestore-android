@@ -1,33 +1,11 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.android.junit5)
+    id("fakestore.android.library")
+    id("fakestore.android.compose")
+    id("fakestore.testing")
 }
 
 android {
     namespace = "cl.gus.labs.fakestore.core.designsystem"
-    compileSdk {
-        version = release(37)
-    }
-
-    defaultConfig {
-        minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-}
-
-kotlin {
-    jvmToolchain(libs.versions.jvmTarget.get().toInt())
 }
 
 dependencies {

@@ -2,6 +2,9 @@
 agp = "9.3.1"
 kotlin = "2.3.0"
 jvmTarget = "21"
+compileSdk = "37"
+minSdk = "26"
+targetSdk = "37"
 
 coreKtx = "1.19.0"
 lifecycleRuntimeKtx = "2.11.0"
@@ -21,6 +24,13 @@ hilt = "2.60.1"
 ksp = "2.3.9"
 
 [libraries]
+# Gradle plugins, for build-logic to compile against
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-gradle-plugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+hilt-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
+
 # AndroidX core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
