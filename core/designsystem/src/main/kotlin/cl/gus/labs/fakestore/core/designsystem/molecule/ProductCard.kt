@@ -172,37 +172,58 @@ private val SampleProduct = ProductCardUiModel(
     imageUrl = null,
 )
 
+private val PreviewCardWidth = 173.dp
+
 @PreviewLightDark
 @Composable
 private fun ProductCardPreview() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            Row(
+            Column(
                 modifier = Modifier.padding(FakeStoreTheme.spacing.lg),
-                horizontalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.md),
+                verticalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.md),
             ) {
-                ProductCard(
-                    product = SampleProduct,
-                    isFavorite = false,
-                    onClick = {},
-                    onFavoriteClick = {},
-                    modifier = Modifier.width(173.dp),
-                )
-                ProductCard(
-                    product = SampleProduct.copy(
-                        id = 2,
-                        title = "John Hardy Naga",
-                        category = "jewelery",
-                        price = 695.0,
-                        rate = 4.6,
-                        ratingCount = 400,
-                    ),
-                    isFavorite = true,
-                    onClick = {},
-                    onFavoriteClick = {},
-                    modifier = Modifier.width(173.dp),
-                )
-                ProductCardSkeleton(modifier = Modifier.width(173.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.md)) {
+                    ProductCard(
+                        product = SampleProduct,
+                        isFavorite = false,
+                        onClick = {},
+                        onFavoriteClick = {},
+                        modifier = Modifier.width(PreviewCardWidth),
+                    )
+                    ProductCard(
+                        product = SampleProduct.copy(
+                            id = 2,
+                            title = "John Hardy Naga",
+                            category = "jewelery",
+                            price = 695.0,
+                            rate = 4.6,
+                            ratingCount = 400,
+                        ),
+                        isFavorite = true,
+                        onClick = {},
+                        onFavoriteClick = {},
+                        modifier = Modifier.width(PreviewCardWidth),
+                    )
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.md)) {
+                    ProductCard(
+                        product = SampleProduct.copy(
+                            id = 3,
+                            title = "Samsung 49-Inch CHG90 144Hz Curved Gaming Monitor",
+                            category = "electronics",
+                            price = 1099.95,
+                            rate = 2.2,
+                            ratingCount = 1000,
+                        ),
+                        isFavorite = true,
+                        onClick = {},
+                        onFavoriteClick = {},
+                        modifier = Modifier.width(PreviewCardWidth),
+                        savingFavorite = true,
+                    )
+                    ProductCardSkeleton(modifier = Modifier.width(PreviewCardWidth))
+                }
             }
         }
     }
