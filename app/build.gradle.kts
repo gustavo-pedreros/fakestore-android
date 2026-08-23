@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("fakestore.android.application")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.android.junit5)
     alias(libs.plugins.hilt)
@@ -8,18 +8,11 @@ plugins {
 
 android {
     namespace = "cl.gus.labs.fakestore"
-    compileSdk {
-        version = release(37)
-    }
 
     defaultConfig {
         applicationId = "cl.gus.labs.fakestore"
-        minSdk = 26
-        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -29,17 +22,10 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
+
     buildFeatures {
         compose = true
     }
-}
-
-kotlin {
-    jvmToolchain(libs.versions.jvmTarget.get().toInt())
 }
 
 dependencies {

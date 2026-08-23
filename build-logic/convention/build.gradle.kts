@@ -24,6 +24,10 @@ gradlePlugin {
             id = "fakestore.jvm.library"
             implementationClass = "cl.gus.labs.fakestore.convention.JvmLibraryConventionPlugin"
         }
+        register("androidApplication") {
+            id = "fakestore.android.application"
+            implementationClass = "cl.gus.labs.fakestore.convention.AndroidApplicationConventionPlugin"
+        }
         register("androidLibrary") {
             id = "fakestore.android.library"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidLibraryConventionPlugin"

@@ -7,10 +7,6 @@ plugins {
 android {
     namespace = "cl.gus.labs.fakestore.core.designsystem"
 
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
     buildFeatures {
         compose = true
     }
