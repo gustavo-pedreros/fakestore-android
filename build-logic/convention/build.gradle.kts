@@ -44,5 +44,9 @@ gradlePlugin {
             id = "fakestore.testing"
             implementationClass = "cl.gus.labs.fakestore.convention.TestingConventionPlugin"
         }
+        register("androidRoom") {
+            id = "fakestore.android.room"
+            implementationClass = "cl.gus.labs.fakestore.convention.AndroidRoomConventionPlugin"
+        }
     }
 }
