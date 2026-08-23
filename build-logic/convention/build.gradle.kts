@@ -40,5 +40,9 @@ gradlePlugin {
             id = "fakestore.android.hilt"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidHiltConventionPlugin"
         }
+        register("testing") {
+            id = "fakestore.testing"
+            implementationClass = "cl.gus.labs.fakestore.convention.TestingConventionPlugin"
+        }
     }
 }

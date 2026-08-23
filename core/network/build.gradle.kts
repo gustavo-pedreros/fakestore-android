@@ -1,8 +1,8 @@
 plugins {
     id("fakestore.android.library")
     id("fakestore.android.hilt")
+    id("fakestore.testing")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.android.junit5)
 }
 
 android {
@@ -28,9 +28,5 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
 
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.bundles.test.unit)
-    testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.okhttp.mockwebserver)
 }

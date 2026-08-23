@@ -1,7 +1,7 @@
 plugins {
     id("fakestore.android.library")
     id("fakestore.android.compose")
-    alias(libs.plugins.android.junit5)
+    id("fakestore.testing")
 }
 
 android {
