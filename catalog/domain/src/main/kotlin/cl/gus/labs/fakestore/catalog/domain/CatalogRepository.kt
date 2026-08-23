@@ -5,6 +5,7 @@ import cl.gus.labs.fakestore.catalog.domain.model.Product
 import cl.gus.labs.fakestore.core.common.result.Either
 import cl.gus.labs.fakestore.shared.kernel.AppError
 import cl.gus.labs.fakestore.shared.kernel.ProductId
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 
 interface CatalogRepository {
@@ -12,6 +13,8 @@ interface CatalogRepository {
     fun observeAll(category: Category?): Flow<List<Product>>
 
     fun observeById(id: ProductId): Flow<Product?>
+
+    fun observeLastSyncedAt(): Flow<Instant?>
 
     suspend fun refresh(): Either<AppError, Unit>
 }
