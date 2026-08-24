@@ -1,0 +1,53 @@
+name: build
+
+on:
+  push:
+    branches: [ main, 'feature/**' ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install the compileSdk platform
+        run: sdkmanager "platforms;android-37" || echo "not available from sdkmanager, relying on AGP"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build, test and lint
+        run: ./gradlew build --stacktrace
+
+      - name: Upload the debug APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fakestore-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Upload reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: '**/build/reports/**'
+          if-no-files-found: ignore
