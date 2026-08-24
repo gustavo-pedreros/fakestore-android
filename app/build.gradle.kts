@@ -26,6 +26,7 @@ android {
 dependencies {
     implementation(project(":catalog:ui"))
     implementation(project(":catalog:data"))
+    implementation(project(":favorites:ui"))
     implementation(project(":favorites:data"))
     implementation(project(":core:designsystem"))
 
