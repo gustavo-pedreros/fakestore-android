@@ -25,7 +25,8 @@ android {
 
 dependencies {
     implementation(project(":catalog:ui"))
-    implementation(project(":catalog:data")) // solo para que Hilt agregue sus @Module
+    implementation(project(":catalog:data"))
+    implementation(project(":favorites:data"))
     implementation(project(":core:designsystem"))
 
     implementation(libs.androidx.navigation3.ui)

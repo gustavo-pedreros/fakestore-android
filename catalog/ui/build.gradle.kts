@@ -12,13 +12,13 @@ android {
 
 dependencies {
     implementation(project(":catalog:domain"))
+    implementation(project(":favorites:domain"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:connectivity"))
 
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
-    // En la API pública de catalogEntries/catalogNavKeys: :app las necesita para componer.
     api(libs.androidx.navigation3.runtime)
     api(libs.kotlinx.serialization.core)
 

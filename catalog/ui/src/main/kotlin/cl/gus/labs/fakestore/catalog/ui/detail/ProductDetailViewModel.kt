@@ -10,6 +10,8 @@ import cl.gus.labs.fakestore.catalog.ui.RefreshState
 import cl.gus.labs.fakestore.catalog.ui.mapper.toDetail
 import cl.gus.labs.fakestore.core.common.result.fold
 import cl.gus.labs.fakestore.core.connectivity.NetworkMonitor
+import cl.gus.labs.fakestore.favorites.domain.usecase.ObserveFavoriteIds
+import cl.gus.labs.fakestore.favorites.domain.usecase.ToggleFavorite
 import cl.gus.labs.fakestore.shared.kernel.ProductId
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -34,7 +36,9 @@ internal class ProductDetailViewModel @AssistedInject constructor(
     @Assisted productId: Int,
     private val observeProductDetail: ObserveProductDetail,
     observeLastSyncedAt: ObserveLastSyncedAt,
+    observeFavoriteIds: ObserveFavoriteIds,
     private val refreshCatalog: RefreshCatalog,
+    private val toggleFavorite: ToggleFavorite,
     private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
@@ -49,11 +53,13 @@ internal class ProductDetailViewModel @AssistedInject constructor(
     val uiState: StateFlow<ProductDetailUiState> = combine(
         observeProductDetail(id),
         observeLastSyncedAt(),
+        observeFavoriteIds(),
         refreshState,
         networkMonitor.isOnline,
-    ) { product, lastSyncedAt, refresh, isOnline ->
+    ) { product, lastSyncedAt, favoriteIds, refresh, isOnline ->
         ProductDetailUiState(
             content = reduce(product, lastSyncedAt, refresh, isOnline),
+            isFavorite = id in favoriteIds,
             lastSyncedAt = lastSyncedAt,
             isStale = refresh is RefreshState.Failed && product != null,
         )
@@ -79,6 +85,10 @@ internal class ProductDetailViewModel @AssistedInject constructor(
     }
 
     fun refresh() = launchRefresh()
+
+    fun onFavoriteToggle() {
+        viewModelScope.launch { toggleFavorite(id) }
+    }
 
     private fun launchRefresh() {
         if (refreshState.value == RefreshState.InFlight) return

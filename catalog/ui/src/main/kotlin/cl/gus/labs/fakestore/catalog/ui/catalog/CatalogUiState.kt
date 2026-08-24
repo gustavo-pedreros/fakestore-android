@@ -10,7 +10,7 @@ internal data class CatalogUiState(
     val content: CatalogContent = CatalogContent.Loading,
     val categories: List<String> = emptyList(),
     val selectedCategory: String? = null,
-    val favoriteIds: Set<Int> = emptySet(), // TODO(:favorites §1.4)
+    val favoriteIds: Set<Int> = emptySet(),
     val lastSyncedAt: Instant? = null,
     val isStale: Boolean = false,
     val isRefreshing: Boolean = false,

@@ -227,6 +227,61 @@ class CatalogViewModelTest {
     }
 
     @Nested
+    @DisplayName("favorites")
+    inner class Favorites {
+
+        @Test
+        @DisplayName("favorite ids reach the state as raw ints")
+        fun favoriteIdsReachState() = runTest {
+            val viewModel = viewModel(
+                products = { listOf(widget, gadget) },
+                lastSyncedAt = syncedAt,
+                favoriteIds = setOf(ProductId(2)),
+            )
+
+            keepUiStateHot(viewModel)
+
+            assertEquals(setOf(2), viewModel.uiState.value.favoriteIds)
+        }
+
+        @Test
+        @DisplayName("onFavoriteToggle calls ToggleFavorite with the product id once")
+        fun onFavoriteToggleDelegates() = runTest {
+            val toggledIds = mutableListOf<ProductId>()
+            val viewModel = viewModel(onToggleFavorite = { id -> toggledIds.add(id) })
+
+            viewModel.onFavoriteToggle(2)
+            advanceUntilIdle()
+
+            assertEquals(listOf(ProductId(2)), toggledIds)
+        }
+
+        @Test
+        @DisplayName("changing favorite ids does not alter the catalog content")
+        fun favoriteChangeDoesNotAlterContent() = runTest {
+            val favoriteIdsFlow = MutableStateFlow(emptySet<ProductId>())
+            val viewModel = CatalogViewModel(
+                observeCatalog = { flowOf(listOf(widget)) },
+                observeCategories = ObserveCategories(repositoryOf(listOf(widget))),
+                observeLastSyncedAt = { flowOf(syncedAt) },
+                observeFavoriteIds = { favoriteIdsFlow },
+                refreshCatalog = { Either.Success(Unit) },
+                toggleFavorite = {},
+                networkMonitor = FakeNetworkMonitor(),
+            )
+
+            keepUiStateHot(viewModel)
+            val contentBefore = viewModel.uiState.value.content
+
+            favoriteIdsFlow.value = setOf(ProductId(1))
+            advanceUntilIdle()
+
+            assertEquals(contentBefore, viewModel.uiState.value.content)
+            assertEquals(setOf(1), viewModel.uiState.value.favoriteIds)
+        }
+    }
+
+    @Nested
     @DisplayName("error events")
     inner class ErrorEvents {
 
@@ -250,13 +305,17 @@ class CatalogViewModelTest {
         products: (Category?) -> List<Product> = { emptyList() },
         categories: List<Product> = products(null),
         lastSyncedAt: Instant? = null,
+        favoriteIds: Set<ProductId> = emptySet(),
         refresh: suspend () -> Either<AppError, Unit> = { Either.Success(Unit) },
+        onToggleFavorite: suspend (ProductId) -> Unit = {},
         monitor: FakeNetworkMonitor = FakeNetworkMonitor(),
     ) = CatalogViewModel(
         observeCatalog = { category -> flowOf(products(category)) },
         observeCategories = ObserveCategories(repositoryOf(categories)),
         observeLastSyncedAt = { flowOf(lastSyncedAt) },
+        observeFavoriteIds = { flowOf(favoriteIds) },
         refreshCatalog = { refresh() },
+        toggleFavorite = { id -> onToggleFavorite(id) },
         networkMonitor = monitor,
     )
 
