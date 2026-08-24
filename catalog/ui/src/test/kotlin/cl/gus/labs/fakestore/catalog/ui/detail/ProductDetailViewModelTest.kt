@@ -4,9 +4,9 @@ import cl.gus.labs.fakestore.catalog.domain.model.Category
 import cl.gus.labs.fakestore.catalog.domain.model.Product
 import cl.gus.labs.fakestore.catalog.domain.model.Rating
 import cl.gus.labs.fakestore.catalog.ui.FakeNetworkMonitor
-import cl.gus.labs.fakestore.catalog.ui.MainDispatcherExtension
 import cl.gus.labs.fakestore.catalog.ui.mapper.toDetail
 import cl.gus.labs.fakestore.core.common.result.Either
+import cl.gus.labs.fakestore.core.testing.MainDispatcherExtension
 import cl.gus.labs.fakestore.shared.kernel.AppError
 import cl.gus.labs.fakestore.shared.kernel.ProductId
 import kotlin.time.Instant

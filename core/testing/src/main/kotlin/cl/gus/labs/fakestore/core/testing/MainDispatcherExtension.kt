@@ -1,4 +1,4 @@
-package cl.gus.labs.fakestore.favorites.ui
+package cl.gus.labs.fakestore.core.testing
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
