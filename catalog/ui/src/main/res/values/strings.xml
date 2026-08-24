@@ -17,6 +17,12 @@
     <string name="catalog_empty_category_title">Sin productos en esta categoría</string>
     <string name="catalog_empty_category_body">Prueba con otro filtro.</string>
 
+    <string name="catalog_detail_error_title">No pudimos cargar el producto</string>
+    <string name="catalog_detail_error_offline_body">Conéctate para ver este producto.</string>
+
+    <string name="catalog_detail_unavailable_title">Este producto ya no está disponible</string>
+    <string name="catalog_detail_unavailable_body">Puede que lo hayan retirado del catálogo.</string>
+
     <string name="catalog_stale_banner">Datos guardados del %1$s</string>
     <string name="catalog_stale_banner_unknown">Mostrando el catálogo guardado</string>
 
