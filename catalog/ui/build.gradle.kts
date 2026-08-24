@@ -18,8 +18,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.kotlinx.serialization.core)
+    // En la API pública de catalogEntries/catalogNavKeys: :app las necesita para componer.
+    api(libs.androidx.navigation3.runtime)
+    api(libs.kotlinx.serialization.core)
 
     debugImplementation(libs.bundles.compose.debug)
 
