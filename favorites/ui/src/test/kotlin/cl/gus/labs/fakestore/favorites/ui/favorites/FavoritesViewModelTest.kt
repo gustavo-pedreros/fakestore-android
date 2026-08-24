@@ -3,7 +3,7 @@ package cl.gus.labs.fakestore.favorites.ui.favorites
 import cl.gus.labs.fakestore.catalog.domain.model.Category
 import cl.gus.labs.fakestore.catalog.domain.model.Product
 import cl.gus.labs.fakestore.catalog.domain.model.Rating
-import cl.gus.labs.fakestore.favorites.ui.MainDispatcherExtension
+import cl.gus.labs.fakestore.core.testing.MainDispatcherExtension
 import cl.gus.labs.fakestore.favorites.ui.mapper.toCard
 import cl.gus.labs.fakestore.shared.kernel.ProductId
 import kotlinx.coroutines.ExperimentalCoroutinesApi

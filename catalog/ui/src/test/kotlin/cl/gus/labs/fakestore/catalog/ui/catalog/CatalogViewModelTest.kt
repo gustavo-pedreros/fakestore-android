@@ -10,9 +10,9 @@ import cl.gus.labs.fakestore.catalog.domain.usecase.ObserveCategories
 import cl.gus.labs.fakestore.catalog.domain.usecase.ObserveLastSyncedAt
 import cl.gus.labs.fakestore.catalog.domain.usecase.RefreshCatalog
 import cl.gus.labs.fakestore.catalog.ui.FakeNetworkMonitor
-import cl.gus.labs.fakestore.catalog.ui.MainDispatcherExtension
 import cl.gus.labs.fakestore.catalog.ui.mapper.toCard
 import cl.gus.labs.fakestore.core.common.result.Either
+import cl.gus.labs.fakestore.core.testing.MainDispatcherExtension
 import cl.gus.labs.fakestore.shared.kernel.AppError
 import cl.gus.labs.fakestore.shared.kernel.ProductId
 import kotlin.time.Instant
