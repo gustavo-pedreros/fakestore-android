@@ -28,6 +28,7 @@ androidxHilt = "1.4.0"
 javaxInject = "1"
 ksp = "2.3.9"
 room = "2.8.4"
+datastore = "1.2.1"
 robolectric = "4.16.1"
 roborazzi = "1.75.0"
 composablePreviewScanner = "0.9.3"
@@ -114,6 +115,7 @@ javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "j
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [bundles]
 compose-library = [
