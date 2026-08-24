@@ -20,6 +20,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -146,6 +147,51 @@ class ProductDetailViewModelTest {
     }
 
     @Nested
+    @DisplayName("favorites")
+    inner class Favorites {
+
+        @Test
+        @DisplayName("isFavorite is true when the product id is in the favorite ids")
+        fun isFavoriteTrueWhenIdIsFavorite() = runTest {
+            val viewModel = viewModel(
+                product = widget,
+                lastSyncedAt = syncedAt,
+                favoriteIds = setOf(widget.id),
+            )
+
+            keepUiStateHot(viewModel)
+
+            assertTrue(viewModel.uiState.value.isFavorite)
+        }
+
+        @Test
+        @DisplayName("isFavorite is false when the product id is not in the favorite ids")
+        fun isFavoriteFalseWhenIdIsNotFavorite() = runTest {
+            val viewModel = viewModel(product = widget, lastSyncedAt = syncedAt)
+
+            keepUiStateHot(viewModel)
+
+            assertFalse(viewModel.uiState.value.isFavorite)
+        }
+
+        @Test
+        @DisplayName("onFavoriteToggle calls ToggleFavorite with the product id once")
+        fun onFavoriteToggleDelegates() = runTest {
+            val toggledIds = mutableListOf<ProductId>()
+            val viewModel = viewModel(
+                product = widget,
+                lastSyncedAt = syncedAt,
+                onToggleFavorite = { id -> toggledIds.add(id) },
+            )
+
+            viewModel.onFavoriteToggle()
+            advanceUntilIdle()
+
+            assertEquals(listOf(widget.id), toggledIds)
+        }
+    }
+
+    @Nested
     @DisplayName("automatic retry")
     inner class AutomaticRetry {
 
@@ -175,13 +221,17 @@ class ProductDetailViewModelTest {
     private fun viewModel(
         product: Product? = null,
         lastSyncedAt: Instant? = null,
+        favoriteIds: Set<ProductId> = emptySet(),
         refresh: suspend () -> Either<AppError, Unit> = { Either.Success(Unit) },
+        onToggleFavorite: suspend (ProductId) -> Unit = {},
         monitor: FakeNetworkMonitor = FakeNetworkMonitor(),
     ) = ProductDetailViewModel(
         productId = widget.id.value,
         observeProductDetail = { flowOf(product) },
         observeLastSyncedAt = { flowOf(lastSyncedAt) },
+        observeFavoriteIds = { flowOf(favoriteIds) },
         refreshCatalog = { refresh() },
+        toggleFavorite = { id -> onToggleFavorite(id) },
         networkMonitor = monitor,
     )
 
