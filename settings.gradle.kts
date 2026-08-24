@@ -27,6 +27,7 @@ rootProject.name = "Fakestore"
 include(":app")
 include(":catalog:data")
 include(":catalog:domain")
+include(":catalog:ui")
 include(":core:common")
 include(":core:connectivity")
 include(":core:database")
