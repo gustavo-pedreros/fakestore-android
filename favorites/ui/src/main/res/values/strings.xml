@@ -1,0 +1,4 @@
+<resources>
+    <string name="fav_empty_title">Aún no tienes favoritos</string>
+    <string name="fav_empty_body">Toca el corazón de un producto para guardarlo aquí.</string>
+</resources>

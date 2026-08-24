@@ -13,12 +13,18 @@ import cl.gus.labs.fakestore.catalog.ui.navigation.CatalogKey
 import cl.gus.labs.fakestore.catalog.ui.navigation.ProductDetailKey
 import cl.gus.labs.fakestore.catalog.ui.navigation.catalogEntries
 import cl.gus.labs.fakestore.catalog.ui.navigation.catalogNavKeys
+import cl.gus.labs.fakestore.favorites.ui.navigation.FavoritesKey
+import cl.gus.labs.fakestore.favorites.ui.navigation.favoritesEntries
+import cl.gus.labs.fakestore.favorites.ui.navigation.favoritesNavKeys
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
 private val NavKeyConfiguration = SavedStateConfiguration {
     serializersModule = SerializersModule {
-        polymorphic(NavKey::class) { catalogNavKeys() }
+        polymorphic(NavKey::class) {
+            catalogNavKeys()
+            favoritesNavKeys()
+        }
     }
 }
 
@@ -38,7 +44,11 @@ fun FakeStoreNavHost(modifier: Modifier = Modifier) {
             catalogEntries(
                 onProductClick = { productId -> backStack.add(ProductDetailKey(productId)) },
                 onBackClick = { backStack.removeLastOrNull() },
-                onFavoritesClick = { },
+                onFavoritesClick = { backStack.add(FavoritesKey) },
+            )
+            favoritesEntries(
+                onProductClick = { productId -> backStack.add(ProductDetailKey(productId)) },
+                onBackClick = { backStack.removeLastOrNull() },
             )
         },
     )
