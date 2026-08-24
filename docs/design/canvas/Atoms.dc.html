@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #0B0B0C; }
+    a:hover { color: #5C5C56; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif; background: {{t.bg}}; color: {{t.ink}}; padding: 48px 44px 64px; display: flex; flex-direction: column; gap: 40px;">
+
+  <!-- ENCABEZADO -->
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 3px solid {{t.ink}}; padding-bottom: 18px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: {{t.dim}};">CAPA 1 — ATOMOS</div>
+      <div style="font-size: 44px; font-weight: 700; letter-spacing: -0.035em; line-height: 1;">Átomos</div>
+    </div>
+    <div style="font-size: 13px; line-height: 1.6; color: {{t.dim}}; max-width: 330px; text-align: right; text-wrap: pretty;">No se pueden partir más sin perder sentido. Ninguno sabe qué es un producto.</div>
+  </div>
+
+  <!-- FILA 1 -->
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+
+    <!-- FsButton -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsButton</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">text · onClick · variant · enabled · loading</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <div style="height: 48px; display: flex; align-items: center; justify-content: center; padding: 0 22px; background: {{t.ink}}; color: {{t.bg}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em;">REINTENTAR</div>
+        <div style="height: 48px; display: flex; align-items: center; justify-content: center; padding: 0 22px; border: 2px solid {{t.ink}}; color: {{t.ink}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em;">VER TODO</div>
+        <div style="height: 48px; display: flex; align-items: center; justify-content: center; padding: 0 12px; color: {{t.ink}}; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-decoration: underline; text-underline-offset: 4px;">DESCARTAR</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <div style="height: 48px; display: flex; align-items: center; justify-content: center; padding: 0 22px; background: {{t.container}}; color: {{t.dim}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em;">DESHABILITADO</div>
+        <div style="height: 48px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0 22px; background: {{t.ink}}; color: {{t.bg}}; border-radius: 4px;">
+          <div style="width: 16px; height: 16px; border: 2px solid {{t.bg}}; border-top-color: transparent; border-radius: 999px;"></div>
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.06em;">CARGANDO</div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">Tres variantes, no cinco. Primaria es bloque de tinta; secundaria es filete de 2dp; terciaria es texto subrayado, porque sin subrayado un texto sin color de acento no se lee como botón.</div>
+    </div>
+
+    <!-- FsFavoriteButton -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsFavoriteButton</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">checked · onCheckedChange · contentDescription</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 40px; height: 40px; border-radius: 999px; background: {{t.tile}}; border: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center;">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#5C5C56" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3 4.2 12.6a4.8 4.8 0 0 1 6.8-6.8l1 1 1-1a4.8 4.8 0 0 1 6.8 6.8Z"/></svg>
+            </div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: {{t.dim}};">off</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 40px; height: 40px; border-radius: 999px; background: #C8F751; border: 1px solid #0B0B0C; display: flex; align-items: center; justify-content: center;">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="#0B0B0C" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+            </div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: {{t.dim}};">on</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 40px; height: 40px; border-radius: 999px; background: {{t.container}}; display: flex; align-items: center; justify-content: center;">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="{{t.dim}}" stroke-width="1.9" stroke-linejoin="round" opacity="0.5" aria-hidden="true"><path d="M12 20.3 4.2 12.6a4.8 4.8 0 0 1 6.8-6.8l1 1 1-1a4.8 4.8 0 0 1 6.8 6.8Z"/></svg>
+            </div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: {{t.dim}};">guardando</div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">El disco y el corazón activo no cambian con el tema: viven sobre el recuadro claro de la imagen. El estado apagado es contorno sin relleno, para que activar se sienta como llenar algo.</div>
+    </div>
+
+  </div>
+
+  <!-- FILA 2 -->
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+
+    <!-- FsChip -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsChip</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">label · selected · onClick</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="height: 44px; display: flex; align-items: center; padding: 0 18px; background: {{t.ink}}; color: {{t.bg}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em;">TODOS</div>
+        <div style="height: 44px; display: flex; align-items: center; padding: 0 18px; border: 1px solid {{t.outline}}; color: {{t.ink}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em;">JEWELERY</div>
+        <div style="height: 44px; display: flex; align-items: center; padding: 0 18px; border: 1px solid {{t.hairline}}; color: {{t.dim}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; opacity: 0.55;">ELECTRONICS</div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">Seleccionado es inversión total, no un tinte. Se distingue en escala de grises y a un metro.</div>
+    </div>
+
+    <!-- FsCategoryBadge -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsCategoryBadge</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">category</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em;">ELECTRONICS</div>
+        <div style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em;">JEWELERY</div>
+        <div style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em;">MENS CLOTHING</div>
+        <div style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em;">WOMENS CLOTHING</div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">No es tocable: 24dp de alto está bien. Un badge que se puede pulsar es un chip, y son componentes distintos.</div>
+    </div>
+
+    <!-- FsPriceText -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsPriceText</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">amount · size</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 26px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; color: {{t.ink}};">$109.95</div>
+        <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; line-height: 1.25; font-variant-numeric: tabular-nums; color: {{t.ink}};">
+          <div>$695.00</div>
+          <div>$ 15.99</div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">Recibe el número, no el texto ya formateado. El formateo vive dentro del átomo para que exista un solo lugar donde cambiarlo a CLP.</div>
+    </div>
+
+  </div>
+
+  <!-- FILA 3 -->
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+
+    <!-- FsImageTile -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsImageTile</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">url · ratio · contentDescription</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+        <div style="display: flex; flex-direction: column; gap: 7px;">
+          <div style="aspect-ratio: 1 / 1; background: {{t.tile}}; border: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 14px;">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 24h28v28a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4Z"/><path d="M25 24v-6a7 7 0 0 1 14 0v6"/><path d="M24 38h16"/></svg>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: {{t.dim}};">cargada</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 7px;">
+          <div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border: 1px solid {{t.tileBorder}};"></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: {{t.dim}};">cargando</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 7px;">
+          <div style="aspect-ratio: 1 / 1; background: {{t.tile}}; border: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8A8A82" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 4h18v16H3z"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="9" cy="9" r="1.6"/></svg>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: {{t.dim}};">sin imagen</div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">El fondo del recuadro es el token <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px;">imageTile</span>, claro en ambos temas. Aquí el producto va dibujado como marcador de posición: la imagen real llega de la API.</div>
+    </div>
+
+    <!-- FsRatingStars -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsRatingStars</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">rate · count</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="display: flex; gap: 2px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" opacity="0.55" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" opacity="0.22" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; color: {{t.ink}};">3.9</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: {{t.dim}};">(120)</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="display: flex; gap: 2px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" opacity="0.22" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" opacity="0.22" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="{{t.ink}}" opacity="0.22" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+          </div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; color: {{t.ink}};">2.1</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: {{t.dim}};">(430)</div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">Sin color de premio: la estrella llena es tinta, la vacía es la misma tinta al 22%. Va con el número, porque cinco siluetas solas no comunican 3.9.</div>
+    </div>
+
+    <!-- FsSkeleton + FsDivider -->
+    <div style="display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid {{t.hairline}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">FsSkeleton · FsDivider</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">width · height · shape  //  weight</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 7px;">
+          <div style="height: 56px; background: {{t.skeleton}}; border-radius: 2px;"></div>
+          <div style="height: 12px; width: 82%; background: {{t.skeleton}}; border-radius: 2px;"></div>
+          <div style="height: 12px; width: 46%; background: {{t.skeleton}}; border-radius: 2px;"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 4px;">
+          <div style="height: 1px; background: {{t.hairline}};"></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: {{t.dim}};">hairline 1dp · outlineVariant</div>
+          <div style="height: 2px; background: {{t.ink}};"></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: {{t.dim}};">strong 2dp · onSurface</div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">El skeleton no brilla ni se anima. Un bloque quieto del color exacto del contenido que viene deja claro que ahí va algo, sin competir con la lectura.</div>
+    </div>
+
+  </div>
+
+  <!-- REGLA -->
+  <div style="display: flex; gap: 14px; padding: 20px 22px; border: 2px solid {{t.ink}}; background: {{t.surface}}; border-radius: 4px;">
+    <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em; color: {{t.dim}}; padding-top: 3px; min-width: 82px;">LA REGLA</div>
+    <div style="font-size: 13px; line-height: 1.6; color: {{t.ink}}; max-width: 880px; text-wrap: pretty;">Un átomo no importa nada de <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">domain</span> ni de <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">feature</span>. <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">FsPriceText</span> recibe un <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">Double</span>, nunca un <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">Product</span>. Esa sola restricción es la que hace que el módulo compile sin conocer la app, y es lo que se puede verificar en CI con una regla de dependencias.</div>
+  </div>
+
+</div>
+
+<script data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","oscuro"],"default":"claro"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const dark = (this.props.tema ?? 'claro') === 'oscuro';
+    const t = dark
+      ? { bg: '#0B0B0C', surface: '#131315', container: '#1B1B1E', containerHigh: '#232327', ink: '#FAFAF7', dim: '#9C9C95', hairline: '#2B2B2F', outline: '#3D3D42', accent: '#C8F751', onAccent: '#0B0B0C', tile: '#F2F2EE', tileBorder: '#2B2B2F', error: '#FF6B5A', invBg: '#FAFAF7', invInk: '#0B0B0C', skeleton: '#202024' }
+      : { bg: '#FAFAF7', surface: '#FFFFFF', container: '#F0F0EA', containerHigh: '#E8E8E0', ink: '#0B0B0C', dim: '#5C5C56', hairline: '#E3E3DB', outline: '#C9C9C0', accent: '#C8F751', onAccent: '#0B0B0C', tile: '#FFFFFF', tileBorder: '#E3E3DB', error: '#C62A1B', invBg: '#0B0B0C', invInk: '#FAFAF7', skeleton: '#EDEDE6' };
+    return { t };
+  }
+}
+</script>
+</body>
+</html>

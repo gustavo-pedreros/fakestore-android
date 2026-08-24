@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #0B0B0C; }
+    a:hover { color: #5C5C56; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif; background: #FAFAF7; color: #0B0B0C; padding: 56px 48px 72px; display: flex; flex-direction: column; gap: 56px;">
+
+  <!-- ENCABEZADO -->
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 3px solid #0B0B0C; padding-bottom: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">FUNDACIONES</div>
+      <div style="font-size: 44px; font-weight: 700; letter-spacing: -0.035em; line-height: 1;">Tipografía y forma</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end; padding-bottom: 4px;">
+      <div style="font-size: 13px; font-weight: 600;">Space Grotesk</div>
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #5C5C56;">JetBrains Mono</div>
+    </div>
+  </div>
+
+  <!-- 01 — ESCALA TIPOGRÁFICA -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">01 — MATERIALTHEME.TYPOGRAPHY</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Escala</h2>
+      <p style="margin: 0; max-width: 780px; font-size: 14px; line-height: 1.6; color: #5C5C56;">Diez estilos, no los quince de M3. Space Grotesk carga la voz; JetBrains Mono aparece solo donde los dígitos deben alinearse en columna: precios, cantidades y etiquetas técnicas.</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; border-top: 2px solid #0B0B0C;">
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">displayLarge</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">700 · 40/40 · -0.03em</div>
+          <div style="font-size: 11px; color: #5C5C56;">Marca en la barra superior</div>
+        </div>
+        <div style="font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1;">FAKE STORE</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">headlineMedium</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">700 · 28/32 · -0.02em</div>
+          <div style="font-size: 11px; color: #5C5C56;">Título de producto en detalle</div>
+        </div>
+        <div style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; text-wrap: pretty;">Fjallraven Foldsack No. 1</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">titleLarge</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">600 · 20/26 · -0.01em</div>
+          <div style="font-size: 11px; color: #5C5C56;">Encabezado de sección, estado vacío</div>
+        </div>
+        <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3;">No pudimos cargar el catálogo</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">titleMedium</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">600 · 15/20 · -0.005em</div>
+          <div style="font-size: 11px; color: #5C5C56;">Título en la tarjeta de la grilla</div>
+        </div>
+        <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">Mens Casual Premium Slim Fit T-Shirt</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">bodyLarge</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">400 · 16/25</div>
+          <div style="font-size: 11px; color: #5C5C56;">Descripción del producto</div>
+        </div>
+        <div style="font-size: 16px; font-weight: 400; line-height: 1.56; color: #0B0B0C; max-width: 620px; text-wrap: pretty;">Your perfect pack for everyday use and walks in the forest. Stash your laptop up to 15 inches in the padded sleeve.</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">bodyMedium</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">400 · 14/21</div>
+          <div style="font-size: 11px; color: #5C5C56;">Texto de apoyo en bloques de estado</div>
+        </div>
+        <div style="font-size: 14px; font-weight: 400; line-height: 1.5; color: #5C5C56; max-width: 620px;">Revisa tu conexión y vuelve a intentarlo.</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">labelLarge</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">600 · 13/16 · +0.06em · MAYÚS</div>
+          <div style="font-size: 11px; color: #5C5C56;">Botones y chips de filtro</div>
+        </div>
+        <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.23;">REINTENTAR</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">labelSmall</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">700 · 10/13 · +0.14em · MAYÚS</div>
+          <div style="font-size: 11px; color: #5C5C56;">Insignia de categoría, banda de caché</div>
+        </div>
+        <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.14em; line-height: 1.3;">ELECTRONICS</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">priceLarge <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 5px; background: #C8F751; color: #0B0B0C;">MONO</span></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">700 · 26/30 · tabular</div>
+          <div style="font-size: 11px; color: #5C5C56;">Precio en la pantalla de detalle</div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 26px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums;">$109.95</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid #E3E3DB;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 13px; font-weight: 600;">priceMedium <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 5px; background: #C8F751; color: #0B0B0C;">MONO</span></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">700 · 16/20 · tabular</div>
+          <div style="font-size: 11px; color: #5C5C56;">Precio en la tarjeta de la grilla</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; line-height: 1.25; font-variant-numeric: tabular-nums;">
+          <div>$109.95</div>
+          <div>$695.00</div>
+          <div>$ 15.99</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display: flex; gap: 12px; padding: 16px 18px; border: 1px solid #E3E3DB; background: #FFFFFF;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; padding-top: 3px; min-width: 78px;">POR QUE MONO</div>
+      <div style="font-size: 12.5px; line-height: 1.6; color: #0B0B0C; max-width: 860px;">Mira la columna de arriba: los tres precios alinean el punto decimal sin trabajo extra. En una grilla de dos columnas eso es la diferencia entre una lista que se recorre y una que hay que leer. Es lo mismo que hicimos con <code style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; background: #F0F0EA; padding: 1px 5px;">NumericTypography</code> en Abaqus, con un solo estilo en vez de tres.</div>
+    </div>
+  </div>
+
+  <!-- 02 — ESPACIADO Y FORMA -->
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px;">
+
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">02 — FAKESTORETHEME.SPACING</div>
+        <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Espaciado</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #5C5C56;">Base 4dp. Siete pasos, todos con un uso declarado.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: grid; grid-template-columns: 52px 92px 1fr; gap: 14px; align-items: center;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">xs</div><div style="height: 14px; width: 4px; background: #0B0B0C;"></div><div style="font-size: 12px; color: #5C5C56;"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #0B0B0C;">4dp</span> · ícono a su etiqueta</div></div>
+        <div style="display: grid; grid-template-columns: 52px 92px 1fr; gap: 14px; align-items: center;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">sm</div><div style="height: 14px; width: 8px; background: #0B0B0C;"></div><div style="font-size: 12px; color: #5C5C56;"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #0B0B0C;">8dp</span> · título a precio</div></div>
+        <div style="display: grid; grid-template-columns: 52px 92px 1fr; gap: 14px; align-items: center;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">md</div><div style="height: 14px; width: 12px; background: #0B0B0C;"></div><div style="font-size: 12px; color: #5C5C56;"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #0B0B0C;">12dp</span> · relleno de tarjeta, gap de grilla</div></div>
+        <div style="display: grid; grid-template-columns: 52px 92px 1fr; gap: 14px; align-items: center;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">lg</div><div style="height: 14px; width: 16px; background: #0B0B0C;"></div><div style="font-size: 12px; color: #5C5C56;"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #0B0B0C;">16dp</span> · margen lateral de pantalla</div></div>
+        <div style="display: grid; grid-template-columns: 52px 92px 1fr; gap: 14px; align-items: center;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">xl</div><div style="height: 14px; width: 24px; background: #0B0B0C;"></div><div style="font-size: 12px; color: #5C5C56;"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #0B0B0C;">24dp</span> · entre bloques del detalle</div></div>
+        <div style="display: grid; grid-template-columns: 52px 92px 1fr; gap: 14px; align-items: center;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">xxl</div><div style="height: 14px; width: 32px; background: #0B0B0C;"></div><div style="font-size: 12px; color: #5C5C56;"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #0B0B0C;">32dp</span> · aire alrededor de estados vacíos</div></div>
+        <div style="display: grid; grid-template-columns: 52px 92px 1fr; gap: 14px; align-items: center;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">huge</div><div style="height: 14px; width: 48px; background: #0B0B0C;"></div><div style="font-size: 12px; color: #5C5C56;"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; color: #0B0B0C;">48dp</span> · separación de secciones mayores</div></div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">03 — MATERIALTHEME.SHAPES</div>
+        <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Radios</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #5C5C56;">Casi cero. La esquina redonda es decoración; acá la jerarquía la hace el borde.</p>
+      </div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 86px; height: 86px; background: #FFFFFF; border: 2px solid #0B0B0C; border-radius: 0;"></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">0dp</div>
+          <div style="font-size: 10.5px; color: #5C5C56; text-align: center; max-width: 90px;">Recuadro de imagen, bandas</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 86px; height: 86px; background: #FFFFFF; border: 2px solid #0B0B0C; border-radius: 2px;"></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">2dp</div>
+          <div style="font-size: 10.5px; color: #5C5C56; text-align: center; max-width: 90px;">Insignia, skeleton</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 86px; height: 86px; background: #FFFFFF; border: 2px solid #0B0B0C; border-radius: 4px;"></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">4dp</div>
+          <div style="font-size: 10.5px; color: #5C5C56; text-align: center; max-width: 90px;">Tarjeta, botón, chip</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 86px; height: 86px; background: #C8F751; border: 2px solid #0B0B0C; border-radius: 999px;"></div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">pill</div>
+          <div style="font-size: 10.5px; color: #5C5C56; text-align: center; max-width: 90px;">Solo el disco del favorito</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 04 — BORDES EN LUGAR DE SOMBRAS -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">04 — ELEVACION</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Bordes en vez de sombras</h2>
+      <p style="margin: 0; max-width: 780px; font-size: 14px; line-height: 1.6; color: #5C5C56;">Toda la app usa <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px;">tonalElevation = 0.dp</span> y <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px;">shadowElevation = 0.dp</span>. La separación entre planos la dan el grosor del filete y el escalón de superficie. En tema oscuro esto además evita el tinte violáceo que M3 aplica al elevar.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="height: 108px; background: #FFFFFF; border: 1px solid #E3E3DB; border-radius: 4px;"></div>
+        <div style="font-size: 12.5px; font-weight: 600;">Nivel 0 — reposo</div>
+        <div style="font-size: 11.5px; line-height: 1.5; color: #5C5C56;">surface + filete 1dp outlineVariant. Tarjeta de producto.</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="height: 108px; background: #F0F0EA; border: 1px solid #E3E3DB; border-radius: 4px;"></div>
+        <div style="font-size: 12.5px; font-weight: 600;">Nivel 1 — contenedor</div>
+        <div style="font-size: 11.5px; line-height: 1.5; color: #5C5C56;">surfaceContainer. Chips y bloques de estado.</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="height: 108px; background: #FFFFFF; border: 2px solid #0B0B0C; border-radius: 4px;"></div>
+        <div style="font-size: 12.5px; font-weight: 600;">Nivel 2 — foco</div>
+        <div style="font-size: 11.5px; line-height: 1.5; color: #5C5C56;">Filete 2dp onSurface. Selección y foco de teclado.</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="height: 108px; background: #E8E8E0; border: 1px solid #C9C9C0; border-radius: 4px;"></div>
+        <div style="font-size: 12.5px; font-weight: 600;">Nivel 3 — presionado</div>
+        <div style="font-size: 11.5px; line-height: 1.5; color: #5C5C56;">surfaceContainerHigh. Reemplaza al ripple tintado.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 — TAMAÑOS TÁCTILES -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">05 — ACCESIBILIDAD</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Áreas táctiles y contraste</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px;">
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-size: 13px; font-weight: 600;">Mínimo 48dp en todo lo tocable</div>
+        <div style="display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap;">
+          <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+            <div style="width: 48px; height: 48px; border: 1px dashed #C9C9C0; display: flex; align-items: center; justify-content: center;">
+              <div style="width: 40px; height: 40px; border-radius: 999px; background: #C8F751; display: flex; align-items: center; justify-content: center;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#0B0B0C" aria-hidden="true"><path d="M12 20.5 3.8 12.6a5 5 0 0 1 7.1-7l1.1 1.1 1.1-1.1a5 5 0 0 1 7.1 7Z"/></svg>
+              </div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">favorito 48</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+            <div style="height: 48px; display: flex; align-items: center; justify-content: center; padding: 0 22px; background: #0B0B0C; color: #FAFAF7; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em;">REINTENTAR</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">botón 48</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+            <div style="height: 44px; display: flex; align-items: center; justify-content: center; padding: 0 18px; border: 1px solid #C9C9C0; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; color: #0B0B0C;">JEWELERY</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: #5C5C56;">chip 44</div>
+          </div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #5C5C56; max-width: 460px;">El chip mide 44dp de alto pero se declara con <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px;">minimumInteractiveComponentSize</span>, así el área tocable llega a 48 sin engordar la fila.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-size: 13px; font-weight: 600;">Contraste medido, no estimado</div>
+        <div style="display: flex; flex-direction: column; border-top: 1px solid #E3E3DB;">
+          <div style="display: grid; grid-template-columns: 1fr 78px 60px; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 12.5px;">onSurface sobre background</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">18.6:1</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #0B0B0C;">AAA</div></div>
+          <div style="display: grid; grid-template-columns: 1fr 78px 60px; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 12.5px;">onSurfaceVariant claro</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">6.5:1</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #0B0B0C;">AA</div></div>
+          <div style="display: grid; grid-template-columns: 1fr 78px 60px; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 12.5px;">onSurfaceVariant oscuro</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">7.0:1</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #0B0B0C;">AAA</div></div>
+          <div style="display: grid; grid-template-columns: 1fr 78px 60px; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 12.5px;">onPrimary sobre primary</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">15.5:1</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #0B0B0C;">AAA</div></div>
+          <div style="display: grid; grid-template-columns: 1fr 78px 60px; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 12.5px;">error claro</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">5.4:1</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #0B0B0C;">AA</div></div>
+          <div style="display: grid; grid-template-columns: 1fr 78px 60px; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 12.5px;">error oscuro</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">6.9:1</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #0B0B0C;">AAA</div></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #5C5C56;">Ninguna combinación queda bajo 4.5:1. El acento nunca aparece como texto, por eso no necesita fila propia.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

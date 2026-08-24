@@ -1,0 +1,45 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Fundaciones · Color", "x": 0, "y": 0, "w": 1200, "h": 2600 },
+    { "file": "TypeScale.dc.html", "title": "Fundaciones · Tipografía y forma", "x": 1300, "y": 0, "w": 1200, "h": 3000 },
+    { "file": "AtomicMap.dc.html", "title": "El mapa · De átomo a pantalla", "x": 2600, "y": 0, "w": 1100, "h": 3050 },
+
+    { "file": "Atoms.dc.html", "title": "Capa 1 · Átomos", "x": 0, "y": 3190, "w": 1120, "h": 1600 },
+    { "file": "Molecules.dc.html", "title": "Capa 2 · Moléculas", "x": 1220, "y": 3190, "w": 1180, "h": 1750 },
+    { "file": "Organisms.dc.html", "title": "Capa 3 · Organismos", "x": 2500, "y": 3190, "w": 1340, "h": 1800 },
+
+    { "file": "ProductList.dc.html", "title": "Pantalla 1 · Lista de productos", "x": 0, "y": 5130, "w": 390, "h": 844 },
+    { "file": "ProductDetail.dc.html", "title": "Pantalla 2 · Detalle de producto", "x": 490, "y": 5130, "w": 390, "h": 844 }
+  ],
+  "annotations": [
+    {
+      "id": "empezar-aqui",
+      "x": 0,
+      "y": -290,
+      "w": 900,
+      "text": "FAKESTORE · DESIGN SYSTEM\n\nSe lee de arriba hacia abajo, en tres filas.\n\n1 · FUNDACIONES — color, tipografía, espaciado, forma. Los valores crudos, en claro y oscuro lado a lado. A la derecha, el mapa que traduce atomic design a módulos y paquetes de Kotlin.\n\n2 · COMPONENTES — átomos, moléculas, organismos. Cada uno de estos tres tableros trae un chip arriba para alternar el tema: la misma lámina en claro y en oscuro.\n\n3 · PANTALLAS — las dos que pide el desafío, a 390×844 (tamaño real de teléfono). Sus chips cambian el tema y el estado: contenido, cargando, error, sin resultados, y la banda de caché. El corazón de favorito responde al click.\n\nEl acento lima aparece exactamente en dos lugares en toda la app: el favorito activo y el chip de categoría seleccionado. Si lo ves en un tercero, es un error."
+    },
+    {
+      "id": "nota-fundaciones",
+      "x": 3800,
+      "y": 0,
+      "w": 380,
+      "text": "Los valores de estas tres láminas son literales, no bindings: puedes hacer click en cualquier muestra y cambiar el hex ahí mismo para probar otra paleta.\n\nOjo: cada tablero es independiente, así que un cambio aquí no se propaga solo a los demás. Dime qué valor quieres cambiar y lo re-genero en todos."
+    },
+    {
+      "id": "nota-componentes",
+      "x": 3920,
+      "y": 3190,
+      "w": 380,
+      "text": "Estos tres tableros son el inventario completo del módulo core:designsystem.\n\nCada tarjeta lleva la firma del composable que le corresponde. Si falta un componente que necesitas, o sobra uno que no vas a usar, este es el momento de decirlo: cada uno es un archivo que después hay que escribir y mantener."
+    },
+    {
+      "id": "nota-pantallas",
+      "x": 980,
+      "y": 5130,
+      "w": 420,
+      "text": "Las dos pantallas del desafío.\n\nCon el chip de estado recorres las cuatro ramas del estado sellado sin tocar código, y con «desdeCache» aparece la banda invertida que pide el requisito de soporte offline.\n\nNo hay barra de estado ni teclado dibujados a propósito: en un teléfono real los pinta el sistema encima, y un facsímil se ve duplicado.\n\nEn el detalle, «tituloEnBarra» muestra cómo aparece el título en la barra superior al hacer scroll."
+    }
+  ],
+  "launch": { "view": "canvas" }
+}

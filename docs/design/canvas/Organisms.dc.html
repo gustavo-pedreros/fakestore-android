@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #0B0B0C; }
+    a:hover { color: #5C5C56; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif; background: {{t.bg}}; color: {{t.ink}}; padding: 48px 44px 64px; display: flex; flex-direction: column; gap: 40px;">
+
+  <!-- ENCABEZADO -->
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 3px solid {{t.ink}}; padding-bottom: 18px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: {{t.dim}};">CAPA 3 — ORGANISMOS</div>
+      <div style="font-size: 44px; font-weight: 700; letter-spacing: -0.035em; line-height: 1;">Organismos</div>
+    </div>
+    <div style="font-size: 13px; line-height: 1.6; color: {{t.dim}}; max-width: 360px; text-align: right; text-wrap: pretty;">Secciones completas de pantalla. Deciden el layout y el desplazamiento, pero siguen sin conocer al ViewModel: reciben lista y lambdas.</div>
+  </div>
+
+  <!-- TRES ORGANISMOS -->
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start;">
+
+    <!-- ProductGrid -->
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.02em;">ProductGrid</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; line-height: 1.5; color: {{t.dim}};">products · favoriteIds · onProductClick · onFavoriteClick</div>
+      </div>
+      <div style="width: 390px; padding: 16px; background: {{t.bg}}; border: 1px dashed {{t.outline}};">
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+            <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+              <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 24h28v28a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4Z"/><path d="M25 24v-6a7 7 0 0 1 14 0v6"/><path d="M24 38h16"/></svg>
+              <div style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: #C8F751; border: 1px solid #0B0B0C; display: flex; align-items: center; justify-content: center;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="#0B0B0C" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+              <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">MENS</div>
+              <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">Fjallraven Foldsack No. 1</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$109.95</div>
+            </div>
+          </div>
+
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+            <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+              <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 20h20l4 10v24a2 2 0 0 1-2 2H20a2 2 0 0 1-2-2V30Z"/><path d="M26 20a6 6 0 0 0 12 0"/></svg>
+              <div style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E3E3DB; display: flex; align-items: center; justify-content: center;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5C5C56" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3 4.2 12.6a4.8 4.8 0 0 1 6.8-6.8l1 1 1-1a4.8 4.8 0 0 1 6.8 6.8Z"/></svg>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+              <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">MENS</div>
+              <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">Mens Casual Premium Slim…</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$ 22.30</div>
+            </div>
+          </div>
+
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+            <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+              <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="34" r="14"/><path d="M32 20v-6"/><path d="M26 14h12"/></svg>
+              <div style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E3E3DB; display: flex; align-items: center; justify-content: center;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5C5C56" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3 4.2 12.6a4.8 4.8 0 0 1 6.8-6.8l1 1 1-1a4.8 4.8 0 0 1 6.8 6.8Z"/></svg>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+              <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">JEWELERY</div>
+              <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">John Hardy Legends Naga…</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$695.00</div>
+            </div>
+          </div>
+
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+            <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+              <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="24" width="36" height="20" rx="3"/><path d="M20 44v6h24v-6"/><circle cx="42" cy="34" r="2"/></svg>
+              <div style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E3E3DB; display: flex; align-items: center; justify-content: center;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5C5C56" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3 4.2 12.6a4.8 4.8 0 0 1 6.8-6.8l1 1 1-1a4.8 4.8 0 0 1 6.8 6.8Z"/></svg>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+              <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">ELECTRONICS</div>
+              <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">WD 2TB Elements Portable…</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$ 64.00</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">Dos columnas fijas, gap 12dp, margen 16dp. Es un <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px;">LazyVerticalGrid</span> con <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px;">key = product.id</span>, para que marcar favorito no recomponga la grilla entera.</div>
+    </div>
+
+    <!-- ProductGridSkeleton -->
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.02em;">ProductGridSkeleton</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; line-height: 1.5; color: {{t.dim}};">itemCount = 6</div>
+      </div>
+      <div style="width: 390px; padding: 16px; background: {{t.bg}}; border: 1px dashed {{t.outline}};">
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 60%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 50%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 72%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 44%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 54%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 58%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+          <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 66%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 48%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">Seis tarjetas, no una rueda centrada. La forma de la espera anticipa la forma del resultado, y el usuario ya sabe que viene una grilla antes de que lleguen los datos.</div>
+    </div>
+
+    <!-- Detalle -->
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.02em;">ProductDetailHeader · Body</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; line-height: 1.5; color: {{t.dim}};">product · isFavorite · onFavoriteClick</div>
+      </div>
+      <div style="width: 390px; background: {{t.bg}}; border: 1px dashed {{t.outline}};">
+        <div style="position: relative; height: 300px; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 44px;">
+          <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 24h28v28a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4Z"/><path d="M25 24v-6a7 7 0 0 1 14 0v6"/><path d="M24 38h16"/></svg>
+          <div style="position: absolute; top: 12px; right: 12px; width: 48px; height: 48px; border-radius: 999px; background: #C8F751; border: 1px solid #0B0B0C; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#0B0B0C" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 24px; background: {{t.bg}};">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 1px solid {{t.ink}}; color: {{t.ink}}; border-radius: 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em;">MENS CLOTHING</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;">3.9</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: {{t.dim}};">(120)</div>
+            </div>
+          </div>
+          <div style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; text-wrap: pretty;">Fjallraven Foldsack No. 1 Backpack</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 26px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums;">$109.95</div>
+          <div style="height: 2px; background: {{t.ink}};"></div>
+          <div style="font-size: 16px; line-height: 1.56; color: {{t.dim}}; text-wrap: pretty;">Your perfect pack for everyday use and walks in the forest. Stash your laptop up to 15 inches in the padded sleeve.</div>
+        </div>
+      </div>
+      <div style="font-size: 11.5px; line-height: 1.55; color: {{t.dim}};">La imagen ocupa 300dp fijos y no se desplaza con parallax: en un catálogo lo que importa es llegar rápido al precio y la descripción.</div>
+    </div>
+
+  </div>
+
+  <!-- STATEHOST -->
+  <div style="display: flex; flex-direction: column; gap: 22px;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="display: flex; align-items: baseline; gap: 12px;">
+        <div style="font-size: 22px; font-weight: 700; letter-spacing: -0.025em;">FsStateHost</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: {{t.dim}};">el organismo que no dibuja nada</div>
+      </div>
+      <div style="font-size: 13px; line-height: 1.6; color: {{t.dim}}; max-width: 900px; text-wrap: pretty;">Un <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">when</span> exhaustivo sobre el estado sellado. Existe para que ninguna pantalla vuelva a escribir <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px;">if (isLoading)</span>: si mañana aparece un quinto estado, el compilador señala cada lugar que hay que actualizar.</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 280px 1fr 1fr; border-top: 2px solid {{t.ink}};">
+
+      <div style="padding: 14px 16px; border-bottom: 1px solid {{t.hairline}}; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: {{t.dim}};">ESTADO</div>
+      <div style="padding: 14px 16px; border-bottom: 1px solid {{t.hairline}}; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: {{t.dim}};">QUE SE DIBUJA</div>
+      <div style="padding: 14px 16px; border-bottom: 1px solid {{t.hairline}}; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: {{t.dim}};">DE DONDE VIENE</div>
+
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; font-weight: 700; color: {{t.ink}};">Loading</div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 13px; color: {{t.ink}};">ProductGridSkeleton</div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 12.5px; color: {{t.dim}};">Valor inicial del <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">StateFlow</span>, antes del primer emit del repositorio.</div>
+
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; font-weight: 700; color: {{t.ink}};">Content</div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 13px; color: {{t.ink}};">ProductGrid <span style="color: {{t.dim}};">+ OfflineBanner si</span> <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">fromCache</span></div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 12.5px; color: {{t.dim}};">Room emite siempre; la red solo actualiza la tabla. <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">fromCache</span> es «hubo lista pero la red falló».</div>
+
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; font-weight: 700; color: {{t.ink}};">Empty</div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 13px; color: {{t.ink}};">FsStateBlock <span style="color: {{t.dim}};">(vacío)</span></div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 12.5px; color: {{t.dim}};">Respuesta correcta con lista vacía, o filtro sin coincidencias. No es un error.</div>
+
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; font-weight: 700; color: {{t.ink}};">Failure</div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 13px; color: {{t.ink}};">FsStateBlock <span style="color: {{t.dim}};">(error + reintentar)</span></div>
+      <div style="padding: 15px 16px; border-bottom: 1px solid {{t.hairline}}; font-size: 12.5px; color: {{t.dim}};"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">AppError</span> del kernel, mapeado a un texto en la capa de UI. Solo cuando la caché también está vacía.</div>
+
+    </div>
+
+    <div style="display: flex; gap: 14px; padding: 18px 20px; border: 2px solid {{t.ink}}; background: {{t.surface}}; border-radius: 4px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em; color: {{t.dim}}; padding-top: 3px; min-width: 108px;">LA COMBINACION</div>
+      <div style="font-size: 12.5px; line-height: 1.6; color: {{t.ink}}; max-width: 900px; text-wrap: pretty;">El caso que el desafío realmente pone a prueba es <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">Content + fromCache</span>: hay datos que mostrar <em>y</em> algo salió mal. Un estado sellado plano no lo puede expresar, por eso <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">fromCache</span> viaja como campo dentro de <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">Content</span> y no como una quinta rama. Error y contenido conviven; error y esqueleto nunca.</div>
+    </div>
+  </div>
+
+</div>
+
+<script data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","oscuro"],"default":"claro"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const dark = (this.props.tema ?? 'claro') === 'oscuro';
+    const t = dark
+      ? { bg: '#0B0B0C', surface: '#131315', container: '#1B1B1E', containerHigh: '#232327', ink: '#FAFAF7', dim: '#9C9C95', hairline: '#2B2B2F', outline: '#3D3D42', accent: '#C8F751', onAccent: '#0B0B0C', tile: '#F2F2EE', tileBorder: '#2B2B2F', error: '#FF6B5A', invBg: '#FAFAF7', invInk: '#0B0B0C', skeleton: '#202024' }
+      : { bg: '#FAFAF7', surface: '#FFFFFF', container: '#F0F0EA', containerHigh: '#E8E8E0', ink: '#0B0B0C', dim: '#5C5C56', hairline: '#E3E3DB', outline: '#C9C9C0', accent: '#C8F751', onAccent: '#0B0B0C', tile: '#FFFFFF', tileBorder: '#E3E3DB', error: '#C62A1B', invBg: '#0B0B0C', invInk: '#FAFAF7', skeleton: '#EDEDE6' };
+    return { t };
+  }
+}
+</script>
+</body>
+</html>
