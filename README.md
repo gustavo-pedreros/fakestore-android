@@ -242,9 +242,6 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 | 7 | **The favorite toggle does not trust the UI's boolean** | The design system hands the ViewModel the `checked` value the user just saw; the use case discards it and lets a `@Transaction` in the DAO read the table and decide. Two fast taps cannot desynchronise anything. | A design-system parameter that is deliberately ignored, which reads like an oversight until you know why. Against a `PUT /favorites/{id} {favorite:true}` backend, an idempotent `setFavorite(id, desired)` fits retries better. |
 | 8 | **Navigation 3, with each feature owning its entries** | The back stack is app-owned state, keys are typed and `@Serializable`, and every feature exposes its own `entryProvider` scope. `:app` never learns which screens exist inside a feature — it only owns the stack. | A young library with a smaller ecosystem than Navigation 2. On a codebase already deep in Nav2 with fragments, the migration would not pay for itself. |
 
-Every one of these has a full decision record with its context and alternatives — see
-[Design records](#design-records).
-
 ---
 
 ## Testing
@@ -366,14 +363,3 @@ Seven **convention plugins** in `build-logic/` carry the shared build configurat
 | Images | Coil 3 with disk cache |
 | Time | `kotlin.time.Instant` / `Clock` from the stdlib |
 | Test | JUnit 5, Turbine, MockWebServer, Robolectric |
-
----
-
-## Design records
-
-The full reasoning behind this project — a staged plan and **seven ADRs**, each written as
-*what I gained / what I paid / when I'd choose otherwise*, including the corrections made after
-implementation proved a decision wrong — lives on the
-**[`docs` branch](https://github.com/gustavo-pedreros/fakestore-android/tree/docs/docs)**.
-
-It is kept off `main` on purpose: pull requests here review code, not plans.
