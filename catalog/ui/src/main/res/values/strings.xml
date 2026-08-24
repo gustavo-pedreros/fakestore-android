@@ -10,4 +10,16 @@
 
     <string name="catalog_error_unknown_title">No pudimos cargar el catálogo</string>
     <string name="catalog_error_unknown_body">Ocurrió un error inesperado. Intenta de nuevo.</string>
+
+    <string name="catalog_empty_title">El catálogo está vacío</string>
+    <string name="catalog_empty_body">Vuelve más tarde.</string>
+
+    <string name="catalog_empty_category_title">Sin productos en esta categoría</string>
+    <string name="catalog_empty_category_body">Prueba con otro filtro.</string>
+
+    <string name="catalog_stale_banner">Datos guardados del %1$s</string>
+    <string name="catalog_stale_banner_unknown">Mostrando el catálogo guardado</string>
+
+    <string name="catalog_action_retry">Reintentar</string>
+    <string name="catalog_action_show_all">Ver todo</string>
 </resources>
