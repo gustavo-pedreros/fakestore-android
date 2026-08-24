@@ -17,9 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -53,11 +53,11 @@ internal fun CatalogScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
+    val currentErrorMessage by rememberUpdatedState(catalogErrorMessage())
 
     LaunchedEffect(viewModel, snackbarHostState) {
         viewModel.errorEvents.collect { error ->
-            snackbarHostState.showSnackbar(context.getString(appErrorStrings(error, offline = false).body))
+            snackbarHostState.showSnackbar(currentErrorMessage(error))
         }
     }
 
@@ -143,6 +143,20 @@ internal fun CatalogScreen(
                     .align(Alignment.BottomCenter)
                     .padding(FakeStoreTheme.spacing.lg),
             )
+        }
+    }
+}
+
+@Composable
+private fun catalogErrorMessage(): (AppError) -> String {
+    val networkBody = stringResource(R.string.catalog_error_network_body)
+    val serverBody = stringResource(R.string.catalog_error_server_body)
+    val unknownBody = stringResource(R.string.catalog_error_unknown_body)
+    return { error ->
+        when (error) {
+            is AppError.Network -> networkBody
+            is AppError.Http, AppError.EmptyBody -> serverBody
+            is AppError.Unknown -> unknownBody
         }
     }
 }
