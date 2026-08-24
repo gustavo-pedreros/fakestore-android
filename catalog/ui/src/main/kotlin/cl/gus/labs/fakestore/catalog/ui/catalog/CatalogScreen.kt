@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cl.gus.labs.fakestore.catalog.ui.R
+import cl.gus.labs.fakestore.catalog.ui.component.CenteredBlock
+import cl.gus.labs.fakestore.catalog.ui.component.staleMessage
 import cl.gus.labs.fakestore.catalog.ui.error.appErrorStrings
 import cl.gus.labs.fakestore.core.designsystem.atom.FsButton
 import cl.gus.labs.fakestore.core.designsystem.atom.FsButtonVariant
@@ -40,11 +42,7 @@ import cl.gus.labs.fakestore.core.designsystem.organism.ProductGrid
 import cl.gus.labs.fakestore.core.designsystem.organism.ProductGridSkeleton
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 import cl.gus.labs.fakestore.shared.kernel.AppError
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import kotlin.time.Instant
-import java.time.Instant as JavaInstant
 
 @Composable
 internal fun CatalogScreen(
@@ -217,32 +215,6 @@ private fun CatalogFailureBlock(
             },
         )
     }
-}
-
-@Composable
-private fun CenteredBlock(content: @Composable () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(FakeStoreTheme.spacing.lg),
-        contentAlignment = Alignment.Center,
-    ) {
-        content()
-    }
-}
-
-private val StaleFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
-
-@Composable
-private fun staleMessage(lastSyncedAt: Instant?): String {
-    if (lastSyncedAt == null) return stringResource(R.string.catalog_stale_banner_unknown)
-    val formatted = remember(lastSyncedAt) {
-        StaleFormatter
-            .withZone(ZoneId.systemDefault())
-            .format(JavaInstant.ofEpochMilli(lastSyncedAt.toEpochMilliseconds()))
-    }
-    return stringResource(R.string.catalog_stale_banner, formatted)
 }
 
 private val PreviewCategories = listOf(
