@@ -1,0 +1,13 @@
+<resources>
+    <string name="catalog_error_offline_title">Sin conexión</string>
+    <string name="catalog_error_offline_body">Conéctate para cargar el catálogo.</string>
+
+    <string name="catalog_error_network_title">No pudimos cargar el catálogo</string>
+    <string name="catalog_error_network_body">Revisa tu conexión y vuelve a intentarlo.</string>
+
+    <string name="catalog_error_server_title">No pudimos cargar el catálogo</string>
+    <string name="catalog_error_server_body">El servidor no respondió como esperábamos. Intenta de nuevo en unos minutos.</string>
+
+    <string name="catalog_error_unknown_title">No pudimos cargar el catálogo</string>
+    <string name="catalog_error_unknown_body">Ocurrió un error inesperado. Intenta de nuevo.</string>
+</resources>
