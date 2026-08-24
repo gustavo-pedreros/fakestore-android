@@ -227,6 +227,65 @@ trigger is pagination, not table size.
 
 ---
 
+## Design system
+
+Atomic design was invented for the web, where a page is a file. Android has Gradle modules, ViewModels
+and navigation, so its five layers had to be **translated**, not copied. That translation was worked out
+on paper before the first composable was written, and it is what decides where every UI file lives:
+
+| Layer | The test it has to pass | Where it lives |
+|---|---|---|
+| **Atom** | Can be drawn without knowing a store exists | `core/designsystem/atom/` |
+| **Molecule** | Several atoms with one purpose. Takes a UI model, never a domain model | `core/designsystem/molecule/` |
+| **Organism** | Owns the layout and scrolling of a whole section. Still receives lists and lambdas | `core/designsystem/organism/` |
+| **Template** | `(state, callbacks) -> Unit`. No ViewModel, no Hilt, no navigation | the feature's stateless `…Screen` |
+| **Page** | The only thing that touches `hiltViewModel()` and navigation. Three lines | the feature's stateful overload |
+
+The cut that matters is between organism and template: **everything above it can be previewed without
+launching the app.** That is not a convention — `:core:designsystem` declares no `domain` module in its
+dependencies, so importing `Product` into an atom does not compile.
+
+It is also what makes the Stage 2 roadmap cheap. A server-driven renderer would target these same atoms,
+which is why the native screens are the bottom of the fallback ladder rather than throwaway work.
+
+### From design to shipped
+
+The list screen as it was specified, in both themes, next to the build that shipped:
+
+<table>
+  <tr>
+    <td align="center"><img src="art/design-system/light/ProductList@2x.png" width="200"><br><sub><b>Spec</b> · light</sub></td>
+    <td align="center"><img src="art/design-system/dark/ProductList@2x.png" width="200"><br><sub><b>Spec</b> · dark</sub></td>
+    <td align="center"><img src="art/catalog.png" width="200"><br><sub><b>Shipped</b></sub></td>
+  </tr>
+</table>
+
+One difference is visible and deliberate: the spec has a moon icon in the top bar for a runtime theme
+toggle. It was cut from Stage 1 — the app follows the system theme — and the sheets were left as drawn
+rather than retouched to match.
+
+### The sheets
+
+Thirteen boards, exported from the design canvas. Every component decision on them carries the same
+*what I gained / what I paid / when I'd choose otherwise* framing used in [Key decisions](#key-decisions).
+
+| Board | What it settles |
+|---|---|
+| [From atom to screen](art/design-system/AtomicMap@2x.png) | The five layers translated to Kotlin, the file tree, and the one-way dependency rule |
+| [Color](art/design-system/Main@2x.png) | The fourteen Material 3 roles the app actually uses, plus a semantic layer on top |
+| [Type scale](art/design-system/TypeScale@2x.png) | Space Grotesk and JetBrains Mono, and which text goes to which |
+| Atoms · [light](art/design-system/light/Atoms@2x.png) · [dark](art/design-system/dark/Atoms@2x.png) | The nine primitives, with their states |
+| Molecules · [light](art/design-system/light/Molecules@2x.png) · [dark](art/design-system/dark/Molecules@2x.png) | Cards, banners, top bars, the category row |
+| Organisms · [light](art/design-system/light/Organisms@2x.png) · [dark](art/design-system/dark/Organisms@2x.png) | The grid, the skeleton, the detail header, and `FsStateHost` |
+| Detail screen · [light](art/design-system/light/ProductDetail@2x.png) · [dark](art/design-system/dark/ProductDetail@2x.png) | The full detail composition |
+
+> The boards are in Spanish and predate the implementation, so a few names drifted on the way to the
+> code — `OfflineBanner` shipped as `FsStatusBanner`, and the page/template pair shipped as two overloads
+> of one function instead of two files. They are kept as the record of what was decided and when, not as
+> documentation of the current API.
+
+---
+
 ## Key decisions
 
 The honest way to present a decision is: **what I gained, what I paid, and when I'd choose otherwise.**
