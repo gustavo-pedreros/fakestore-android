@@ -3,6 +3,7 @@ package cl.gus.labs.fakestore.core.database.di
 import android.content.Context
 import androidx.room.Room
 import cl.gus.labs.fakestore.core.database.FakeStoreDatabase
+import cl.gus.labs.fakestore.core.database.dao.FavoriteDao
 import cl.gus.labs.fakestore.core.database.dao.ProductDao
 import cl.gus.labs.fakestore.core.database.dao.SyncMetadataDao
 import dagger.Module
@@ -28,4 +29,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideSyncMetadataDao(database: FakeStoreDatabase): SyncMetadataDao = database.syncMetadataDao()
+
+    @Provides
+    @Singleton
+    fun provideFavoriteDao(database: FakeStoreDatabase): FavoriteDao = database.favoriteDao()
 }
