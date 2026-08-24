@@ -67,6 +67,7 @@ internal fun CatalogScreen(
         onProductClick = onProductClick,
         onFavoritesClick = onFavoritesClick,
         onCategorySelect = viewModel::onCategorySelect,
+        onFavoriteToggle = viewModel::onFavoriteToggle,
         onRefresh = viewModel::refresh,
         modifier = modifier,
     )
@@ -80,6 +81,7 @@ internal fun CatalogScreen(
     onProductClick: (Int) -> Unit,
     onFavoritesClick: () -> Unit,
     onCategorySelect: (String?) -> Unit,
+    onFavoriteToggle: (Int) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -128,7 +130,7 @@ internal fun CatalogScreen(
                             products = products,
                             favoriteIds = state.favoriteIds,
                             onProductClick = onProductClick,
-                            onFavoriteClick = { _, _ -> }, // TODO(:favorites §1.4)
+                            onFavoriteClick = { id, _ -> onFavoriteToggle(id) },
                             modifier = Modifier.fillMaxSize(),
                             state = gridState,
                         )
@@ -275,6 +277,7 @@ private fun CatalogScreenPreview(state: CatalogUiState) {
                 onProductClick = {},
                 onFavoritesClick = {},
                 onCategorySelect = {},
+                onFavoriteToggle = {},
                 onRefresh = {},
             )
         }

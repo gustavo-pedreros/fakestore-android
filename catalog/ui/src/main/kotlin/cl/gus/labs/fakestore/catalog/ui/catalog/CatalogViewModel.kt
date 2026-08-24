@@ -12,7 +12,10 @@ import cl.gus.labs.fakestore.catalog.ui.RefreshState
 import cl.gus.labs.fakestore.catalog.ui.mapper.toCard
 import cl.gus.labs.fakestore.core.common.result.fold
 import cl.gus.labs.fakestore.core.connectivity.NetworkMonitor
+import cl.gus.labs.fakestore.favorites.domain.usecase.ObserveFavoriteIds
+import cl.gus.labs.fakestore.favorites.domain.usecase.ToggleFavorite
 import cl.gus.labs.fakestore.shared.kernel.AppError
+import cl.gus.labs.fakestore.shared.kernel.ProductId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.time.Instant
@@ -39,7 +42,9 @@ internal class CatalogViewModel @Inject constructor(
     observeCatalog: ObserveCatalog,
     observeCategories: ObserveCategories,
     observeLastSyncedAt: ObserveLastSyncedAt,
+    observeFavoriteIds: ObserveFavoriteIds,
     private val refreshCatalog: RefreshCatalog,
+    private val toggleFavorite: ToggleFavorite,
     private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
@@ -50,26 +55,28 @@ internal class CatalogViewModel @Inject constructor(
     val errorEvents: Flow<AppError> = errors.receiveAsFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val filteredCatalog: Flow<Pair<Category?, List<Product>>> =
+    private val slice: Flow<CatalogSlice> = combine(
         selectedCategory.flatMapLatest { category ->
             observeCatalog(category).map { products -> category to products }
-        }
+        },
+        observeFavoriteIds(),
+    ) { (category, products), favoriteIds -> CatalogSlice(category, products, favoriteIds) }
 
     val uiState: StateFlow<CatalogUiState> = combine(
-        filteredCatalog,
+        slice,
         observeCategories(),
         observeLastSyncedAt(),
         refreshState,
         networkMonitor.isOnline,
-    ) { filtered, categories, lastSyncedAt, refresh, isOnline ->
-        val (category, products) = filtered
+    ) { slice, categories, lastSyncedAt, refresh, isOnline ->
         CatalogUiState(
-            content = reduce(products, lastSyncedAt, refresh, isOnline),
+            content = reduce(slice.products, lastSyncedAt, refresh, isOnline),
             categories = categories.map(Category::value),
-            selectedCategory = category?.value,
+            selectedCategory = slice.category?.value,
+            favoriteIds = slice.favoriteIds.mapTo(mutableSetOf(), ProductId::value),
             lastSyncedAt = lastSyncedAt,
-            isStale = refresh is RefreshState.Failed && products.isNotEmpty(),
-            isRefreshing = refresh is RefreshState.InFlight && products.isNotEmpty(),
+            isStale = refresh is RefreshState.Failed && slice.products.isNotEmpty(),
+            isRefreshing = refresh is RefreshState.InFlight && slice.products.isNotEmpty(),
         )
     }.stateIn(
         scope = viewModelScope,
@@ -96,6 +103,10 @@ internal class CatalogViewModel @Inject constructor(
         selectedCategory.value = category?.let(::Category)
     }
 
+    fun onFavoriteToggle(productId: Int) {
+        viewModelScope.launch { toggleFavorite(ProductId(productId)) }
+    }
+
     private fun launchRefresh(userInitiated: Boolean) {
         if (refreshState.value == RefreshState.InFlight) return
         refreshState.value = RefreshState.InFlight
@@ -110,6 +121,12 @@ internal class CatalogViewModel @Inject constructor(
         }
     }
 }
+
+private data class CatalogSlice(
+    val category: Category?,
+    val products: List<Product>,
+    val favoriteIds: Set<ProductId>,
+)
 
 private fun reduce(
     products: List<Product>,

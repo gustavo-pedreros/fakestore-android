@@ -8,7 +8,7 @@ import kotlin.time.Instant
 @Immutable
 internal data class ProductDetailUiState(
     val content: ProductDetailContent = ProductDetailContent.Loading,
-    val isFavorite: Boolean = false, // TODO(:favorites §1.4)
+    val isFavorite: Boolean = false,
     val lastSyncedAt: Instant? = null,
     val isStale: Boolean = false,
 )

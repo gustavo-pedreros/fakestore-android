@@ -56,6 +56,7 @@ internal fun ProductDetailScreen(
         state = state,
         onBackClick = onBackClick,
         onRetryClick = viewModel::refresh,
+        onFavoriteToggle = viewModel::onFavoriteToggle,
         modifier = modifier,
     )
 }
@@ -65,6 +66,7 @@ internal fun ProductDetailScreen(
     state: ProductDetailUiState,
     onBackClick: () -> Unit,
     onRetryClick: () -> Unit,
+    onFavoriteToggle: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -123,7 +125,7 @@ internal fun ProductDetailScreen(
                     ProductDetailHeader(
                         imageUrl = content.product.imageUrl,
                         isFavorite = state.isFavorite,
-                        onFavoriteClick = { }, // TODO(:favorites §1.4)
+                        onFavoriteClick = { onFavoriteToggle() },
                     )
                     ProductDetailBody(product = content.product)
                 }
@@ -213,6 +215,7 @@ private fun ProductDetailScreenPreview(state: ProductDetailUiState) {
                 state = state,
                 onBackClick = {},
                 onRetryClick = {},
+                onFavoriteToggle = {},
             )
         }
     }
