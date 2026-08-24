@@ -16,8 +16,6 @@ import cl.gus.labs.fakestore.catalog.ui.navigation.catalogNavKeys
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
-// rememberNavBackStack exige un SerializersModule con polimorfismo abierto de NavKey: cada
-// feature registra sus claves con su propia extensión, así :app no las enumera.
 private val NavKeyConfiguration = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(NavKey::class) { catalogNavKeys() }
@@ -40,7 +38,7 @@ fun FakeStoreNavHost(modifier: Modifier = Modifier) {
             catalogEntries(
                 onProductClick = { productId -> backStack.add(ProductDetailKey(productId)) },
                 onBackClick = { backStack.removeLastOrNull() },
-                onFavoritesClick = { }, // TODO(:favorites §1.4)
+                onFavoritesClick = { },
             )
         },
     )
