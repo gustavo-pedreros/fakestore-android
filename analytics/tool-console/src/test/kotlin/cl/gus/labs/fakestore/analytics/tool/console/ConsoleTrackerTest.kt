@@ -13,14 +13,16 @@ class ConsoleTrackerTest {
 
     private class FakeConsoleClient : ConsoleClient {
         val events = mutableListOf<Recorded>()
-        var userId: String? = null
+        // Named so it does not generate a `setUserId(String)` accessor, which would clash
+        // with the interface method of the same JVM signature.
+        var identifiedUser: String? = null
         val userProperties = mutableMapOf<String, String>()
         var resetCount = 0
 
         override fun logEvent(name: String, properties: Map<String, String>) {
             events += Recorded(name, properties)
         }
-        override fun setUserId(userId: String) { this.userId = userId }
+        override fun setUserId(userId: String) { identifiedUser = userId }
         override fun setUserProperty(key: String, value: String) { userProperties[key] = value }
         override fun reset() { resetCount++ }
     }

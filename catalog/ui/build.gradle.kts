@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":analytics:api"))
     implementation(project(":catalog:domain"))
     implementation(project(":favorites:domain"))
     implementation(project(":core:designsystem"))
