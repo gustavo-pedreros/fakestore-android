@@ -82,52 +82,7 @@ not on its classpath. The tool enforces the rule; nobody has to remember it.
 
 ### Module graph
 
-```mermaid
-graph TD
-    app[":app"]
-
-    subgraph ctx [" bounded contexts "]
-        direction TB
-        cui[":catalog:ui"]
-        cdom[":catalog:domain"]
-        cdat[":catalog:data"]
-        fui[":favorites:ui"]
-        fdom[":favorites:domain"]
-        fdat[":favorites:data"]
-    end
-
-    subgraph core [" technical core "]
-        direction TB
-        ds[":core:designsystem"]
-        net[":core:network"]
-        db[":core:database"]
-        conn[":core:connectivity"]
-        com[":core:common"]
-        tst[":core:testing"]
-    end
-
-    ker[":shared:kernel"]
-
-    app --> cui & cdat & fui & fdat & ds
-
-    cui --> cdom & ds & conn
-    cdat --> cdom & db & net
-    cdom --> ker & com
-
-    fui --> fdom & ds
-    fdat --> fdom & db
-    fdom --> ker
-
-    net --> ker & com
-
-    cui -. "Customer/Supplier" .-> fdom
-    fui -. "Customer/Supplier" .-> cdom
-
-    classDef domain fill:#1f6f4a,stroke:#0d3f29,color:#fff
-    classDef kernel fill:#6b3fa0,stroke:#3d2260,color:#fff
-    class cdom,fdom domain
-    class ker kernel
-```
+![Module graph — `:app` wires two bounded contexts, catalog and favorites, each with its ui, domain and data modules; ui and data depend on domain, the two contexts cross only at domain level, and both consume a shared technical core.](docs/diagrams/01-module-graph.png)
 
 The two dashed edges are the interesting ones. They are the same rule fired in both directions: the catalog
 needs to know *which products are favorites* to draw its hearts, and the favorites screen needs to know
@@ -161,16 +116,7 @@ verification is Stage 4 of the roadmap.
 The UI **only ever reads from Room**, through a `Flow`. The network **only ever writes to Room**, and never
 feeds the UI directly. There is exactly one arrow into the database and exactly one arrow out of it.
 
-```mermaid
-flowchart LR
-    api["fakestoreapi.com"] -->|"writes only"| data[":catalog:data"]
-    data -->|"DTO to domain, ACL"| room[("Room")]
-    room -->|"Flow of Product"| vm["ViewModel"]
-    vm -->|"StateFlow of UiState"| ui["Compose"]
-    ui -.->|"pull to refresh"| data
-
-    style room fill:#1f6f4a,stroke:#0d3f29,color:#fff
-```
+![Catalog data flow — the network only ever writes to Room through the data layer, and the UI only ever reads from Room through a Flow; the refresh the screen triggers goes back to the data layer, never straight to the screen.](docs/diagrams/02-single-source-of-truth.png)
 
 This is why requirement 4 is a *property of the architecture* rather than a feature bolted on top. There is no
 "offline mode" branch anywhere in the codebase. Offline is simply what the app does when the write arrow
@@ -181,29 +127,7 @@ stops firing and the read arrow keeps working.
 The axis that governs the whole catalog presentation is not *"did the network fail?"* — it is
 **"is there usable data in Room?"**. A failed refresh must never hide data the user already had.
 
-```mermaid
-flowchart TD
-    start(["App opens"]) --> cache{"Usable data<br/>in Room?"}
-
-    cache -->|"no"| r1{"Refresh"}
-    r1 -->|"in flight"| loading["Loading<br/>skeletons"]
-    r1 -->|"failed, offline"| errNet["Blocking error<br/>no connection + retry"]
-    r1 -->|"failed, online"| errSrv["Blocking error<br/>ACL message + retry"]
-    r1 -->|"ok, zero items"| empty["Empty state"]
-
-    cache -->|"yes"| r2{"Refresh"}
-    r2 -->|"in flight"| content1["Content<br/>+ refresh indicator"]
-    r2 -->|"failed"| stale["Content<br/>+ staleness banner + snackbar"]
-    r2 -->|"ok"| content2["Content<br/>fresh"]
-
-    errNet -.->|"connectivity returns"| auto["Automatic retry"]
-    stale -.->|"connectivity returns"| auto
-    auto --> content2
-
-    style stale fill:#8a6d1f,stroke:#5a4712,color:#fff
-    style errNet fill:#8a2f2f,stroke:#5a1e1e,color:#fff
-    style errSrv fill:#8a2f2f,stroke:#5a1e1e,color:#fff
-```
+![Decision tree for the catalog screen — with no cache a failed refresh blocks the screen; with cache the content stays and only a staleness banner appears, and the retry fires by itself when connectivity returns.](docs/diagrams/03-cache-decides-the-error.png)
 
 Two details close the case:
 
@@ -244,6 +168,8 @@ on paper before the first composable was written, and it is what decides where e
 The cut that matters is between organism and template: **everything above it can be previewed without
 launching the app.** That is not a convention — `:core:designsystem` declares no `domain` module in its
 dependencies, so importing `Product` into an atom does not compile.
+
+![Composition pyramid of the design system — atoms, molecules and organisms live in `:core:designsystem` and can be previewed without launching the app; template and page live in each feature and need state, a ViewModel and navigation.](docs/diagrams/05-atom-to-screen.png)
 
 It is also what makes the Stage 2 roadmap cheap. A server-driven renderer would target these same atoms,
 which is why the native screens are the bottom of the fallback ladder rather than throwaway work.
@@ -355,21 +281,18 @@ forces you to cache rendered screens and breaks the single source of truth.
 
 The other half is refusing to let the server leave you with no UI at all:
 
-```mermaid
-flowchart LR
-    l1["1 · Server<br/>fresh contract"] -->|"unreachable"| l2["2 · Room<br/>cached contract"]
-    l2 -->|"empty"| l3["3 · Bundled assets<br/>shipped contract"]
-    l3 -->|"unparseable"| l4["4 · Native screen<br/>Stage 1, already built"]
-
-    style l4 fill:#1f6f4a,stroke:#0d3f29,color:#fff
-```
+![Four-level SDUI fallback ladder — fresh contract from the server, contract cached in Room, contract shipped in the APK assets and, as the floor, the native screen that is already built.](docs/diagrams/04-fallback-ladder.png)
 
 Level 4 is the reason the native screens are not throwaway work: they are the floor of the ladder. That is
 also why every screen in this repo is assembled from design-system atoms — the SDUI renderer would target
 those same atoms.
 
 Stage 2 also turns favorites into a synced entity with last-write-wins reconciliation and optimistic local
-writes. The `favorites` table **already ships with the `updatedAt` and `syncState` columns** it will need,
+writes.
+
+![Favorite toggle sequence — the screen writes to Room with a pending state and the UI reacts immediately; a worker later sends the pending mutations, the server resolves last-write-wins by `updatedAt`, and the worker reconciles Room, rolling back silently if the server won.](docs/diagrams/06-favorites-lww.png)
+
+The `favorites` table **already ships with the `updatedAt` and `syncState` columns** it will need,
 precisely so that adding sync later costs no Room migration.
 
 ### Stage 3 — auditability
