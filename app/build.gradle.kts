@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":analytics:bundle"))
     implementation(project(":catalog:ui"))
     implementation(project(":catalog:data"))
     implementation(project(":favorites:ui"))

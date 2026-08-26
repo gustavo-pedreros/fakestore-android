@@ -25,6 +25,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "Fakestore"
 include(":app")
+include(":analytics:api")
+include(":analytics:runtime")
+include(":analytics:bundle")
+include(":analytics:tool-logcat")
 include(":catalog:data")
 include(":catalog:domain")
 include(":catalog:ui")
