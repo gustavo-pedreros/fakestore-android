@@ -2,10 +2,10 @@
 
 ## Estado
 
-Aceptada — 2026-08-22 · **Corregida — 2026-08-23** (la Decisión 5 quedó desmentida por la implementación; ver
-[Corrección](#corrección--2026-08-23)) · **Decisión 2 parcialmente superada — 2026-08-23** por
+Aceptada — 2026-08-22 · **Corregida — 2026-08-23** (la [Decisión 5](#5-tests-driver-jvm-embebido-de-room-no-robolectric---superada) quedó desmentida por la implementación; ver
+[Corrección](#corrección--2026-08-23)) · **[Decisión 2](#2-entities) parcialmente superada — 2026-08-23** por
 [ADR-0003](0003-price-representation.md): `price` pasó de `String` a `Double`. Todo lo demás se mantiene. ·
-**Decisión 2 corregida de nuevo — 2026-08-24** al construir `:favorites:data` (ver
+**[Decisión 2](#2-entities) corregida de nuevo — 2026-08-24** al construir `:favorites:data` (ver
 [Corrección](#corrección--2026-08-24)): `syncState` nació con un solo caso, no tres, y `kotlinx-datetime`
 nunca entró.
 
@@ -19,7 +19,7 @@ diseñan sin un modelo de dominio asentado que mapear.
 
 Ese riesgo se mitiga así: las entities no inventan forma, se derivan de dos fuentes ya firmes —
 
-1. **La forma real de `fakestoreapi.com`**, ya sondeada por `curl` en la sesión de ADR-0001 (`id`, `title`,
+1. **La forma real de `fakestoreapi.com`**, ya sondeada por `curl` en la sesión de [ADR-0001](0001-networking-module.md) (`id`, `title`,
    `price`, `description`, `category`, `image`, `rating.rate`, `rating.count`).
 2. **Los seams ya decididos por adelantado**: la tabla `favorites` nace con `updatedAt` y `syncState`
    aunque en Etapa 1 siempre valgan `LOCAL_ONLY`, y el banner de datos cacheados se alimenta de
@@ -34,7 +34,7 @@ release, y queda registrado en este documento precisamente porque no había un p
 
 ### 1. Versión de Room: 2.8.4 (estable), no la nueva línea 3.0/KMP
 
-El stack ya fijaba "Room 2.8.x (KSP)". Confirmado contra las notas de release: **2.8.4** (19-nov-2025) es la última
+[El stack](../ARCHITECTURE.md#3-stack) ya fijaba "Room 2.8.x (KSP)". Confirmado contra las notas de release: **2.8.4** (19-nov-2025) es la última
 estable de la línea `androidx.room` 2.x, que a partir de esa versión entra en modo mantenimiento. Existe una
 **Room 3.0** (`androidx.room3`, alpha desde 11-mar-2026, KMP-first, coordenadas nuevas) — se descarta por ser
 alpha; no corresponde pinear una librería de persistencia a una versión no estable.
@@ -125,7 +125,7 @@ arrastrar Robolectric, que este proyecto no usa en ningún otro módulo.
 
 ## Corrección — 2026-08-23
 
-Al implementarla, la Decisión 5 falló dos veces seguidas.
+Al implementarla, la [Decisión 5](#5-tests-driver-jvm-embebido-de-room-no-robolectric---superada) falló dos veces seguidas.
 Ambos fallos tienen **la misma causa raíz**, que la búsqueda web no reveló porque la documentación de Room
 la da por sabida.
 
@@ -178,9 +178,9 @@ heredarlo transitivamente de Robolectric.
 `:core:database` se cerró **solo con productos**. `FavoriteEntity`, `SyncState`, `SyncMetadataEntity` y sus
 DAOs quedaron diferidos hasta que existiera un consumidor real.
 Consecuencia directa: **`kotlinx-datetime` nunca entró al catálogo** y no hay `converter/` — los
-`TypeConverter`s de la Decisión 1 y de las Notas de implementación solo los necesitaban las entities diferidas.
-`ProductEntity` usa exclusivamente tipos que Room soporta de forma nativa. La versión de Room (2.8.4, Decisión 1) y
-la forma de `ProductEntity` (Decisión 2) se sostienen sin cambios.
+`TypeConverter`s de la [Decisión 1](#1-versión-de-room-284-estable-no-la-nueva-línea-30kmp) y de las Notas de implementación solo los necesitaban las entities diferidas.
+`ProductEntity` usa exclusivamente tipos que Room soporta de forma nativa. La versión de Room (2.8.4, [Decisión 1](#1-versión-de-room-284-estable-no-la-nueva-línea-30kmp)) y
+la forma de `ProductEntity` ([Decisión 2](#2-entities)) se sostienen sin cambios.
 
 ### Lección para el resto del proyecto
 
@@ -191,24 +191,23 @@ su carpeta `test/`. La guía "usá el driver bundled y olvidate de Robolectric" 
 
 ## Corrección — 2026-08-24
 
-Al construir `:favorites:data` ([ADR-0007](0007-favorites-context.md)), dos predicciones de la Decisión 2 y de la
+Al construir `:favorites:data` ([ADR-0007](0007-favorites-context.md)), dos predicciones de la [Decisión 2](#2-entities) y de la
 sección "Alcance realmente ejecutado" no se cumplieron.
 
-**`syncState` nació con un solo caso, no tres.** La Decisión 2 proponía `LOCAL_ONLY | PENDING | SYNCED` completo desde
+**`syncState` nació con un solo caso, no tres.** La [Decisión 2](#2-entities) proponía `LOCAL_ONLY | PENDING | SYNCED` completo desde
 el principio ("usarlas es trabajo de Etapa 2; *definirlas* es barato hoy"). Al escribir el ADR de favoritos
 se revisó ese argumento y no se sostuvo: un enum de un solo caso sigue evitando la migración de Room —lo que
 evita la migración es que **la columna** exista, no que el enum tenga sus tres casos— y declarar hoy
 `PENDING`/`SYNCED` habría sido código muerto —dos casos sin ningún consumidor hasta la Etapa 2— del tipo
-que obliga a dar explicaciones en cada revisión. Ver ADR-0007 §3 para el argumento completo.
+que obliga a dar explicaciones en cada revisión. Ver [ADR-0007, Decisión 3](0007-favorites-context.md#3-la-tabla-nace-con-updatedat-y-syncstate-y-la-migración-es-automigration1--2) para el argumento completo.
 
-**`kotlinx-datetime` no volvió a evaluarse — se descartó directamente.** La Decisión 1 y la fila de "Dependencias" abajo
+**`kotlinx-datetime` no volvió a evaluarse — se descartó directamente.** La [Decisión 1](#1-versión-de-room-284-estable-no-la-nueva-línea-30kmp) y la fila de "Dependencias" abajo
 dejaban la puerta abierta a reconsiderarlo con `:favorites:data`. `FavoriteEntity.updatedAt` terminó siendo
 `Long` (epoch millis UTC), igual que `SyncMetadataEntity.lastSyncedAt` ya lo era: Room no necesita un
-`TypeConverter` para long, y el resto del proyecto ya usa `kotlin.time.Instant`/`Clock` (stdlib, ver ADR-0005
-§D3) en las capas que sí hablan de tiempo. `kotlinx-datetime` habría sido una segunda librería de tiempo
+`TypeConverter` para long, y el resto del proyecto ya usa `kotlin.time.Instant`/`Clock` (stdlib, ver [ADR-0005, Decisión 3](0005-catalog-data-layer.md#3-lastsyncedat-entra-en-este-bloque-y-no-trae-ninguna-dependencia)) en las capas que sí hablan de tiempo. `kotlinx-datetime` habría sido una segunda librería de tiempo
 compitiendo con la que ya está en uso, sin que ningún caso de uso la pidiera.
 
-Ninguna de las dos correcciones tocó la versión de Room (Decisión 1) ni la forma de `ProductEntity` (Decisión 2): siguen
+Ninguna de las dos correcciones tocó la versión de Room ([Decisión 1](#1-versión-de-room-284-estable-no-la-nueva-línea-30kmp)) ni la forma de `ProductEntity` ([Decisión 2](#2-entities)): siguen
 firmes.
 
 ## Consecuencias

@@ -33,6 +33,6 @@ Una decisión que resultó equivocada **no se borra ni se reescribe**: se marca 
 se agrega como sección propia, con la fecha. Un ADR registra por qué se decidió algo *en su momento*;
 borrar el error borra el aprendizaje.
 
-[ADR-0002](adr/0002-database-module.md) es el ejemplo más completo: su Decisión 5 eligió un driver de tests que
+[ADR-0002](adr/0002-database-module.md) es el ejemplo más completo: su [Decisión 5](adr/0002-database-module.md#5-tests-driver-jvm-embebido-de-room-no-robolectric---superada) eligió un driver de tests que
 falló dos veces seguidas, y esa sección sigue ahí, marcada, seguida de la causa raíz y de lo que realmente
 se construyó.

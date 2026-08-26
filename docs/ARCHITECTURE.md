@@ -15,7 +15,7 @@ Un catálogo de productos offline-first sobre `https://fakestoreapi.com`, con cu
 4. **Caché offline con indicador visual** de que los datos mostrados vienen de disco.
 
 Sobre esa base se diseñaron dos capacidades más —una API propia y server-driven UI— que quedaron
-**diseñadas y no construidas**. Están en [§5](#5-diseñado-no-construido), con el detalle de por qué el
+**diseñadas y no construidas**. Están en [«Diseñado, no construido»](#5-diseñado-no-construido), con el detalle de por qué el
 diseño elegido es el que hace compatibles SDUI y offline-first.
 
 ---
@@ -53,7 +53,7 @@ impone la herramienta, no la buena voluntad ni la revisión de código.
 
 `:core:connectivity` no vive dentro de `:core:network` porque lo consumen `:catalog:ui` y, en el diseño de
 la etapa siguiente, también `:favorites:data` y `:core:sdui`. Un módulo que sirve a `ui` y a `data` a la vez
-no puede ser honestamente capa de datos ([ADR-0006](adr/0006-catalog-presentation.md) §1).
+no puede ser honestamente capa de datos ([ADR-0006, Decisión 1](adr/0006-catalog-presentation.md#1-networkmonitor-no-va-en-corenetwork-nace-coreconnectivity)).
 
 El crecimiento previsto es **aditivo, no invasivo**: cada etapa agrega módulos y, a lo sumo, una arista de
 dependencia en los existentes. Ninguna reescribe la anterior.
@@ -69,7 +69,7 @@ dependencia en los existentes. Ninguna reescribe la anterior.
    - `:catalog:ui → :favorites:domain` — relación *Customer/Supplier*: el catálogo consume el flujo de
      favoritos para fusionarlo en la presentación.
    - `:favorites:ui → :catalog:domain` — el espejo: la pantalla de favoritos necesita saber cómo se ve un
-     producto para dibujar sus tarjetas ([ADR-0007](adr/0007-favorites-context.md) §1). Es la primera vez
+     producto para dibujar sus tarjetas ([ADR-0007, Decisión 1](adr/0007-favorites-context.md#1-la-pantalla-de-favoritos-vive-en-favoritesui-que-consume-catalogdomain)). Es la primera vez
      que la regla se ejerce en las dos direcciones a la vez.
 5. `:shared:kernel` es pequeño y **gobernado**: solo entra lo que dos o más contextos hablan de verdad.
 
@@ -83,14 +83,14 @@ arquitectura sobre el classpath— es trabajo pendiente, no algo que este repo y
 | Área | Elección |
 |---|---|
 | Lenguaje / toolchain | Kotlin 2.3.0, JVM 21, `minSdk 26` — el desugaring deja de hacer falta |
-| UI | Jetpack Compose (BOM 2026.08.00), Material 3, **Navigation 3** (1.1.6): back stack propio, claves tipadas y `entryProvider` por feature ([ADR-0006](adr/0006-catalog-presentation.md) §3) |
+| UI | Jetpack Compose (BOM 2026.08.00), Material 3, **Navigation 3** (1.1.6): back stack propio, claves tipadas y `entryProvider` por feature ([ADR-0006, Decisión 3](adr/0006-catalog-presentation.md#3-navigation-3-y-la-feature-es-dueña-de-sus-entries-y-de-sus-keys)) |
 | Asincronía | Coroutines + Flow (`StateFlow`, `combine`, `flatMapLatest`) |
 | DI | Hilt 2.60.1 + KSP 2.3.9. `hilt-lifecycle-viewmodel-compose` 1.4.0 en vez de `hilt-navigation-compose`, que arrastraría Navigation 2 |
 | Red | Retrofit 3.0.0 (BOM) + OkHttp 5.4.0 (BOM) + kotlinx.serialization 1.10.0 |
 | Persistencia | Room 2.8.4 (KSP) — última estable de la línea 2.x; la 3.0/KMP sigue en alpha ([ADR-0002](adr/0002-database-module.md)) |
 | Imágenes | Coil 3, con caché en disco |
-| Fechas | `kotlin.time.Instant`/`Clock` — stdlib, estable desde Kotlin 2.3 ([ADR-0005](adr/0005-catalog-data-layer.md) §D3) |
-| Test | JUnit 5 (mannodermaus), `kotlinx-coroutines-test`, Turbine 1.2.1, MockWebServer. **Sin MockK**: los casos de uso son `fun interface`, así que los dobles son lambdas ([ADR-0004](adr/0004-catalog-domain-model.md) §3). Para Room: Robolectric 4.16.1 + driver por defecto, con JUnit4 vía `junit-vintage-engine` ([ADR-0002](adr/0002-database-module.md), Corrección) |
+| Fechas | `kotlin.time.Instant`/`Clock` — stdlib, estable desde Kotlin 2.3 ([ADR-0005, Decisión 3](adr/0005-catalog-data-layer.md#3-lastsyncedat-entra-en-este-bloque-y-no-trae-ninguna-dependencia)) |
+| Test | JUnit 5 (mannodermaus), `kotlinx-coroutines-test`, Turbine 1.2.1, MockWebServer. **Sin MockK**: los casos de uso son `fun interface`, así que los dobles son lambdas ([ADR-0004, Decisión 3](adr/0004-catalog-domain-model.md#3-la-forma-del-caso-de-uso-la-decide-su-contenido)). Para Room: Robolectric 4.16.1 + driver por defecto, con JUnit4 vía `junit-vintage-engine` ([ADR-0002](adr/0002-database-module.md), Corrección) |
 
 ---
 
@@ -245,22 +245,22 @@ autoritativo; el worker reconcilia Room, con **rollback silencioso** si el servi
 ## 6. Las doce decisiones y su costo
 
 La forma honesta de presentar una decisión es **qué gané, qué pagué, y qué haría distinto en otro
-contexto**. Las últimas cuatro corresponden al diseño de [§5](#5-diseñado-no-construido).
+contexto**. Las últimas cuatro corresponden al diseño de [«Diseñado, no construido»](#5-diseñado-no-construido).
 
 | # | Decisión | Por qué | Trade-off / cuándo NO lo haría |
 |---|---|---|---|
-| 1 | **DDD ortodoxo: capa = módulo Gradle** | La pureza de `domain` la garantiza el build, no la disciplina. Imposible importar Retrofit en un módulo que no lo tiene en el classpath. | ~20 módulos para 2 pantallas. Fricción de Gradle y sync más lento. En un equipo chico o un producto exploratorio usaría vertical slices con capas como paquetes. |
-| 2 | **Módulo = bounded context** | Un contexto se entiende, se testea y se reemplaza entero. Crecer es agregar módulos, no tocar los existentes. Un equipo puede ser dueño de un contexto. | Exige definir contratos explícitos entre contextos y resistir la tentación del atajo. |
-| 3 | **Cruce entre contextos solo a nivel `domain`** | El catálogo necesita saber qué es favorito. Permitir la arista en `domain` (Customer/Supplier) es honesto; permitirla en `data` sería un acoplamiento invisible. | Es una regla que hay que verificar, no solo escribir. De ahí que falten los tests de arquitectura. |
-| 4 | **Una sola base física de Room, DAOs separados** | En móvil, N conexiones SQLite cuestan memoria, batería y migraciones. Los límites lógicos se mantienen porque cada `data` solo ve su DAO. | Rompe la pureza ortodoxa: hay entidades de varios contextos en un módulo técnico compartido. Pragmatismo móvil consciente. |
-| 5 | **Sin foreign keys entre `products` y `favorites`** | Acoplar tablas genera rigidez estructural. Los módulos evolucionan o se eliminan sin romper integridad referencial en disco. | Obliga a cruzar en memoria. Mitigado con `Set<ProductId>` para O(1) y `combine` reactivo. |
-| 6 | **Room como Single Source of Truth** | El requisito offline deja de ser un parche y pasa a ser una propiedad de la arquitectura: la UI solo lee de Room, la red solo escribe. | Toda escritura pasa por disco. Irrelevante a esta escala. |
-| 7 | **"¿Hay caché?" decide si un error es bloqueante** | Un fallo de red nunca debe tapar datos que el usuario ya tenía. Es la diferencia entre una app que se siente sólida y una que se siente rota. | Más estados que modelar y testear. Es exactamente lo que un interceptor de mocks habría escondido. |
-| 8 | **Sin interceptor de mocks** | Menos complejidad en el binario, ningún camino de código exclusivo de debug, y obliga a diseñar de verdad el arranque en frío sin red. Los tests usan MockWebServer, determinista y fuera del producto. | Se pierde la demo offline instantánea sin backend. Con una API inestable o privada, el mock sí valdría la pena. |
-| 9 | **SDUI con estructura + bindings, no contenido hidratado** | Es lo único que hace compatibles SDUI y offline-first: layout cacheado + datos cacheados ⇒ render server-driven en modo avión. | Más complejidad en el cliente (resolver bindings). El payload hidratado es más simple pero rompe el SSOT. |
-| 10 | **Fallback ladder de 4 niveles** | El riesgo real de SDUI es que el servidor te deje sin UI. Servidor → caché → assets → nativo significa que la app nunca queda en blanco. | Hay que mantener el nivel nativo vivo. Se paga con trabajo que ya está hecho y no se tira. |
-| 11 | **Contrato compartido entre cliente y servidor** | Si se es dueño de ambos extremos, escribir los DTOs dos veces garantiza drift. La ACL sigue existiendo: el dominio nunca ve un DTO. | Acopla cliente y servidor al wire format. Con un proveedor externo no lo haría: ahí el DTO se escribe del lado del cliente. |
-| 12 | **Optimistic updates + LWW con rollback silencioso** | El usuario no debe esperar a la red para ver el efecto de su acción. El servidor sigue siendo la autoridad; si gana, el cliente se corrige solo. | Complejidad asíncrona real: estados pendientes, reintentos, reconciliación. Y LWW puede perder escrituras concurrentes legítimas — para favoritos es aceptable, para un carrito no lo sería. |
+| 1 | [**DDD ortodoxo: capa = módulo Gradle**](#2-dos-ideas-ordenan-todo) | La pureza de `domain` la garantiza el build, no la disciplina. Imposible importar Retrofit en un módulo que no lo tiene en el classpath. | ~20 módulos para 2 pantallas. Fricción de Gradle y sync más lento. En un equipo chico o un producto exploratorio usaría vertical slices con capas como paquetes. |
+| 2 | [**Módulo = bounded context**](#2-dos-ideas-ordenan-todo) | Un contexto se entiende, se testea y se reemplaza entero. Crecer es agregar módulos, no tocar los existentes. Un equipo puede ser dueño de un contexto. | Exige definir contratos explícitos entre contextos y resistir la tentación del atajo. |
+| 3 | [**Cruce entre contextos solo a nivel `domain`**](#reglas-de-dependencia) | El catálogo necesita saber qué es favorito. Permitir la arista en `domain` (Customer/Supplier) es honesto; permitirla en `data` sería un acoplamiento invisible. | Es una regla que hay que verificar, no solo escribir. De ahí que falten los tests de arquitectura. |
+| 4 | [**Una sola base física de Room, DAOs separados**](adr/0002-database-module.md) | En móvil, N conexiones SQLite cuestan memoria, batería y migraciones. Los límites lógicos se mantienen porque cada `data` solo ve su DAO. | Rompe la pureza ortodoxa: hay entidades de varios contextos en un módulo técnico compartido. Pragmatismo móvil consciente. |
+| 5 | [**Sin foreign keys entre `products` y `favorites`**](adr/0007-favorites-context.md#6-el-cruce-catálogo--favoritos-se-hace-en-memoria-en-las-dos-pantallas) | Acoplar tablas genera rigidez estructural. Los módulos evolucionan o se eliminan sin romper integridad referencial en disco. | Obliga a cruzar en memoria. Mitigado con `Set<ProductId>` para O(1) y `combine` reactivo. |
+| 6 | [**Room como Single Source of Truth**](#room-como-fuente-única-de-verdad) | El requisito offline deja de ser un parche y pasa a ser una propiedad de la arquitectura: la UI solo lee de Room, la red solo escribe. | Toda escritura pasa por disco. Irrelevante a esta escala. |
+| 7 | [**"¿Hay caché?" decide si un error es bloqueante**](adr/0006-catalog-presentation.md#2-el-viewmodel-no-habla-de-string-el-mapeo-a-fsuistate-ocurre-en-el-borde-composable) | Un fallo de red nunca debe tapar datos que el usuario ya tenía. Es la diferencia entre una app que se siente sólida y una que se siente rota. | Más estados que modelar y testear. Es exactamente lo que un interceptor de mocks habría escondido. |
+| 8 | [**Sin interceptor de mocks**](adr/0001-networking-module.md#4-interceptors-solo-logging-debug) | Menos complejidad en el binario, ningún camino de código exclusivo de debug, y obliga a diseñar de verdad el arranque en frío sin red. Los tests usan MockWebServer, determinista y fuera del producto. | Se pierde la demo offline instantánea sin backend. Con una API inestable o privada, el mock sí valdría la pena. |
+| 9 | [**SDUI con estructura + bindings, no contenido hidratado**](#sdui-con-estructura-y-bindings-no-contenido-hidratado) | Es lo único que hace compatibles SDUI y offline-first: layout cacheado + datos cacheados ⇒ render server-driven en modo avión. | Más complejidad en el cliente (resolver bindings). El payload hidratado es más simple pero rompe el SSOT. |
+| 10 | [**Fallback ladder de 4 niveles**](#el-fallback-ladder) | El riesgo real de SDUI es que el servidor te deje sin UI. Servidor → caché → assets → nativo significa que la app nunca queda en blanco. | Hay que mantener el nivel nativo vivo. Se paga con trabajo que ya está hecho y no se tira. |
+| 11 | [**Contrato compartido entre cliente y servidor**](#compatibilidad-hacia-adelante-del-contrato) | Si se es dueño de ambos extremos, escribir los DTOs dos veces garantiza drift. La ACL sigue existiendo: el dominio nunca ve un DTO. | Acopla cliente y servidor al wire format. Con un proveedor externo no lo haría: ahí el DTO se escribe del lado del cliente. |
+| 12 | [**Optimistic updates + LWW con rollback silencioso**](adr/0007-favorites-context.md#4-el-toggle-es-atómico-en-el-dao-y-descarta-el-boolean-que-manda-la-ui) | El usuario no debe esperar a la red para ver el efecto de su acción. El servidor sigue siendo la autoridad; si gana, el cliente se corrige solo. | Complejidad asíncrona real: estados pendientes, reintentos, reconciliación. Y LWW puede perder escrituras concurrentes legítimas — para favoritos es aceptable, para un carrito no lo sería. |
 
 El alcance está por encima del mínimo, y eso fue deliberado: la app que cumple los cuatro requisitos se
 sostiene sola, y el resto existe para mostrar cómo se piensa un producto que tiene que crecer.

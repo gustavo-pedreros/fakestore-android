@@ -2,7 +2,7 @@
 
 ## Estado
 
-Aceptada — 2026-08-21. Corregida tras la implementación (ver Decisión 2).
+Aceptada — 2026-08-21. Corregida tras la implementación (ver [Decisión 2](#2-apperror-conserva-la-forma-se-descarta-errorcodeapi)).
 
 ## Contexto
 
@@ -36,9 +36,9 @@ va a ser hablado tanto por `:catalog:domain` como por `:favorites:domain` (favor
 producto) — el criterio de `ARCHITECTURE.md` para `:shared:kernel` ("solo entra lo que dos o más contextos
 hablan de verdad"). Ese cruce existe sin importar el modelo de errores.
 
-Lo que sí cambia por el modelo de errores es qué entra al módulo *ahora*: solo `AppError` (Decisión 2).
+Lo que sí cambia por el modelo de errores es qué entra al módulo *ahora*: solo `AppError` ([Decisión 2](#2-apperror-conserva-la-forma-se-descarta-errorcodeapi)).
 `ProductId`/~~`Money`~~/`Category`/`Rating` nacen cuando exista `:catalog:domain` — no se anticipan vacíos
-en este paso. (`Money` terminó no escribiéndose nunca: ver ADR-0003.)
+en este paso. (`Money` terminó no escribiéndose nunca: ver [ADR-0003](0003-price-representation.md).)
 
 - **Gano**: el seam ya existe cuando `:catalog:domain`/`:favorites:domain` lo necesiten — cero costo de
   mover `AppError` de paquete más adelante.

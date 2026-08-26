@@ -2,8 +2,8 @@
 
 ## Estado
 
-Aceptada — 2026-08-23. Amplía ADR-0004 (`CatalogRepository` gana un método y aparece un quinto caso de
-uso), reabre con una segunda entity el schema que fijó ADR-0002, y supera la fila «Fechas» del stack en
+Aceptada — 2026-08-23. Amplía [ADR-0004](0004-catalog-domain-model.md) (`CatalogRepository` gana un método y aparece un quinto caso de
+uso), reabre con una segunda entity el schema que fijó [ADR-0002](0002-database-module.md), y supera la fila «Fechas» d[el stack](../ARCHITECTURE.md#3-stack) en
 `ARCHITECTURE.md`.
 
 ## Contexto
@@ -13,7 +13,7 @@ que tienen que satisfacerlo están construidos y mergeados —`:core:database` (
 (PR #3)— y ninguno de los dos sabe del otro: `ProductDao` habla `ProductEntity`, `executeCall` habla
 `Either<AppError, T>`, y entre medio no hay nada.
 
-Este bloque es donde «Room como fuente única de verdad» deja de ser una frase del plan:
+Este bloque es donde [«Room como fuente única de verdad»](../ARCHITECTURE.md#room-como-fuente-única-de-verdad) deja de ser una frase del plan:
 
 > La UI **solo lee de Room**, vía `Flow`. La red escribe en Room; nunca alimenta la UI directamente.
 
@@ -93,7 +93,7 @@ suspend fun syncAll(products: List<ProductEntity>) {
    operación: los observadores ven una sola emisión con el estado final, nunca el intermedio entre el
    upsert y la poda.
 3. **Un refresh fallido jamás destruye la caché.** Si la escritura muere a medias, la transacción hace
-   rollback y Room queda como estaba. Es la invariante que la tabla de estados de arranque exige —*"un fallo de refresh nunca debe
+   rollback y Room queda como estaba. Es la invariante que [la tabla de estados de arranque](../ARCHITECTURE.md#hay-caché-decide-si-un-error-es-bloqueante) exige —*"un fallo de refresh nunca debe
    tapar datos que el usuario ya tenía"*— y acá se cumple por construcción, no por un `try/catch`.
 
 **Pago**: una query más que `deleteAll` + `upsertAll`, y un parámetro `:ids` que crece con el catálogo.
@@ -113,13 +113,13 @@ Se decidió al revés, porque el precio que la regla estaba estimando ya no exis
 **`kotlinx-datetime` no entra.** `kotlin.time.Instant` y `kotlin.time.Clock` están en el stdlib con
 `@SinceKotlin("2.3")` + `@WasExperimental(ExperimentalTime::class)` — verificado con `javap` sobre
 `kotlin-stdlib-2.3.0.jar`, no de memoria. Estables, sin `@OptIn`, y 2.3 es justo la versión del proyecto.
-El stack listaba `kotlinx-datetime` para fechas, y se lo contaba como parte del coste de diferir `sync_metadata`; ese
+[El stack](../ARCHITECTURE.md#3-stack) listaba `kotlinx-datetime` para fechas, y se lo contaba como parte del coste de diferir `sync_metadata`; ese
 coste dejó de existir hace una versión de Kotlin.
 
 **No hay migración que escribir.** `:app` depende solo de `:core:designsystem`: `DatabaseModule` nunca se
 instancia en runtime, así que `fakestore.db` no existe en ningún dispositivo. La entity nueva regenera
 `schemas/…/1.json` en el sitio, sin `Migration` y sin bump de versión — mismo precedente y mismo argumento
-que ADR-0003 usó para pasar `price` de `TEXT` a `REAL`.
+que [ADR-0003](0003-price-representation.md) usó para pasar `price` de `TEXT` a `REAL`.
 
 **No hay `TypeConverter`.** La columna guarda `Long` (epoch millis UTC), no `Instant`. `:core:database`
 conserva así la propiedad que tiene desde el PR #6 —*todos los campos son tipos nativos de Room*— y el
@@ -164,7 +164,7 @@ productos lo es; es una suposición sobre la escala, no sobre la corrección.
 ## Consecuencias
 
 - **No hay mapper `ProductDto → Product`, y no debe haberlo.** Si alguna vez aparece uno, es la señal de
-  que alguien saltó Room. Es la regla de «Room como fuente única de verdad» expresada como ausencia de un archivo — más barata de
+  que alguien saltó Room. Es la regla de [«Room como fuente única de verdad»](../ARCHITECTURE.md#room-como-fuente-única-de-verdad) expresada como ausencia de un archivo — más barata de
   auditar que cualquier test.
 - **`:core:database` pasa de una entity a dos** y su `identityHash` cambia (hoy `2777658269ff955db…`). El
   `1.json` regenerado se commitea, igual que la primera vez: es el baseline de migraciones, no output
@@ -182,23 +182,23 @@ productos lo es; es una suposición sobre la escala, no sobre la corrección.
   timestamp después**: si el proceso muere entremedio, la banda dice que los datos son *más viejos* de lo
   que son, nunca más nuevos. El fallo es conservador. Cambiaría si el timestamp decidiera algo de
   corrección —expirar la caché, disparar un sync— en vez de solo pintar un texto.
-- **ADR-0004 queda ampliada**: `CatalogRepository` gana `observeLastSyncedAt(): Flow<Instant?>` y los casos
+- **[ADR-0004](0004-catalog-domain-model.md) queda ampliada**: `CatalogRepository` gana `observeLastSyncedAt(): Flow<Instant?>` y los casos
   de uso pasan de cuatro a cinco. `ObserveLastSyncedAt` es un proxy puro, así que es `fun interface` — la
-  regla de ADR-0004 §3 se aplica sin excepción.
-- **El stack queda superado** en la fila «Fechas»: `kotlinx-datetime` sigue siendo la respuesta
+  regla de [ADR-0004, Decisión 3](0004-catalog-domain-model.md#3-la-forma-del-caso-de-uso-la-decide-su-contenido) se aplica sin excepción.
+- **[El stack](../ARCHITECTURE.md#3-stack) queda superado** en la fila «Fechas»: `kotlinx-datetime` sigue siendo la respuesta
   correcta para calendario, zonas horarias y formateo (probablemente en `:catalog:ui`), pero no para
   «un instante y un reloj», que hoy es stdlib.
 - **`:catalog:data` no aplica `fakestore.android.room`.** Usa `ProductDao` y `ProductEntity` como tipos
   Kotlin comunes, sin una sola anotación de Room en su código. Si algún día necesitara el plugin, es la
   señal de que un detalle de persistencia se filtró al módulo equivocado.
 - **Todo `:catalog:data` es `internal`.** El módulo no exporta un solo símbolo público: su única superficie
-  es el grafo de Hilt. Es lo que la regla 2 de dependencia quiere decir con *"`*:data` implementa las interfaces
+  es el grafo de Hilt. Es lo que [la regla 2 de dependencia](../ARCHITECTURE.md#reglas-de-dependencia) quiere decir con *"`*:data` implementa las interfaces
   que declara su `*:domain`"*.
 
 ## Notas de implementación
 
 **`syncAll(emptyList())` vacía la tabla, y es deliberado.** SQLite acepta `NOT IN ()` —a diferencia de la
-mayoría de los motores SQL— y lo evalúa como verdadero para todas las filas. La tabla de estados de arranque modela explícitamente el
+mayoría de los motores SQL— y lo evalúa como verdadero para todas las filas. [La tabla de estados de arranque](../ARCHITECTURE.md#hay-caché-decide-si-un-error-es-bloqueante) modela explícitamente el
 caso *"OK, 0 items → `Empty`"*, así que un catálogo vacío del servidor es una respuesta legítima y no un
 error a ignorar. Lleva su propio test para que nadie lo «arregle» por accidente.
 
@@ -218,7 +218,7 @@ en el cuerpo de `refresh`, que ya es `suspend`. No hace falta un combinador nuev
 **`GET /products/{id}` no se declara en `CatalogApi`.** El dominio no tiene ningún método que lo usaría —el
 detalle sale de Room— y no sería gratis: un sondeo en vivo de `/products/999` devuelve **HTTP 200
 con body vacío**, justo el caso para el que existen `EmptyBodyAwareConverterFactory` y `AppError.EmptyBody`
-(corrección de ADR-0001). El reintento del detalle sin caché llama `RefreshCatalog`, que trae el catálogo
+(corrección de [ADR-0001](0001-networking-module.md)). El reintento del detalle sin caché llama `RefreshCatalog`, que trae el catálogo
 completo.
 
 **Los campos de `ProductDto` son no-nulos y sin defaults.** Un payload mal formado lanza

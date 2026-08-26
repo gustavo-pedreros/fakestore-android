@@ -19,7 +19,7 @@ respeta su propia regla de pureza: Room no debe conocer el dominio, y un átomo 
 
 `:catalog:domain` es el módulo que introduce el lenguaje ubicuo entre ambos. Al planificarlo aparecieron
 cuatro preguntas que el diseño inicial no tenía resueltas, o tenía resueltas antes de que existiera el código que
-las iba a probar. Es el mismo patrón que ADR-0003 encontró en la representación del precio.
+las iba a probar. Es el mismo patrón que [ADR-0003](0003-price-representation.md) encontró en la representación del precio.
 
 ## Decisión
 
@@ -37,7 +37,7 @@ Esa lista no pasa su propia regla. Al contarlos:
 
 | Tipo | ¿Cuántos contextos lo hablan? | Dónde va |
 |---|---|---|
-| `ProductId` | **Dos.** `:favorites:domain` expone `ObserveFavoriteIds`, y «sin foreign keys» pide textualmente *"un `Set<ProductId>` para búsqueda O(1)"* en el cruce del ViewModel. | `:shared:kernel` |
+| `ProductId` | **Dos.** `:favorites:domain` expone `ObserveFavoriteIds`, y [«sin foreign keys»](../ARCHITECTURE.md#sin-foreign-keys-entre-products-y-favorites) pide textualmente *"un `Set<ProductId>` para búsqueda O(1)"* en el cruce del ViewModel. | `:shared:kernel` |
 | `Category` | **Uno.** Favoritos no filtra ni muestra categorías. | `:catalog:domain` |
 | `Rating` | **Uno.** | `:catalog:domain` |
 
@@ -69,7 +69,7 @@ sean esos cuatro para siempre. Con `enum` + `fromWire`, una quinta categoría de
 campo que llegó bien. Con `value class`, la categoría nueva fluye hasta el chip y la lista de filtros crece
 sola (ver decisión 4).
 
-Es el mismo criterio que ADR-0003 aplicó al campo de moneda: no modelar como garantía lo que la API no
+Es el mismo criterio que [ADR-0003](0003-price-representation.md) aplicó al campo de moneda: no modelar como garantía lo que la API no
 garantiza.
 
 **El dominio no normaliza ni transforma el string.** `FsChip` ya hace `label.uppercase()`
@@ -124,7 +124,7 @@ congelado; la firma del dominio se escribe una sola vez.
 `ObserveCategories` **no agrega un método al repositorio, ni una query al DAO, ni una llamada de red**:
 deriva las categorías del mismo `observeAll(null)` que alimenta la grilla.
 
-`GET /products/categories` existe —el sondeo de arriba salió de ahí— y **se descarta a propósito**. «Room como fuente única de verdad» es
+`GET /products/categories` existe —el sondeo de arriba salió de ahí— y **se descarta a propósito**. [«Room como fuente única de verdad»](../ARCHITECTURE.md#room-como-fuente-única-de-verdad) es
 categórica: *"la UI solo lee de Room"*. Pintar los chips desde una llamada de red rompería esa regla justo
 en el requisito 4: sin conexión, la grilla tendría productos y el filtro estaría vacío.
 
@@ -138,10 +138,10 @@ si el catálogo creciera un orden de magnitud, pasa a ser una query y el caso de
 
 - **La línea del kernel del diseño inicial queda corregida** en la línea del kernel: `Category` y `Rating` bajan a
   `:catalog:domain`. El resto de la línea —`ProductId`, `AppError`, y las exclusiones de `ErrorCode`
-  (ADR-0001) y `Money` (ADR-0003)— se mantiene.
+  ([ADR-0001](0001-networking-module.md)) y `Money` ([ADR-0003](0003-price-representation.md))— se mantiene.
 - **La lista de casos de uso gana un cuarto.** La lista decía `ObserveCatalog`, `RefreshCatalog`,
   `ObserveProductDetail`; `ObserveCategories` se suma con el filtro. (Un quinto, `ObserveLastSyncedAt`, se
-  suma con ADR-0005.)
+  suma con [ADR-0005](0005-catalog-data-layer.md).)
 - **El kernel queda en dos tipos** (`AppError`, `ProductId`) al cierre de este bloque. Que sea pequeño es
   la intención de la regla 5, no un síntoma de que falte algo.
 - **`:catalog:domain` tendrá un solo test**, y es correcto: los tres `fun interface` no tienen cuerpo que
@@ -161,13 +161,13 @@ Sin invariantes que lancen. Ni `ProductId`, ni `Category`, ni `Rating` validan n
   `require` acá tumbaría el refresh completo por un producto mal formado — peor que mostrarlo con cinco
   estrellas.
 
-`Product` **no lleva `isFavorite`**. «Sin foreign keys» es explícita: sin foreign keys, el cruce ocurre en el ViewModel
+`Product` **no lleva `isFavorite`**. [«Sin foreign keys»](../ARCHITECTURE.md#sin-foreign-keys-entre-products-y-favorites) es explícita: sin foreign keys, el cruce ocurre en el ViewModel
 con `combine`. Meter la bandera en el modelo acoplaría los dos contextos justo donde esa decisión los
 separa.
 
 El orden del catálogo es **parte del contrato del repositorio**, no un detalle de implementación: un
 `SELECT` sin `ORDER BY` devuelve orden indefinido y la grilla parpadearía en cada refresh. Se elige `id`
 ascendente porque reproduce el orden que la propia API sirve, sin inventar un criterio que el diseño no
-pidió. Ordenar por precio —hoy posible gracias a la columna `REAL` de ADR-0003— espera a que exista un
+pidió. Ordenar por precio —hoy posible gracias a la columna `REAL` de [ADR-0003](0003-price-representation.md)— espera a que exista un
 control de orden en la UI.
 

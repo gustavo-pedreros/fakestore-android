@@ -3,7 +3,7 @@
 ## Estado
 
 Aceptada — 2026-08-23. Revierte la representación del precio fijada en el diseño inicial y supera la
-justificación de `price: String` de ADR-0002 §2.
+justificación de `price: String` de [ADR-0002, Decisión 2](0002-database-module.md#2-entities).
 
 ## Contexto
 
@@ -133,7 +133,7 @@ preferencia de estilo.
   adelante. Es una capacidad que el `String` no tenía.
 - **`Formatters` en `:core:common` deja de tener contenido monetario.** Sigue reservado para fechas y
   otros formatos si aparecen, pero el dinero ya no pasa por ahí.
-- **ADR-0002 §2 queda parcialmente superado** en su justificación de `price: String`. El resto de ADR-0002
+- **[ADR-0002, Decisión 2](0002-database-module.md#2-entities) queda parcialmente superado** en su justificación de `price: String`. El resto de [ADR-0002](0002-database-module.md)
   —versión de Room, forma de `ProductEntity`, DAOs, Hilt, y su Corrección sobre tests— se mantiene.
 - **Es la segunda convención heredada que se rechaza tras evaluarla** (la primera fueron los convention
   plugins de `build-logic`, que se reescribieron en vez de copiarse). Refuerza que una referencia de estilo
