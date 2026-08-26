@@ -19,4 +19,5 @@ dependencies {
     api(project(":analytics:runtime"))
 
     implementation(project(":analytics:tool-logcat"))
+    implementation(project(":analytics:tool-console"))
 }
