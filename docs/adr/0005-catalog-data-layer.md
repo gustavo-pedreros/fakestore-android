@@ -3,7 +3,7 @@
 ## Estado
 
 Aceptada — 2026-08-23. Amplía ADR-0004 (`CatalogRepository` gana un método y aparece un quinto caso de
-uso), reabre con una segunda entity el schema que fijó ADR-0002, y supera la fila «Fechas» de §3 de
+uso), reabre con una segunda entity el schema que fijó ADR-0002, y supera la fila «Fechas» del stack en
 `ARCHITECTURE.md`.
 
 ## Contexto
@@ -13,7 +13,7 @@ que tienen que satisfacerlo están construidos y mergeados —`:core:database` (
 (PR #3)— y ninguno de los dos sabe del otro: `ProductDao` habla `ProductEntity`, `executeCall` habla
 `Either<AppError, T>`, y entre medio no hay nada.
 
-Este bloque es donde §2.1 deja de ser una frase del plan:
+Este bloque es donde «Room como fuente única de verdad» deja de ser una frase del plan:
 
 > La UI **solo lee de Room**, vía `Flow`. La red escribe en Room; nunca alimenta la UI directamente.
 
@@ -93,7 +93,7 @@ suspend fun syncAll(products: List<ProductEntity>) {
    operación: los observadores ven una sola emisión con el estado final, nunca el intermedio entre el
    upsert y la poda.
 3. **Un refresh fallido jamás destruye la caché.** Si la escritura muere a medias, la transacción hace
-   rollback y Room queda como estaba. Es la invariante que §2.5 exige —*"un fallo de refresh nunca debe
+   rollback y Room queda como estaba. Es la invariante que la tabla de estados de arranque exige —*"un fallo de refresh nunca debe
    tapar datos que el usuario ya tenía"*— y acá se cumple por construcción, no por un `try/catch`.
 
 **Pago**: una query más que `deleteAll` + `upsertAll`, y un parámetro `:ids` que crece con el catálogo.
@@ -105,7 +105,7 @@ que borrar todo pasaría de elegante a incorrecto.
 
 ### 3. `lastSyncedAt` entra en este bloque, y no trae ninguna dependencia
 
-§2.5 pide que el `FsStatusBanner` muestre la antigüedad de los datos cuando el refresh falla con caché
+La tabla de estados de arranque pide que el `FsStatusBanner` muestre la antigüedad de los datos cuando el refresh falla con caché
 presente. Quien **escribe** ese timestamp es la capa de datos; quien lo **lee** es `:catalog:ui`. La regla
 que este repo aplicó cinco veces —*no se construye sin un consumidor real delante*— empujaba a diferirlo.
 Se decidió al revés, porque el precio que la regla estaba estimando ya no existe.
@@ -164,13 +164,13 @@ productos lo es; es una suposición sobre la escala, no sobre la corrección.
 ## Consecuencias
 
 - **No hay mapper `ProductDto → Product`, y no debe haberlo.** Si alguna vez aparece uno, es la señal de
-  que alguien saltó Room. Es la regla de §2.1 expresada como ausencia de un archivo — más barata de
+  que alguien saltó Room. Es la regla de «Room como fuente única de verdad» expresada como ausencia de un archivo — más barata de
   auditar que cualquier test.
 - **`:core:database` pasa de una entity a dos** y su `identityHash` cambia (hoy `2777658269ff955db…`). El
   `1.json` regenerado se commitea, igual que la primera vez: es el baseline de migraciones, no output
   desechable.
 - **`SyncMetadataDao` es el primer DAO que van a compartir dos contextos.** Favoritos lo va a querer en la
-  Etapa 2 para su `syncState`. §2.1 promete *"cada `*:data` consume únicamente su propio DAO"*; con la
+  Etapa 2 para su `syncState`. «Room como fuente única de verdad» promete *"cada `*:data` consume únicamente su propio DAO"*; con la
   tabla `scope`-eada la garantía se degrada a *"cada contexto consume sus propias filas"*. Se acepta y se
   dice en voz alta. La alternativa que la preserva —una tabla `catalog_sync` dedicada, y otra cuando
   favoritos la pida— cambia una verruga conocida por N tablas de una fila.
@@ -192,13 +192,13 @@ productos lo es; es una suposición sobre la escala, no sobre la corrección.
   Kotlin comunes, sin una sola anotación de Room en su código. Si algún día necesitara el plugin, es la
   señal de que un detalle de persistencia se filtró al módulo equivocado.
 - **Todo `:catalog:data` es `internal`.** El módulo no exporta un solo símbolo público: su única superficie
-  es el grafo de Hilt. Es lo que la regla 2 de §1.3 quiere decir con *"`*:data` implementa las interfaces
+  es el grafo de Hilt. Es lo que la regla 2 de dependencia quiere decir con *"`*:data` implementa las interfaces
   que declara su `*:domain`"*.
 
 ## Notas de implementación
 
 **`syncAll(emptyList())` vacía la tabla, y es deliberado.** SQLite acepta `NOT IN ()` —a diferencia de la
-mayoría de los motores SQL— y lo evalúa como verdadero para todas las filas. §2.5 modela explícitamente el
+mayoría de los motores SQL— y lo evalúa como verdadero para todas las filas. La tabla de estados de arranque modela explícitamente el
 caso *"OK, 0 items → `Empty`"*, así que un catálogo vacío del servidor es una respuesta legítima y no un
 error a ignorar. Lleva su propio test para que nadie lo «arregle» por accidente.
 
@@ -216,7 +216,7 @@ gratis.
 en el cuerpo de `refresh`, que ya es `suspend`. No hace falta un combinador nuevo en `:core:common`.
 
 **`GET /products/{id}` no se declara en `CatalogApi`.** El dominio no tiene ningún método que lo usaría —el
-detalle sale de Room (§2.5)— y no sería gratis: un sondeo en vivo de `/products/999` devuelve **HTTP 200
+detalle sale de Room— y no sería gratis: un sondeo en vivo de `/products/999` devuelve **HTTP 200
 con body vacío**, justo el caso para el que existen `EmptyBodyAwareConverterFactory` y `AppError.EmptyBody`
 (corrección de ADR-0001). El reintento del detalle sin caché llama `RefreshCatalog`, que trae el catálogo
 completo.

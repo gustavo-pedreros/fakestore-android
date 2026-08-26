@@ -2,10 +2,10 @@
 
 ## Estado
 
-Aceptada — 2026-08-22 · **Corregida — 2026-08-23** (§5 quedó desmentida por la implementación; ver
-[Corrección](#corrección--2026-08-23)) · **§2 parcialmente superada — 2026-08-23** por
+Aceptada — 2026-08-22 · **Corregida — 2026-08-23** (la Decisión 5 quedó desmentida por la implementación; ver
+[Corrección](#corrección--2026-08-23)) · **Decisión 2 parcialmente superada — 2026-08-23** por
 [ADR-0003](0003-price-representation.md): `price` pasó de `String` a `Double`. Todo lo demás se mantiene. ·
-**§2 corregida de nuevo — 2026-08-24** al construir `:favorites:data` (ver
+**Decisión 2 corregida de nuevo — 2026-08-24** al construir `:favorites:data` (ver
 [Corrección](#corrección--2026-08-24)): `syncState` nació con un solo caso, no tres, y `kotlinx-datetime`
 nunca entró.
 
@@ -125,7 +125,7 @@ arrastrar Robolectric, que este proyecto no usa en ningún otro módulo.
 
 ## Corrección — 2026-08-23
 
-Al implementarla, §5 falló dos veces seguidas.
+Al implementarla, la Decisión 5 falló dos veces seguidas.
 Ambos fallos tienen **la misma causa raíz**, que la búsqueda web no reveló porque la documentación de Room
 la da por sabida.
 
@@ -173,14 +173,14 @@ Detalle de implementación no obvio: `junit-vintage-engine` va como `testRuntime
 `@RunWith`, etc., hay que declarar `junit:junit` explícitamente como `testImplementation`. No basta con
 heredarlo transitivamente de Robolectric.
 
-### Alcance realmente ejecutado vs. §2
+### Alcance realmente ejecutado vs. la Decisión 2
 
 `:core:database` se cerró **solo con productos**. `FavoriteEntity`, `SyncState`, `SyncMetadataEntity` y sus
 DAOs quedaron diferidos hasta que existiera un consumidor real.
 Consecuencia directa: **`kotlinx-datetime` nunca entró al catálogo** y no hay `converter/` — los
-`TypeConverter`s de §1 y de las Notas de implementación solo los necesitaban las entities diferidas.
-`ProductEntity` usa exclusivamente tipos que Room soporta de forma nativa. La versión de Room (2.8.4, §1) y
-la forma de `ProductEntity` (§2) se sostienen sin cambios.
+`TypeConverter`s de la Decisión 1 y de las Notas de implementación solo los necesitaban las entities diferidas.
+`ProductEntity` usa exclusivamente tipos que Room soporta de forma nativa. La versión de Room (2.8.4, Decisión 1) y
+la forma de `ProductEntity` (Decisión 2) se sostienen sin cambios.
 
 ### Lección para el resto del proyecto
 
@@ -191,24 +191,24 @@ su carpeta `test/`. La guía "usá el driver bundled y olvidate de Robolectric" 
 
 ## Corrección — 2026-08-24
 
-Al construir `:favorites:data` ([ADR-0007](0007-favorites-context.md)), dos predicciones de §2 y de la
-sección "Alcance realmente ejecutado vs. §2" no se cumplieron.
+Al construir `:favorites:data` ([ADR-0007](0007-favorites-context.md)), dos predicciones de la Decisión 2 y de la
+sección "Alcance realmente ejecutado" no se cumplieron.
 
-**`syncState` nació con un solo caso, no tres.** §2 proponía `LOCAL_ONLY | PENDING | SYNCED` completo desde
+**`syncState` nació con un solo caso, no tres.** La Decisión 2 proponía `LOCAL_ONLY | PENDING | SYNCED` completo desde
 el principio ("usarlas es trabajo de Etapa 2; *definirlas* es barato hoy"). Al escribir el ADR de favoritos
 se revisó ese argumento y no se sostuvo: un enum de un solo caso sigue evitando la migración de Room —lo que
 evita la migración es que **la columna** exista, no que el enum tenga sus tres casos— y declarar hoy
 `PENDING`/`SYNCED` habría sido código muerto —dos casos sin ningún consumidor hasta la Etapa 2— del tipo
 que obliga a dar explicaciones en cada revisión. Ver ADR-0007 §3 para el argumento completo.
 
-**`kotlinx-datetime` no volvió a evaluarse — se descartó directamente.** §1 y la fila de "Dependencias" abajo
+**`kotlinx-datetime` no volvió a evaluarse — se descartó directamente.** La Decisión 1 y la fila de "Dependencias" abajo
 dejaban la puerta abierta a reconsiderarlo con `:favorites:data`. `FavoriteEntity.updatedAt` terminó siendo
 `Long` (epoch millis UTC), igual que `SyncMetadataEntity.lastSyncedAt` ya lo era: Room no necesita un
 `TypeConverter` para long, y el resto del proyecto ya usa `kotlin.time.Instant`/`Clock` (stdlib, ver ADR-0005
 §D3) en las capas que sí hablan de tiempo. `kotlinx-datetime` habría sido una segunda librería de tiempo
 compitiendo con la que ya está en uso, sin que ningún caso de uso la pidiera.
 
-Ninguna de las dos correcciones tocó la versión de Room (§1) ni la forma de `ProductEntity` (§2): siguen
+Ninguna de las dos correcciones tocó la versión de Room (Decisión 1) ni la forma de `ProductEntity` (Decisión 2): siguen
 firmes.
 
 ## Consecuencias

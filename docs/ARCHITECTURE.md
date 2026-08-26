@@ -245,7 +245,7 @@ autoritativo; el worker reconcilia Room, con **rollback silencioso** si el servi
 ## 6. Las doce decisiones y su costo
 
 La forma honesta de presentar una decisión es **qué gané, qué pagué, y qué haría distinto en otro
-contexto**. Las últimas cuatro corresponden al diseño de §5.
+contexto**. Las últimas cuatro corresponden al diseño de [§5](#5-diseñado-no-construido).
 
 | # | Decisión | Por qué | Trade-off / cuándo NO lo haría |
 |---|---|---|---|

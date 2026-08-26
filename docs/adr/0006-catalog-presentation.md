@@ -3,8 +3,8 @@
 ## Estado
 
 Aceptada — 2026-08-23. Cierra la capa de presentación del catálogo y convierte la tabla de estados en código. **Corrige dos
-asignaciones de §1.2**: `NetworkMonitor` no va en `:core:network` (§1), y la Etapa 1 son **14 módulos**,
-no 13. Supera la fila «UI» de §3 (Navigation Compose → Navigation 3). **Corregida — 2026-08-24** (ver
+asignaciones del grafo de módulos**: `NetworkMonitor` no va en `:core:network` (Decisión 1), y la Etapa 1 son **14 módulos**,
+no 13. Supera la fila «UI» del stack (Navigation Compose → Navigation 3). **Corregida — 2026-08-24** (ver
 [Corrección](#corrección--2026-08-24)): tres desviaciones de implementación, y **D4 se cumplió** al
 construir `:favorites` ([ADR-0007](0007-favorites-context.md)) — el corazón dejó de ser decorativo.
 
@@ -28,7 +28,7 @@ system ya fijó la forma de la presentación cuando se construyó.
 | `CategoryFilterRow` | `(categories: List<String>, selected: String?, onSelect)` | habla `String`, no `Category` |
 | `ProductCardUiModel` | `id: Int`, `price: Double`, `imageUrl: String?` | modelo espejo (D3 del plan del DS): hay un mapper |
 
-Lo que el DS **no** trae y este bloque escribe es exactamente lo que §1.2 le asignó a `:catalog:ui` cuando
+Lo que el DS **no** trae y este bloque escribe es exactamente lo que el grafo de módulos le asignó a `:catalog:ui` cuando
 descartó `:core:ui`: los textos de error, el `Reintentar`, y el formato de la antigüedad del caché.
 
 Las cuatro decisiones que siguen son las que quedan.
@@ -46,7 +46,7 @@ errores— y un único consumidor, `:catalog:data`. La conectividad la consumen 
 
 | Consumidor | Para qué | Cuándo |
 |---|---|---|
-| `:catalog:ui` | el reintento automático de §2.5 | este bloque |
+| `:catalog:ui` | el reintento automático de la tabla de estados | este bloque |
 | `:favorites:data` | `FavoritesSyncWorker` | Etapa 2 |
 | `:core:sdui` | el fallback ladder | Etapa 2 |
 
@@ -67,7 +67,7 @@ filtra al `debugCompileClasspath` de la UI— pero era un argumento que había q
 nada que argumentar: el módulo entero son dos tipos. Y el permiso `ACCESS_NETWORK_STATE` viaja con el código
 que lo usa, misma lección que el commit `36983e9` («declare INTERNET where the app can actually get it»).
 
-**Pago** el módulo #14, para tres archivos. §1.2 cerró la Etapa 1 en 13 módulos justamente por descartar
+**Pago** el módulo #14, para tres archivos. El grafo cerraba la Etapa 1 en 13 módulos justamente por descartar
 `:core:ui` con el argumento de que «un módulo Gradle para un objeto es ceremonia». Hay que explicar por qué
 acá no aplica: aquello era un objeto de Kotlin **puro, sin dependencias**, cuyo contenido era un `when` de
 cuatro líneas. Esto es un adaptador del framework con un permiso, un binding de Hilt y un `callbackFlow` con
@@ -78,7 +78,7 @@ que defender.
 `:core:network` sin discusión. Y en un proyecto sin Etapa 2 a la vista, empezar en `:core:network` y partir
 después también es defendible — el split cuesta mover tres archivos y cambiar un import.
 
-**Consecuencia sobre la regla 3 de §1.3.** Deja de leerse como lista cerrada:
+**Consecuencia sobre la regla 3 de dependencia.** Deja de leerse como lista cerrada:
 
 > `*:ui` depende de `*:domain` (nunca de `*:data`), de `:core:designsystem`, y de los `:core:*` técnicos que
 > no traen UI ni persistencia.
@@ -89,7 +89,7 @@ mecánicamente.
 ### 2. El ViewModel no habla de `String`; el mapeo a `FsUiState` ocurre en el borde composable
 
 `FsUiState.Failure` carga un `String` ya resuelto. Si el ViewModel lo produjera, necesitaría `Context`, y los
-tests de §2.5 —que son el entregable central de este bloque— pasarían a necesitar Robolectric.
+tests de la tabla de estados —que son el entregable central de este bloque— pasarían a necesitar Robolectric.
 
 ```kotlin
 sealed interface CatalogContent {
@@ -104,7 +104,7 @@ El composable traduce `CatalogContent → FsUiState<List<ProductCardUiModel>>` r
 `stringResource`. Es el mismo movimiento que ADR-0005 §1 hizo con los datasources: se compra un seam para
 que el test sea puro.
 
-La reducción **es** la tabla de §2.5, y el orden de las ramas es la invariante:
+La reducción **es** la tabla de estados de arranque, y el orden de las ramas es la invariante:
 
 ```kotlin
 private fun reduce(
@@ -129,13 +129,13 @@ Tres detalles cierran los casos:
   sabemos que el catálogo esté vacío — solo que todavía no cargó. Es el uso que justifica retroactivamente
   que ADR-0005 §3 metiera `sync_metadata` en el bloque anterior: se escribió para la banda, y termina
   desambiguando dos estados.
-- **El reintento automático** se generaliza una línea respecto de §2.5, que dice «si la caché está vacía, se
+- **El reintento automático** se generaliza una línea respecto de la tabla original, que decía «si la caché está vacía, se
   dispara `RefreshCatalog` solo». Acá se dispara **si el último refresh falló**, con o sin caché: cubre el
   caso de la tabla y además hace que la banda de antigüedad desaparezca sola al volver la red.
 
 **Gano** que `CatalogViewModelTest` sea Jupiter puro: sin Android, sin Robolectric, con los dobles como
 lambdas —`ObserveCatalog { flowOf(products) }`— gracias a que ADR-0004 §3 los hizo `fun interface`. Las siete
-filas de §2.5 se asertan sobre `data class`es.
+filas de la tabla de estados se asertan sobre `data class`es.
 
 **Pago** un tipo que se parece mucho a `FsUiState` y un `when` de cuatro ramas por pantalla.
 
@@ -146,7 +146,7 @@ considerar si aparece una tercera pantalla con estados.
 ### 3. Navigation 3, y la feature es dueña de sus entries **y de sus keys**
 
 Se usa **Navigation 3** (`androidx.navigation3:1.1.6`, estable desde el 12 de agosto de 2026), no Navigation
-Compose 2.x como decía §3. No es un bump de versión: es otro modelo.
+Compose 2.x como decía el stack. No es un bump de versión: es otro modelo.
 
 En Nav2 el back stack es estado oculto dentro de un `NavController` y los argumentos viajan como `Bundle`
 hasta un `SavedStateHandle`. En Nav3 **el back stack es una `SnapshotStateList` que la app posee**, las keys
@@ -188,7 +188,7 @@ NavDisplay(
         catalogEntries(
             onProductClick = { id -> backStack.add(ProductDetailKey(id)) },
             onBackClick = { backStack.removeLastOrNull() },
-            onFavoritesClick = { /* TODO(:favorites §1.4) */ },
+            onFavoritesClick = { /* TODO: favoritos */ },
         )
     },
 )
@@ -237,11 +237,11 @@ una lista se presta a eso mucho mejor que un grafo declarado en tiempo de compil
 ### 4. El corazón se renderiza, pero está desconectado
 
 `:favorites` no existe todavía. `ProductGrid` ya recibe `favoriteIds: Set<Int>`, así que el seam está puesto:
-en este bloque se pasa `emptySet()` y `onFavoriteClick` es un no-op con `TODO(:favorites §1.4)`.
+en este bloque se pasa `emptySet()` y `onFavoriteClick` es un no-op marcado con un TODO hacia el contexto de favoritos.
 
 **Gano** honestidad con el staging: el requisito 3 se demuestra cuando está hecho. El bloque `:favorites`
 solo agrega un `combine(catalogo, favoriteIds)` en el ViewModel — ni `CatalogScreen` ni
-`ProductDetailScreen` se tocan, que es lo que §2.2 prometió cuando decidió no poner foreign keys.
+`ProductDetailScreen` se tocan, que es lo que «sin foreign keys» prometió.
 
 **Pago** que en la demo intermedia el corazón no responde al tap.
 
@@ -251,17 +251,17 @@ cumplido justo el requisito que pide persistencia entre reinicios, y habría que
 ## Consecuencias
 
 - **El diseño inicial cambia en cuatro lugares**: nace `:core:connectivity` (el `NetworkMonitor` sale de
-  `:core:network`; 14 módulos y no 13), §1.3 (la regla 3 se amplía; los ítems `ui:` y `:app:` se cierran),
-  §3 (la fila «UI» pasa a Navigation 3; Turbine deja de estar pendiente).
+  `:core:network`; 14 módulos y no 13), las reglas de dependencia (la regla 3 se amplía),
+  el stack (la fila «UI» pasa a Navigation 3; Turbine deja de estar pendiente).
 - **`:catalog:ui` no ve Room, Retrofit ni OkHttp.** Verificable con `:dependencies`, no de palabra.
 - **`:app` no depende de `:catalog:domain`.** Las lambdas de navegación hablan `Int`, igual que
   `ProductGrid.onProductClick`; el dominio queda confinado a `data` y `ui`.
-- **`SavedStateHandle` no aparece en el proyecto.** El argumento del detalle viaja tipado (§3).
+- **`SavedStateHandle` no aparece en el proyecto.** El argumento del detalle viaja tipado (Decisión 3).
 - ~~`:core:testing` sigue diferido…~~ **Resuelto**: nació con `:favorites:ui` como segundo consumidor, tal
   como se predijo, y `MainDispatcherExtension` se movió ahí desde `:catalog:ui/src/test`.
 - **`Formatters` sigue diferido.** El formato de la antigüedad queda privado en `:catalog:ui`, con
   `java.time` — disponible sin desugaring gracias al `minSdk = 26` que fijó D6 del plan del design system.
-- ~~Deuda consciente: el corazón sin conectar (§4) y el `onFavoritesClick`…~~ **Saldada**: `:favorites` se
+- ~~Deuda consciente: el corazón sin conectar (Decisión 4) y el `onFavoritesClick`…~~ **Saldada**: `:favorites` se
   construyó completo — ver [D4 se cumplió](#d4-se-cumplió-el-corazón-quedó-conectado).
 
 ## Notas de implementación
@@ -273,7 +273,7 @@ cumplido justo el requisito que pide persistencia entre reinicios, y habría que
 - `NavDisplay` trae por defecto **solo** `rememberSaveableStateHolderNavEntryDecorator()`. El
   `rememberViewModelStoreNavEntryDecorator()` hay que pasarlo explícitamente o cada navegación reusa el mismo
   `ViewModel`.
-- El caso «detalle sin caché» de §2.5 es alcanzable de verdad: `ObserveProductDetail` lee de Room y devuelve
+- El caso «detalle sin caché» de la tabla de estados es alcanzable de verdad: `ObserveProductDetail` lee de Room y devuelve
   `null` si no está. Entrando desde la lista siempre está; el estado existe para deep links y muerte de
   proceso, y se resuelve con el mismo error bloqueante con `Reintentar`.
 - **MockK sigue sin entrar.** ADR-0004 §3 hizo los casos de uso `fun interface`, así que los dobles son
@@ -287,12 +287,12 @@ las tres son consecuencias que no se vieron al escribirlas.
 
 ### `navigation3-runtime` y `kotlinx-serialization-core` son `api`, no `implementation`
 
-§3 dio por hecho que `:catalog:ui` podía declararlas como `implementation`. No puede: las dos funciones que
+La Decisión 3 dio por hecho que `:catalog:ui` podía declararlas como `implementation`. No puede: las dos funciones que
 la decisión expone —`EntryProviderScope<NavKey>.catalogEntries(...)` y
 `PolymorphicModuleBuilder<NavKey>.catalogNavKeys()`— tienen esos tipos en su **firma pública**, así que `:app`
 los necesita en su classpath de compilación para poder componer.
 
-**Gano** que el contrato sea honesto: si la feature es dueña de su grafo de navegación (§3), la navegación es
+**Gano** que el contrato sea honesto: si la feature es dueña de su grafo de navegación (Decisión 3), la navegación es
 parte de su API, y Gradle debe decirlo. **Pago** que Navigation 3 quede visible para todo consumidor de
 `:catalog:ui` — que hoy es `:app` y nada más. **Cuándo elegiría otra cosa**: si `catalogEntries` recibiera un
 `EntryProviderScope` envuelto en un tipo propio de la feature, las dos volverían a `implementation` a cambio
@@ -315,7 +315,7 @@ catálogo entero.
 
 ### El snackbar no estrena copy propio
 
-§2 dejó el canal `Channel<AppError>` para el fallo de un refresh pedido por el usuario, sin decidir qué texto
+La Decisión 2 dejó el canal `Channel<AppError>` para el fallo de un refresh pedido por el usuario, sin decidir qué texto
 mostrar. La pantalla reusa `appErrorStrings(error, offline = false).body` — el mismo cuerpo del error
 bloqueante. Para `AppError.Network`, que es el caso real de un pull-to-refresh sin red, eso es exactamente
 «Revisa tu conexión y vuelve a intentarlo.»

@@ -4,24 +4,24 @@
 
 Aceptada — 2026-08-24. Cierra el contexto de favoritos. Con este bloque **los cuatro
 requisitos funcionales quedan cumplidos**. Resuelve la advertencia que el diseño inicial dejó abierta sobre
-`AppErrorStrings` (§2), salda la deuda consciente que declaró ADR-0006 §4, y le da a `:core:database` su
+`AppErrorStrings` (Decisión 2), salda la deuda consciente que declaró ADR-0006 §4, y le da a `:core:database` su
 **primera migración**.
 
 ## Contexto
 
 El requisito 3 —*favoritos persistentes entre reinicios*— es el único funcional que falta, y hoy el corazón
-**se dibuja y no responde** en las dos pantallas. Eso no es un olvido: fue la decisión §4 de ADR-0006, tomada
+**se dibuja y no responde** en las dos pantallas. Eso no es un olvido: fue la Decisión 4 de ADR-0006, tomada
 para no simular con `remember { mutableStateOf }` justo el requisito que pide persistencia. La consecuencia
 es que la demo actual arrastra tres controles muertos.
 
 Lo interesante de este bloque no es el requisito, que es modesto. Es que **es el primer contexto que cruza a
-otro**. `:catalog` se construyó entero sin depender de nadie más; la regla 4 de §1.3 —«cruce entre contextos
+otro**. `:catalog` se construyó entero sin depender de nadie más; la regla 4 de dependencia —«cruce entre contextos
 solo a nivel `domain`»— estaba escrita pero nunca ejercida. Acá se ejerce en las dos direcciones:
 
-| Arista | Por qué | Estado en §1.3 |
+| Arista | Por qué | Estado en las reglas |
 |---|---|---|
 | `:catalog:ui → :favorites:domain` | la grilla necesita saber qué está marcado | ya documentada |
-| `:favorites:ui → :catalog:domain` | la pantalla de favoritos muestra productos | su espejo, §1 de este ADR |
+| `:favorites:ui → :catalog:domain` | la pantalla de favoritos muestra productos | su espejo, Decisión 1 de este ADR |
 
 Los seams ya están puestos, y eso decide buena parte del diseño:
 
@@ -67,7 +67,7 @@ propia, y moverlo después cuesta más que ponerlo bien ahora.
 
 ### 2. La trampa de `AppErrorStrings` no se dispara: la pantalla de favoritos no tiene estado de error
 
-§1.2 dejó el aviso escrito cuando descartó `:core:ui`:
+El grafo de módulos dejó el aviso escrito cuando descartó `:core:ui`:
 
 > `AppErrorStrings` nace en `:catalog:ui`. Ojo con la trampa: `:favorites:ui` **no puede importarlo** de ahí,
 > porque la regla 4 restringe el cruce entre contextos al nivel `domain`. O se duplica, o se promueve.
@@ -76,23 +76,23 @@ Al diseñar la pantalla resulta que **no hace falta ninguna de las dos**. Favori
 nada: no tiene `RefreshCatalog`, no tiene `NetworkMonitor`, no tiene un `Either` del que extraer un
 `AppError`. Sus estados son `Loading` / `Empty` / `Ready`, y ninguno lleva texto de error.
 
-Esto no es un truco para esquivar la regla; es la regla funcionando. El aviso de §1.2 daba por hecho que toda
+Esto no es un truco para esquivar la regla; es la regla funcionando. Ese aviso daba por hecho que toda
 feature muestra errores de red, y esta feature no toca la red.
 
 **Gano** no revivir `:core:ui` por anticipado ni duplicar textos que hoy no divergen. Y gano una respuesta
-concreta a la pregunta que §1.2 dejó abierta, en vez de arrastrarla.
+concreta a la pregunta que quedó abierta, en vez de arrastrarla.
 
 **Pago** que el disparador siga pendiente y haya que volver a evaluarlo, en vez de cerrarlo de una vez.
 
 **Cuándo elegiría otra cosa**: en la Etapa 2, cuando `FavoritesSyncWorker` le dé errores propios a favoritos
 —conflicto resuelto, sync fallido— habrá dos features con `AppError` en pantalla y textos que sí divergen
 («No pudimos cargar el catálogo» vs. «No pudimos guardar el favorito»). **Ese** es el momento de promover, y
-el argumento de §1.2 sobre que el mapeo *probablemente no debe compartirse* seguirá siendo el correcto: lo
+el argumento sobre que el mapeo *probablemente no debe compartirse* seguirá siendo el correcto: lo
 que se promueve es la forma (`título` + `cuerpo`), no las cadenas.
 
 ### 3. La tabla nace con `updatedAt` y `syncState`, y la migración es `@AutoMigration(1 → 2)`
 
-§1.5 pide que la tabla nazca con las dos columnas de sync aunque en la Etapa 1 nunca cambien de valor, para
+El seam previsto para la Etapa 2 pide que la tabla nazca con las dos columnas de sync aunque en la Etapa 1 nunca cambien de valor, para
 no pagar una migración de Room después. Se cumple al pie de la letra:
 
 ```kotlin
@@ -139,7 +139,7 @@ La autoridad es la base, no el estado que la pantalla tenía dibujado. Y el `@Tr
 de carrera entre el `SELECT` y el `INSERT`/`DELETE`, que con dos taps rápidos es alcanzable de verdad.
 
 **Gano** que un tap sobre una grilla que todavía no recompuso no pueda escribir el valor equivocado. Es el
-mismo principio que gobierna §2.1: **una sola fuente de verdad, y no es la UI**.
+mismo principio que gobierna «Room como fuente única de verdad»: **una sola fuente de verdad, y no es la UI**.
 
 **Pago** un parámetro del design system que se ignora, lo que a primera vista parece un descuido y hay que
 explicar en el código.
@@ -164,24 +164,24 @@ el estado `PENDING` de la Etapa 2; usarlo ahora sería inventar una latencia que
 
 **Cuándo elegiría otra cosa**: aquí está lo interesante — **tampoco cambia en la Etapa 2**. El toggle seguirá
 escribiendo local primero (optimista, decisión 12 de `ARCHITECTURE.md`) y el error remoto será del worker, no
-del usuario. `Either` haría falta solo si la escritura fuera remota-primero, que es justo lo que §2.5 de la
+del usuario. `Either` haría falta solo si la escritura fuera remota-primero, que es justo lo que la tabla de estados de la
 Etapa 2 descarta. La firma es estable, no provisoria.
 
 ### 6. El cruce catálogo × favoritos se hace en memoria, en las dos pantallas
 
-§2.2 ya lo decidió para la grilla: sin foreign keys, `combine` y un `Set<ProductId>` para búsqueda O(1). La
+«Sin foreign keys» ya lo decidió para la grilla: sin foreign keys, `combine` y un `Set<ProductId>` para búsqueda O(1). La
 pantalla de favoritos usa exactamente la misma herramienta —`combine(ObserveCatalog(null), ObserveFavoriteIds())`
 y filtrar— en vez de agregar un `observeByIds(ids)` a `CatalogRepository`.
 
 **Gano** cero superficie nueva en el repositorio del catálogo y, sobre todo, que **ninguna query conozca las
 dos tablas**. Es lo que hace que los contextos se puedan eliminar sin romper integridad referencial en disco,
-que es la promesa entera de §2.2.
+que es la promesa entera de «sin foreign keys».
 
 **Pago** un scan O(n) sobre el catálogo completo en cada emisión. Con 20 productos es ruido; conviene decirlo
 antes de que lo pregunten.
 
 **Cuándo elegiría otra cosa**: con paginación, un `WHERE productId IN (:ids)` — pero eso exige que una query
-conozca las dos tablas, que es lo que §2.2 rechaza, así que la salida correcta sería otra: que `:favorites`
+conozca las dos tablas, que es lo que «sin foreign keys» rechaza, así que la salida correcta sería otra: que `:favorites`
 guarde lo que necesita mostrar. El disparador real es la paginación, no el tamaño del catálogo.
 
 **Efecto lateral que se documenta, no se esconde**: un favorito cuyo producto ya no está en `products` —la
@@ -192,16 +192,16 @@ fila se borra es el sync, y el sync todavía no existe.
 ## Consecuencias
 
 - **El diseño inicial cambia en tres lugares**: los cuatro ítems de favoritos se cierran, el ítem de la tabla se
-  cierra), §1.2 (`:core:database` deja de estar «acotado a productos»; `:core:testing` se cierra al final del
+  cierra), el grafo de módulos (`:core:database` deja de estar «acotado a productos»; `:core:testing` se cierra al final del
   bloque). La Etapa 1 pasa a **17 módulos**, 18 con `:core:testing`.
 - **La regla 4 queda ejercida en ambas direcciones y es verificable en el classpath**, que es lo que la
   Etapa 4 va a automatizar. `:favorites:ui` no debe ver Room, Retrofit ni `:catalog:ui`.
 - **`:favorites:domain` es más chico que `:catalog:domain`**: no depende de `:core:common`, porque sin
-  `Either` (§5) no hay nada que importar de ahí. Que el módulo encoja es la prueba de que el contexto está
+  `Either` (Decisión 5) no hay nada que importar de ahí. Que el módulo encoja es la prueba de que el contexto está
   bien acotado, no de que falte algo.
 - **`:core:testing` por fin tiene su segundo consumidor.** ADR-0006 dejó `MainDispatcherExtension` inline en
   `:catalog:ui/src/test` con la regla explícita de que nacería con `:favorites:ui`. Nace. Y el guard de ciclos
-  que §1.2 no podía escribir —«cuáles módulos hay que excluir depende de qué termine dependiendo ese módulo»—
+  que el grafo no podía escribir —«cuáles módulos hay que excluir depende de qué termine dependiendo ese módulo»—
   resulta ser **solo el módulo mismo**: sus únicas dependencias son `kotlinx-coroutines-test` y JUnit, ambas
   externas.
 - **`FakeNetworkMonitor` no sube a `:core:testing`.** Necesitaría `:core:connectivity`, y eso convertiría un
@@ -209,7 +209,7 @@ fila se borra es el sync, y el sync todavía no existe.
   al revés.
 - **`:app` gana dos dependencias**: `:favorites:ui` y `:favorites:data` —esta última solo para que Hilt
   agregue sus `@Module`, igual que `:catalog:data`—.
-- **Deuda consciente**: la fila huérfana de §6 y el `savingFavoriteIds` sin usar de §5. Las dos se resuelven
+- **Deuda consciente**: la fila huérfana de la Decisión 6 y el `savingFavoriteIds` sin usar de la Decisión 5. Las dos se resuelven
   en la Etapa 2 y las dos están escritas acá para que no se descubran como sorpresas.
 
 ## Notas de implementación

@@ -3,7 +3,7 @@
 ## Estado
 
 Aceptada — 2026-08-23. Corrige la línea de `:shared:kernel` del diseño inicial y amplía la lista de
-casos de uso de §1.3. **Ampliada — 2026-08-23** por [ADR-0005](0005-catalog-data-layer.md): agrega un
+casos de uso prevista. **Ampliada — 2026-08-23** por [ADR-0005](0005-catalog-data-layer.md): agrega un
 quinto caso de uso, `ObserveLastSyncedAt`, con el mismo criterio de la decisión 3.
 
 ## Contexto
@@ -19,7 +19,7 @@ respeta su propia regla de pureza: Room no debe conocer el dominio, y un átomo 
 
 `:catalog:domain` es el módulo que introduce el lenguaje ubicuo entre ambos. Al planificarlo aparecieron
 cuatro preguntas que el diseño inicial no tenía resueltas, o tenía resueltas antes de que existiera el código que
-las iba a probar. Es el mismo patrón que ADR-0003 encontró en §2.6.
+las iba a probar. Es el mismo patrón que ADR-0003 encontró en la representación del precio.
 
 ## Decisión
 
@@ -29,15 +29,15 @@ El diseño inicial declaraba el lenguaje ubicuo del kernel como:
 
 > `:shared:kernel` — Kotlin puro. Lenguaje ubicuo: ProductId, Category, Rating, AppError
 
-La **regla 5** de §1.3, en el mismo documento, dice:
+La **regla 5** de dependencia dice:
 
 > `:shared:kernel` es pequeño y **gobernado**: solo entra lo que dos o más contextos hablan de verdad.
 
-La lista de §1.2 no pasa su propia regla. Al contarlos:
+Esa lista no pasa su propia regla. Al contarlos:
 
 | Tipo | ¿Cuántos contextos lo hablan? | Dónde va |
 |---|---|---|
-| `ProductId` | **Dos.** `:favorites:domain` expone `ObserveFavoriteIds` (§1.4), y §2.2 pide textualmente *"un `Set<ProductId>` para búsqueda O(1)"* en el cruce del ViewModel. | `:shared:kernel` |
+| `ProductId` | **Dos.** `:favorites:domain` expone `ObserveFavoriteIds`, y «sin foreign keys» pide textualmente *"un `Set<ProductId>` para búsqueda O(1)"* en el cruce del ViewModel. | `:shared:kernel` |
 | `Category` | **Uno.** Favoritos no filtra ni muestra categorías. | `:catalog:domain` |
 | `Rating` | **Uno.** | `:catalog:domain` |
 
@@ -124,7 +124,7 @@ congelado; la firma del dominio se escribe una sola vez.
 `ObserveCategories` **no agrega un método al repositorio, ni una query al DAO, ni una llamada de red**:
 deriva las categorías del mismo `observeAll(null)` que alimenta la grilla.
 
-`GET /products/categories` existe —el sondeo de arriba salió de ahí— y **se descarta a propósito**. §2.1 es
+`GET /products/categories` existe —el sondeo de arriba salió de ahí— y **se descarta a propósito**. «Room como fuente única de verdad» es
 categórica: *"la UI solo lee de Room"*. Pintar los chips desde una llamada de red rompería esa regla justo
 en el requisito 4: sin conexión, la grilla tendría productos y el filtro estaría vacío.
 
@@ -161,7 +161,7 @@ Sin invariantes que lancen. Ni `ProductId`, ni `Category`, ni `Rating` validan n
   `require` acá tumbaría el refresh completo por un producto mal formado — peor que mostrarlo con cinco
   estrellas.
 
-`Product` **no lleva `isFavorite`**. §2.2 es explícita: sin foreign keys, el cruce ocurre en el ViewModel
+`Product` **no lleva `isFavorite`**. «Sin foreign keys» es explícita: sin foreign keys, el cruce ocurre en el ViewModel
 con `combine`. Meter la bandera en el modelo acoplaría los dos contextos justo donde esa decisión los
 separa.
 

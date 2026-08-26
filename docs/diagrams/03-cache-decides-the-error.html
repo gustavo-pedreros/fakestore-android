@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The cache decides whether an error is blocking</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #fafaf7; --ink: #0b0b0c; --muted: #5c5c56; --accent: #c62a1b;
+    --sans: 'Space Grotesk', system-ui, sans-serif; --serif: 'Instrument Serif', serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans); background: var(--paper); color: var(--ink);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  svg { width: 100%; min-width: 900px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="cache-decides-title cache-decides-desc">
+  <title id="cache-decides-title">The cache decides whether an error is blocking</title>
+  <desc id="cache-decides-desc">Decision tree for the catalog screen: the first question is not whether the network failed but whether there is usable data in Room; with no cache a failed refresh blocks the screen, with cache the content stays and only a staleness banner appears.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">PRESENTATION · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">The cache decides whether an error is blocking</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">The axis is not “did the network fail?” · a failed refresh must never hide data the user already had</text>
+
+  <line x1="640" y1="204" x2="640" y2="240" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 500,280 H 368 Q 360,280 360,288 V 364" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="425" y="256" width="26" height="16" rx="2" fill="#fafaf7"/>
+  <text x="438" y="268" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">NO</text>
+  <path d="M 780,280 H 942 Q 950,280 950,288 V 364" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="849" y="256" width="34" height="16" rx="2" fill="#fafaf7"/>
+  <text x="866" y="268" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">YES</text>
+  <path d="M 240,404 H 158 Q 150,404 150,412 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="162" y="380" width="77" height="16" rx="2" fill="#fafaf7"/>
+  <text x="200" y="392" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">IN FLIGHT</text>
+  <line x1="360" y1="444" x2="360" y2="488" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="368" y="458" width="55" height="16" rx="2" fill="#fafaf7"/>
+  <text x="374" y="470" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="start" letter-spacing="0.06em">FAILED</text>
+  <path d="M 480,404 H 562 Q 570,404 570,412 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="475" y="380" width="98" height="16" rx="2" fill="#fafaf7"/>
+  <text x="524" y="392" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">OK · 0 ITEMS</text>
+  <path d="M 950,444 V 464 Q 950,472 942,472 H 823 Q 815,472 815,480 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="826" y="448" width="113" height="16" rx="2" fill="#fafaf7"/>
+  <text x="882" y="460" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">IN FLIGHT · OK</text>
+  <path d="M 1070,404 H 1107 Q 1115,404 1115,412 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="1123" y="440" width="55" height="16" rx="2" fill="#fafaf7"/>
+  <text x="1129" y="452" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="start" letter-spacing="0.06em">FAILED</text>
+  <path d="M 1115,568 V 588 Q 1115,596 1107,596 H 823 Q 815,596 815,588 V 568" fill="none" stroke="#5c5c56" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <rect x="919" y="604" width="91" height="16" rx="2" fill="#fafaf7"/>
+  <text x="965" y="616" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">BACK ONLINE</text>
+  <rect x="540" y="156" width="200" height="48" rx="20" fill="#fafaf7"/>
+  <rect x="540" y="156" width="200" height="48" rx="20" fill="#ffffff" stroke="#5c5c56" stroke-width="1"/>
+  <text x="640" y="186" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">App opens</text>
+  <polygon points="640,240 780,280 640,320 500,280" fill="#fafaf7"/>
+  <polygon points="640,240 780,280 640,320 500,280" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <text x="640" y="276" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Is there usable data</text>
+  <text x="640" y="296" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">in Room?</text>
+  <polygon points="360,364 480,404 360,444 240,404" fill="#fafaf7"/>
+  <polygon points="360,364 480,404 360,444 240,404" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="360" y="410" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Refresh?</text>
+  <polygon points="950,364 1070,404 950,444 830,404" fill="#fafaf7"/>
+  <polygon points="950,364 1070,404 950,444 830,404" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="950" y="410" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Refresh?</text>
+  <rect x="60" y="488" width="180" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="60" y="488" width="180" height="80" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="150" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Loading</text>
+  <text x="150" y="544" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">skeletons</text>
+  <rect x="270" y="488" width="180" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="270" y="488" width="180" height="80" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="360" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Error</text>
+  <text x="360" y="544" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">blocking · retry</text>
+  <rect x="480" y="488" width="180" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="480" y="488" width="180" height="80" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="570" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Empty</text>
+  <text x="570" y="544" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">server returned nothing</text>
+  <rect x="700" y="488" width="230" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="700" y="488" width="230" height="80" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="815" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Content</text>
+  <text x="815" y="544" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">fresh</text>
+  <rect x="1000" y="488" width="230" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="1000" y="488" width="230" height="80" rx="6" fill="#c8f751" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="1115" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Content</text>
+  <text x="1115" y="544" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">+ staleness banner</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">the axis that governs everything</text>
+  <rect x="436" y="645" width="14" height="12" rx="2" fill="#c8f751" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="458" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">a failed refresh never hides data</text>
+  <line x1="731" y1="651" x2="749" y2="651" stroke="#5c5c56" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="753" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">automatic retry when the network returns</text>
+</svg>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From atom to screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #fafaf7; --ink: #0b0b0c; --muted: #5c5c56; --accent: #c62a1b;
+    --sans: 'Space Grotesk', system-ui, sans-serif; --serif: 'Instrument Serif', serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans); background: var(--paper); color: var(--ink);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  svg { width: 100%; min-width: 900px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="atom-to-screen-title atom-to-screen-desc">
+  <title id="atom-to-screen-title">From atom to screen</title>
+  <desc id="atom-to-screen-desc">Composition pyramid of the design system: atoms, molecules and organisms live in :core:designsystem and can be previewed without launching the app; template and page live in each feature and need state, a ViewModel and navigation.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">DESIGN SYSTEM · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">From atom to screen</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">Atomic design translated to Gradle and Compose · the cut that matters is between organism and template</text>
+
+  <text x="520" y="184" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">MORE SPECIFIC · LESS REUSABLE</text>
+  <polygon points="420,200 620,200 684,272 356,272" fill="#fafaf7"/>
+  <polygon points="420,200 620,200 684,272 356,272" fill="#ffffff" stroke="#5c5c56" stroke-width="1"/>
+  <text x="520" y="230" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Page</text>
+  <text x="520" y="250" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">hiltViewModel() · navigation</text>
+  <text x="980" y="242" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">feature/…Screen stateful</text>
+  <polygon points="356,272 684,272 748,344 292,344" fill="#fafaf7"/>
+  <polygon points="356,272 684,272 748,344 292,344" fill="#ffffff" stroke="#5c5c56" stroke-width="1"/>
+  <text x="520" y="302" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Template</text>
+  <text x="520" y="322" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">(state, callbacks) -&gt; Unit</text>
+  <text x="980" y="314" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">feature/…Screen stateless</text>
+  <polygon points="292,344 748,344 812,416 228,416" fill="#fafaf7"/>
+  <polygon points="292,344 748,344 812,416 228,416" fill="rgba(11,11,12,0.04)" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="520" y="374" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Organism</text>
+  <text x="520" y="394" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">owns layout and scrolling</text>
+  <text x="980" y="386" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">designsystem/organism/</text>
+  <polygon points="228,416 812,416 876,488 164,488" fill="#fafaf7"/>
+  <polygon points="228,416 812,416 876,488 164,488" fill="rgba(11,11,12,0.04)" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="520" y="446" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Molecule</text>
+  <text x="520" y="466" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">takes a UiModel, never domain</text>
+  <text x="980" y="458" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">designsystem/molecule/</text>
+  <polygon points="164,488 876,488 940,560 100,560" fill="#fafaf7"/>
+  <polygon points="164,488 876,488 940,560 100,560" fill="rgba(11,11,12,0.04)" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="520" y="518" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Atom</text>
+  <text x="520" y="538" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">drawn without knowing a store exists</text>
+  <text x="980" y="530" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">designsystem/atom/</text>
+  <text x="520" y="592" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">MORE GENERIC · MORE REUSABLE</text>
+  <line x1="100" y1="344" x2="940" y2="344" stroke="#c62a1b" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="149" y="320" width="62" height="16" rx="2" fill="#fafaf7"/>
+  <text x="180" y="332" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">THE CUT</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">needs the app running</text>
+  <rect x="357" y="645" width="14" height="12" rx="2" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="379" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">previewable without launching the app</text>
+  <line x1="681" y1="651" x2="699" y2="651" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="703" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">the cut that matters</text>
+</svg>
+</div>
+</body>
+</html>

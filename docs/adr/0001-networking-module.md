@@ -159,7 +159,6 @@ También se corrigió, fuera del alcance original de este ADR:
   quedaron alineados a 21.
 
 Explícitamente fuera de este paso (sin cambios respecto al plan original):
-- `NetworkMonitor` (necesita `Context`/`ConnectivityManager`; su consumidor real es el ViewModel de catálogo
-  de §2.5) — se construye junto a `:catalog:data`/`:catalog:ui`.
+- `NetworkMonitor` (necesita `Context`/`ConnectivityManager`; su consumidor real es el ViewModel de catálogo) — se construye junto a `:catalog:data`/`:catalog:ui`.
 - `ProductsApi` y sus DTOs — son de `:catalog:data`, que no existe todavía.
 - Bootstrap de Hilt en `:app` (`FakeStoreApp`, `android:name` en el manifest) — todavía no se hizo.
