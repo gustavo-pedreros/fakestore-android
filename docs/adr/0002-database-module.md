@@ -105,6 +105,15 @@ necesita todavía.
   `deleteByProductId(id: Int)`.
 - `SyncMetadataDao`: `observe(scope: String): Flow<SyncMetadataEntity?>`, `upsert(entity: SyncMetadataEntity)`.
 
+> **Las firmas crecieron después; la forma, no.** `ProductDao.observeAll` gana el filtro por categoría en
+> [ADR-0004, Decisión 4](0004-catalog-domain-model.md#4-el-filtro-por-categoría-entra-ahora-y-se-deriva-de-room);
+> `upsertAll` gana `deleteMissing` y el `syncAll` transaccional en
+> [ADR-0005, Decisión 2](0005-catalog-data-layer.md#2-el-refresh-escribe-con-upsert--poda-por-id-dentro-de-una-transaction);
+> y `FavoriteDao` cambia `upsert`/`deleteByProductId` por `count`/`insert`/`deleteById` bajo un `toggle`
+> atómico en [ADR-0007, Decisión 4](0007-favorites-context.md#4-el-toggle-es-atómico-en-el-dao-y-descarta-el-boolean-que-manda-la-ui).
+> `SyncMetadataDao.observe` shipeó como `observeByScope`. Lo que esta decisión fija —`Flow` para leer,
+> `suspend` para escribir— se sostiene en los tres.
+
 ### 4. `FakeStoreDatabase` + Hilt — mismo patrón que `:core:network`
 
 `di/DatabaseModule.kt` provee `FakeStoreDatabase` (vía `Room.databaseBuilder`, aplicando `Context` de

@@ -316,8 +316,13 @@ catálogo entero.
 ### El snackbar no estrena copy propio
 
 La [Decisión 2](#2-el-viewmodel-no-habla-de-string-el-mapeo-a-fsuistate-ocurre-en-el-borde-composable) dejó el canal `Channel<AppError>` para el fallo de un refresh pedido por el usuario, sin decidir qué texto
-mostrar. La pantalla reusa `appErrorStrings(error, offline = false).body` — el mismo cuerpo del error
-bloqueante. Para `AppError.Network`, que es el caso real de un pull-to-refresh sin red, eso es exactamente
+mostrar. La pantalla reusa **la copy** del error bloqueante, pero **no puede reusar `appErrorStrings`**:
+esa función devuelve `@StringRes Int`, y resolverlos exige `stringResource`, que es `@Composable`. El
+snackbar se muestra desde el `LaunchedEffect` que colecta el canal, o sea desde una corrutina y fuera de la
+composición. La salida es `catalogErrorMessage()` (`CatalogScreen.kt:151`): resuelve los tres cuerpos
+durante la composición y devuelve un lambda plano, que `rememberUpdatedState` mantiene fresco. Duplica el
+`when` de `appErrorStrings` a cambio de no arrastrar el `Context` a la corrutina. Para `AppError.Network`,
+que es el caso real de un pull-to-refresh sin red, eso es exactamente
 «Revisa tu conexión y vuelve a intentarlo.»
 
 **Gano** un string menos y que la causa llegue al usuario en vez de un genérico. **Pago** que el snackbar

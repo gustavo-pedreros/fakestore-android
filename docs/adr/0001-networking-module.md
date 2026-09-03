@@ -62,9 +62,10 @@ sealed interface AppError {
 ```
 
 `EmptyBody` deja de ser un caso decorativo: por el hallazgo de la tabla de arriba, es la señal real de
-"producto no encontrado" en esta API (200 + body vacío), no un 404. Amerita un comentario de una línea en el
-código citando el comportamiento — no es una decisión de diseño, es una excentricidad de la API que hay que
-dejar documentada para no parecer un bug futuro.
+"producto no encontrado" en esta API (200 + body vacío), no un 404. Es una excentricidad de la API, no una
+decisión de diseño, y hay que dejarla documentada para que no parezca un bug futuro. Va acá y no en un
+comentario: el código de este repo no lleva comentarios, así que este ADR es el lugar donde se busca por qué
+existe `EmptyBody`.
 
 - **Pago diferido**: cuando exista el servidor propio de la Etapa 2, si ahí sí se definen códigos de error
   propios, `AppError.Api` + `ErrorCode` vuelven — es el "sistema más elaborado" que ya se anticipaba.
@@ -117,6 +118,9 @@ Efecto neto: `OkHttpClientFactory` recibe una lista de interceptors casi vacía 
   campos que hoy se omiten (`Api`, `ErrorCode`, qualifiers de timeout) tienen un lugar claro adonde volver.
 
 ## Dependencias (BOM)
+
+> Versiones al 2026-08-21, cuando se cerró el módulo. La fuente viva es `gradle/libs.versions.toml`;
+> este cuadro no se actualiza.
 
 | Librería | Versión (BOM) |
 |---|---|

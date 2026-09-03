@@ -141,8 +141,9 @@ de carrera entre el `SELECT` y el `INSERT`/`DELETE`, que con dos taps rápidos e
 **Gano** que un tap sobre una grilla que todavía no recompuso no pueda escribir el valor equivocado. Es el
 mismo principio que gobierna [«Room como fuente única de verdad»](../ARCHITECTURE.md#room-como-fuente-única-de-verdad): **una sola fuente de verdad, y no es la UI**.
 
-**Pago** un parámetro del design system que se ignora, lo que a primera vista parece un descuido y hay que
-explicar en el código.
+**Pago** un parámetro del design system que se ignora, lo que a primera vista parece un descuido. La
+explicación no vive en un comentario —el repo no lleva ninguno— sino en esta decisión, que es lo que hay que
+leer cuando alguien pregunte por ese `Boolean`.
 
 **Cuándo elegiría otra cosa**: con un backend que exponga `PUT /favorites/{id} {favorite: true}`, un
 `setFavorite(id, desired)` idempotente encaja mejor con el reintento del worker — reintentar un `toggle` es
@@ -192,8 +193,8 @@ fila se borra es el sync, y el sync todavía no existe.
 ## Consecuencias
 
 - **El diseño inicial cambia en tres lugares**: los cuatro ítems de favoritos se cierran, el ítem de la tabla se
-  cierra), [el grafo de módulos](../ARCHITECTURE.md#grafo-de-módulos) (`:core:database` deja de estar «acotado a productos»; `:core:testing` se cierra al final del
-  bloque). La Etapa 1 pasa a **17 módulos**, 18 con `:core:testing`.
+  cierra, y [el grafo de módulos](../ARCHITECTURE.md#grafo-de-módulos) (`:core:database` deja de estar «acotado a productos»; `:core:testing` se cierra al final del
+  bloque). La Etapa 1 pasa a **13 módulos**, 14 con `:core:testing`.
 - **La regla 4 queda ejercida en ambas direcciones y es verificable en el classpath**, que es lo que la
   Etapa 4 va a automatizar. `:favorites:ui` no debe ver Room, Retrofit ni `:catalog:ui`.
 - **`:favorites:domain` es más chico que `:catalog:domain`**: no depende de `:core:common`, porque sin
