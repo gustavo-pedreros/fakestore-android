@@ -78,7 +78,16 @@ Two ideas, applied at different scales:
 
 The consequence worth stating plainly: **layers are Gradle modules, so purity is a classpath property, not a
 code-review convention.** You cannot accidentally import Retrofit into `:catalog:domain`, because Retrofit is
-not on its classpath. The tool enforces the rule; nobody has to remember it.
+not on its classpath.
+
+Worth being precise, because the absolute version of that sentence is false. It is not impossible — adding
+the dependency to that module's nine-line `build.gradle.kts` makes it compile. What stops being possible is
+committing the violation *from application code*: you have to open a build file, where the diff states it.
+The rule is not a lock, it is a trimmed classpath, and what it buys is visibility rather than impossibility.
+
+One part is absolute: `*:domain` applies `org.jetbrains.kotlin.jvm`, not `com.android.library`, so it has no
+`android.jar` on its compile classpath. `import android.content.Context` never resolves there, whatever you
+add to `dependencies {}`.
 
 ### Module graph
 
@@ -90,13 +99,16 @@ needs to know *which products are favorites* to draw its hearts, and the favorit
 crossing is allowed.
 
 `:core:testing` sits apart on purpose. The `fakestore.testing` convention plugin puts it on the test
-classpath of every module, so drawing those thirteen edges would bury the production graph under
-test-only wiring that no production code can see.
+classpath of twelve of the other thirteen modules — all but `:core:connectivity`, which has no tests of
+its own — so drawing those twelve edges would bury the production graph under test-only wiring that no
+production code can see.
 
 ### Dependency rules
 
 1. `*:domain` is **pure Kotlin/JVM** — no Android, no Retrofit, no Room, no Compose.
-2. `*:data` implements the interfaces its own `*:domain` declares. Hilt wires them at runtime.
+2. `*:data` implements the repository interface its own `*:domain` declares, and provides the domain's use
+   cases over it. `*:domain` carries no DI annotation at all; Hilt resolves and validates those bindings at
+   compile time.
 3. `*:ui` depends on `*:domain` (**never** on `*:data`), on `:core:designsystem`, and on technical `:core:*`
    modules that carry neither UI nor persistence.
 4. **Contexts cross only at `domain` level.** A `data` module never depends on another context — that would
@@ -134,8 +146,10 @@ Two details close the case:
 - **The retry is automatic.** `NetworkMonitor` emits the offline→online transition and, if the last refresh
   failed, fires `RefreshCatalog` on its own. The user never has to find the button, and the staleness banner
   closes itself. Verified on an emulator: coming back from airplane mode, you cannot tap Retry fast enough.
-- **"No connection" and "the server failed" are different messages.** `AppError.Network` produces
-  connectivity-specific copy; everything else goes through the error ACL.
+- **Four different messages, not one.** Being offline short-circuits the rest: if `NetworkMonitor`
+  says there is no connection, the copy is connectivity-specific whatever the failure was. Online, the
+  ACL decides between `AppError.Network`, `Http`/`EmptyBody` and `Unknown`, each with its own title
+  and body.
 
 Every row of that diagram is a **ViewModel test with virtual time**, not a manual check.
 
@@ -218,7 +232,7 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 
 | # | Decision | What I gained | What I paid / when I'd choose otherwise |
 |---|---|---|---|
-| 1 | **A layer is a Gradle module, not a package** | `domain` purity is guaranteed by the build. Importing Retrofit into a domain module is not a discipline problem — it is a compile error. | 14 modules for two screens; slower syncs and more Gradle friction. On a small team or an exploratory product I would use vertical slices with layers as packages. |
+| 1 | **A layer is a Gradle module, not a package** | `domain` purity is a classpath property: importing Retrofit there is a compile error. Not impossible — you can edit that module's build file — but the violation can no longer be committed from application code, and the Android framework is genuinely out of reach. | 14 modules for two screens; slower syncs and more Gradle friction. On a small team or an exploratory product I would use vertical slices with layers as packages. |
 | 2 | **A module group is a bounded context** | A context can be understood, tested and replaced whole. Growing means adding modules, not editing existing ones. | Requires explicit contracts between contexts and the discipline to resist the shortcut. |
 | 3 | **Contexts cross only at `domain` level** | The catalog needs to know what is a favorite. Allowing that edge at `domain` (Customer/Supplier) is honest; allowing it at `data` would be an invisible coupling. | It is a rule that must be *verified*, not just written. Hence Stage 4. |
 | 4 | **One physical Room database, separate DAOs** | On mobile, N SQLite connections cost memory, battery and migrations. DDD's logical boundaries survive because each `data` module only ever sees its own DAO. | It breaks orthodox purity: entities from several contexts live in one shared technical module. A conscious mobile-pragmatism trade. |
@@ -325,7 +339,7 @@ in this README and in review; Stage 4 is where they become build failures instea
 | `:core:database` | Android lib | The single Room instance, entities, DAOs, migrations |
 | `:core:designsystem` | Compose lib | M3 theme, tokens, atoms → molecules → organisms, `FsIcons` |
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
-| `:core:testing` | Pure Kotlin | JUnit 5 extensions shared by every module's tests |
+| `:core:testing` | Pure Kotlin | `MainDispatcherExtension` and the shared test dependencies |
 
 Seven **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
 `build.gradle.kts` is usually a plugin list and a handful of dependencies.
@@ -342,6 +356,6 @@ Seven **convention plugins** in `build-logic/` carry the shared build configurat
 | DI | Hilt 2.60.1 + KSP |
 | Network | Retrofit 3.0.0 + OkHttp 5.4.0 + kotlinx.serialization |
 | Persistence | Room 2.8.4, schemas exported and version-controlled |
-| Images | Coil 3 with disk cache |
+| Images | Coil 3 over OkHttp, stock `ImageLoader` — the disk cache is Coil's default, not a setting here |
 | Time | `kotlin.time.Instant` / `Clock` from the stdlib |
 | Test | JUnit 5, Turbine, MockWebServer, Robolectric |

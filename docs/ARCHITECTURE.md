@@ -26,8 +26,17 @@ diseño elegido es el que hace compatibles SDUI y offline-first.
 - **Clean Architecture dentro de cada contexto** → `ui → domain ← data`, con inversión de dependencias.
 
 Al ser DDD ortodoxo, **las capas son módulos Gradle, no paquetes**. La consecuencia práctica es la que
-importa: `domain` no puede importar Retrofit ni Room porque no los tiene en el classpath. La disciplina la
-impone la herramienta, no la buena voluntad ni la revisión de código.
+importa: `domain` no tiene Retrofit ni Room en su classpath, así que importarlos ahí no compila.
+
+Vale la pena ser preciso, porque la versión absoluta de esa frase es falsa. No es imposible: se arregla
+agregando la dependencia al `build.gradle.kts` del módulo, que son nueve líneas. Lo que deja de poder
+hacerse es cometer la violación **desde el código de la aplicación** — hay que ir a un archivo de build
+donde el diff la declara. La regla no la impone un candado; la impone el classpath recortado, y lo que
+gana no es imposibilidad sino visibilidad.
+
+Hay un punto donde sí es absoluto: `*:domain` aplica `org.jetbrains.kotlin.jvm`, no `com.android.library`,
+así que no tiene `android.jar` en su classpath de compilación. `import android.content.Context` no resuelve
+nunca, agregues la dependencia que agregues; haría falta cambiarle el plugin al módulo.
 
 ### Grafo de módulos
 
@@ -39,16 +48,16 @@ impone la herramienta, no la buena voluntad ni la revisión de código.
 :catalog:ui              Compose + ViewModels + UiState + UiMappers.
 
 :favorites:domain        Kotlin puro. FavoritesRepository, ToggleFavorite, ObserveFavoriteIds.
-:favorites:data          Room. Escritura optimista local.
+:favorites:data          Room. Escritura local sobre FavoriteDao.
 :favorites:ui            Pantalla de favoritos.
 
 :shared:kernel           Kotlin puro. Lenguaje ubicuo: ProductId, AppError.
-:core:common             Either, DispatcherProvider, Formatters, Clock. Kotlin puro.
+:core:common             Kotlin puro. Either y sus operadores (map, flatMap, fold).
 :core:connectivity       NetworkMonitor (ConnectivityManager → Flow<Boolean>).
 :core:network            Retrofit/OkHttp/kotlinx.serialization, executeCall, ACL de errores.
 :core:database           Instancia física única de Room + entities + DAOs + migraciones.
-:core:designsystem       Tema M3, tokens, átomos, moléculas, organismos, FsIcons, test tags.
-:core:testing            Extensiones JUnit5, fakes, factories.
+:core:designsystem       Tema M3, tokens, átomos, moléculas, organismos, FsIcons, modelos de UI.
+:core:testing            Kotlin puro. MainDispatcherExtension + dependencias de test.
 ```
 
 `:core:connectivity` no vive dentro de `:core:network` porque lo consumen `:catalog:ui` y, en el diseño de
@@ -61,7 +70,9 @@ dependencia en los existentes. Ninguna reescribe la anterior.
 ### Reglas de dependencia
 
 1. `*:domain` es **Kotlin/JVM puro**: sin Android, sin Retrofit, sin Room, sin Compose.
-2. `*:data` implementa las interfaces que declara su `*:domain`. Hilt cablea en runtime.
+2. `*:data` implementa la interfaz de repositorio que declara su `*:domain`, y provee sobre ella los casos
+   de uso del dominio. `*:domain` no lleva ni una anotación de DI; Hilt resuelve y valida esos bindings en
+   tiempo de compilación.
 3. `*:ui` depende de `*:domain` (nunca de `*:data`), de `:core:designsystem`, y de los `:core:*` técnicos
    que no traen UI ni persistencia. Lo que la regla protege es que la presentación no toque Retrofit ni
    Room — no que tenga un número fijo de aristas.
@@ -88,7 +99,7 @@ arquitectura sobre el classpath— es trabajo pendiente, no algo que este repo y
 | DI | Hilt 2.60.1 + KSP 2.3.9. `hilt-lifecycle-viewmodel-compose` 1.4.0 en vez de `hilt-navigation-compose`, que arrastraría Navigation 2 |
 | Red | Retrofit 3.0.0 (BOM) + OkHttp 5.4.0 (BOM) + kotlinx.serialization 1.10.0 |
 | Persistencia | Room 2.8.4 (KSP) — última estable de la línea 2.x; la 3.0/KMP sigue en alpha ([ADR-0002](adr/0002-database-module.md)) |
-| Imágenes | Coil 3, con caché en disco |
+| Imágenes | Coil 3 sobre OkHttp, con el `ImageLoader` de fábrica — la caché en disco es su default, acá no se configura nada |
 | Fechas | `kotlin.time.Instant`/`Clock` — stdlib, estable desde Kotlin 2.3 ([ADR-0005, Decisión 3](adr/0005-catalog-data-layer.md#3-lastsyncedat-entra-en-este-bloque-y-no-trae-ninguna-dependencia)) |
 | Test | JUnit 5 (mannodermaus), `kotlinx-coroutines-test`, Turbine 1.2.1, MockWebServer. **Sin MockK**: los casos de uso son `fun interface`, así que los dobles son lambdas ([ADR-0004, Decisión 3](adr/0004-catalog-domain-model.md#3-la-forma-del-caso-de-uso-la-decide-su-contenido)). Para Room: Robolectric 4.16.1 + driver por defecto, con JUnit4 vía `junit-vintage-engine` ([ADR-0002](adr/0002-database-module.md), Corrección) |
 
@@ -121,18 +132,19 @@ referencial en disco.
 El eje que gobierna toda la presentación del catálogo no es *"¿falló la red?"* sino **"¿hay datos
 utilizables en Room?"**. Un fallo de refresh **nunca** debe tapar datos que el usuario ya tenía.
 
-El ViewModel combina tres flujos: `ObserveCatalog()` (Room), el resultado del refresh en curso, y
-`NetworkMonitor.isOnline`.
+El ViewModel combina cinco flujos: el catálogo ya cruzado con los favoritos (`CatalogSlice`), las
+categorías, `lastSyncedAt`, el estado del refresh en curso y `NetworkMonitor.isOnline`. Cuatro de ellos
+deciden el estado de la tabla de abajo; las categorías y los favoritos solo se pintan encima.
 
 | Caché | Refresh | Conexión | Estado | UI |
 |---|---|---|---|---|
 | vacía | en curso | — | `Loading` | Skeletons |
-| vacía | falló | offline | `Error(Network)` | Pantalla completa: *"Sin conexión…"* + Reintentar |
-| vacía | falló | online | `Error(appError)` | Pantalla completa con el mensaje de la ACL + Reintentar |
+| vacía | falló | offline | `Failure(offline = true)` | Pantalla completa: *"Sin conexión…"* + Reintentar |
+| vacía | falló | online | `Failure(offline = false)` | Pantalla completa con el mensaje de la ACL + Reintentar |
 | vacía | OK, 0 items | — | `Empty` | Estado vacío: el servidor respondió, pero no hay catálogo |
-| con datos | en curso | — | `Content` | Contenido + indicador de refresco |
-| con datos | falló | — | `Content` | Contenido + `FsStatusBanner` con la antigüedad + snackbar no bloqueante |
-| con datos | OK | — | `Content` | Contenido fresco |
+| con datos | en curso | — | `Ready` | Contenido + indicador de refresco |
+| con datos | falló | — | `Ready` | Contenido + `FsStatusBanner` con la antigüedad; snackbar **solo si el refresh lo pidió el usuario** |
+| con datos | OK | — | `Ready` | Contenido fresco |
 
 Detalles que cierran el caso:
 
@@ -142,7 +154,7 @@ Detalles que cierran el caso:
 - **Detalle sin caché.** `ProductDetailViewModel` **no** refresca al entrar: pedir el catálogo completo en
   cada tap sería un desperdicio. Solo dispara `RefreshCatalog` cuando el producto falta — que es exactamente
   el caso del deep link. Si un sync exitoso tampoco lo trae, el estado es `Unavailable`, no un error.
-- **Imágenes.** La caché en disco de Coil las conserva offline; las que nunca se descargaron caen a
+- **Imágenes.** La caché en disco que Coil trae por defecto las conserva offline; las que nunca se descargaron caen a
   placeholder con `contentDescription`, sin romper la fila.
 
 Los estados de la tabla son **tests de ViewModel**, no verificación manual.
@@ -249,7 +261,7 @@ contexto**. Las últimas cuatro corresponden al diseño de [«Diseñado, no cons
 
 | # | Decisión | Por qué | Trade-off / cuándo NO lo haría |
 |---|---|---|---|
-| 1 | [**DDD ortodoxo: capa = módulo Gradle**](#2-dos-ideas-ordenan-todo) | La pureza de `domain` la garantiza el build, no la disciplina. Imposible importar Retrofit en un módulo que no lo tiene en el classpath. | ~20 módulos para 2 pantallas. Fricción de Gradle y sync más lento. En un equipo chico o un producto exploratorio usaría vertical slices con capas como paquetes. |
+| 1 | [**DDD ortodoxo: capa = módulo Gradle**](#2-dos-ideas-ordenan-todo) | La pureza de `domain` es una propiedad del classpath: importar Retrofit ahí no compila. No es imposible —se edita el build del módulo— pero deja de ser una violación cometible desde el código, y el framework de Android sí queda fuera de alcance. | 14 módulos para 2 pantallas. Fricción de Gradle y sync más lento. En un equipo chico o un producto exploratorio usaría vertical slices con capas como paquetes. |
 | 2 | [**Módulo = bounded context**](#2-dos-ideas-ordenan-todo) | Un contexto se entiende, se testea y se reemplaza entero. Crecer es agregar módulos, no tocar los existentes. Un equipo puede ser dueño de un contexto. | Exige definir contratos explícitos entre contextos y resistir la tentación del atajo. |
 | 3 | [**Cruce entre contextos solo a nivel `domain`**](#reglas-de-dependencia) | El catálogo necesita saber qué es favorito. Permitir la arista en `domain` (Customer/Supplier) es honesto; permitirla en `data` sería un acoplamiento invisible. | Es una regla que hay que verificar, no solo escribir. De ahí que falten los tests de arquitectura. |
 | 4 | [**Una sola base física de Room, DAOs separados**](adr/0002-database-module.md) | En móvil, N conexiones SQLite cuestan memoria, batería y migraciones. Los límites lógicos se mantienen porque cada `data` solo ve su DAO. | Rompe la pureza ortodoxa: hay entidades de varios contextos en un módulo técnico compartido. Pragmatismo móvil consciente. |
