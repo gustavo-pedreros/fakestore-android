@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #fafaf7; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    a { color: #c62a1b; } a:hover { color: #8f1e13; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 1 · LA CONSECUENCIA PRÁCTICA</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">Una capa es un módulo de Gradle, no una carpeta</h1>
+
+  <div style="margin-top: 34px; display: flex; gap: 56px; align-items: flex-start">
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 18px">
+      <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #0b0b0c; text-wrap: pretty">El módulo de dominio del catálogo no tiene Retrofit ni Room en su classpath.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 32px; line-height: 1.2; color: #0b0b0c; text-wrap: pretty">No es que esté mal visto importarlos: <span style="color: #c62a1b">no compila.</span></p>
+      <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #5c5c56; text-wrap: pretty">¿Imposible? No: se arregla agregando la dependencia al build. Lo que no se puede es cometer la violación <strong style="font-weight: 600; color: #0b0b0c">desde el código</strong> — hay que abrir un archivo de nueve líneas, que se toca dos veces al año, donde el diff dice textual que estás metiendo HTTP en el dominio.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 19px; line-height: 1.38; color: #5c5c56; text-wrap: pretty">No es una pared infranqueable. Es una pared que no cruzás distraído, y que deja marca cuando la cruzás.</p>
+    </div>
+
+    <div style="width: 470px; flex: none; display: flex; flex-direction: column; gap: 14px">
+      <div style="background: #f2f2ee; border: 1px solid rgba(11,11,12,0.14); border-radius: 6px; padding: 18px 22px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">CATALOG/DOMAIN/…/USECASE/REFRESHCATALOG.KT</div>
+        <pre style="margin: 14px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; color: #0b0b0c; white-space: pre-wrap">import retrofit2.Retrofit</pre>
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(11,11,12,0.12); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.55; color: #c62a1b">e: Unresolved reference 'retrofit2'</div>
+        <div style="margin-top: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 1.6; color: #8a8a82">se arregla editando el build del módulo</div>
+      </div>
+      <div style="background: rgba(198,42,27,0.05); border: 1px solid rgba(198,42,27,0.30); border-radius: 6px; padding: 18px 22px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #c62a1b">Y ACÁ SÍ ES ABSOLUTO</div>
+        <pre style="margin: 14px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; color: #0b0b0c; white-space: pre-wrap">import android.content.Context</pre>
+        <div style="margin-top: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 1.6; color: #5c5c56">el módulo es <span style="color: #0b0b0c">kotlin.jvm</span>, no <span style="color: #0b0b0c">android.library</span>:<br>no hay <span style="color: #0b0b0c">android.jar</span> en el classpath, y eso<br>no se arregla con ninguna dependencia</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 34px; display: flex; gap: 20px; align-items: flex-start; background: rgba(11,11,12,0.03); border-left: 2px solid #0b0b0c; padding: 18px 22px">
+    <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #5c5c56; flex: none; padding-top: 4px">LO QUE PAGA</span>
+    <span style="font-size: 16px; line-height: 1.5; color: #0b0b0c; text-wrap: pretty">Catorce módulos para dos pantallas. Sincronizaciones más lentas y más fricción de Gradle. En un equipo chico, o en un producto todavía exploratorio, elegiría <em>vertical slices</em>, con las capas como paquetes.</span>
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>README §KEY DECISIONS #1</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

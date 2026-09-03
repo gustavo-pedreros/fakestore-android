@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Arquitectura de FakeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: 13.333in 7.5in; margin: 0; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; background: #fafaf7; }
+  body { font-family: 'Space Grotesk', system-ui, sans-serif; }
+  a { color: #c62a1b; }
+  .page { width: 1280px; height: 720px; overflow: hidden; position: relative;
+           break-after: page; page-break-after: always; }
+  .page:last-child { break-after: auto; page-break-after: auto; }
+  .page > div, .page > svg { width: 1280px; height: 720px; }
+</style>
+</head>
+<body>
+<section class="page" data-slide="Main.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">DESAFÍO TÉCNICO · MOBILE ANDROID · AGOSTO 2026</div>
+
+  <div style="margin-top: auto; display: flex; flex-direction: column; gap: 36px">
+    <h1 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 128px; line-height: 0.88; letter-spacing: -0.035em; color: #0b0b0c">FakeStore</h1>
+    <div style="display: flex; gap: 24px; align-items: stretch">
+      <div style="width: 2px; background: #c62a1b; flex: none"></div>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 28px; line-height: 1.32; color: #0b0b0c; max-width: 820px; text-wrap: pretty">La arquitectura de esta app no está escrita en un documento.<br><span style="color: #c62a1b">Está escrita en el build.</span></p>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; padding-top: 20px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; align-items: baseline; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; color: #5c5c56">
+    <span>GUSTAVO PEDREROS</span>
+    <span style="color: #8a8a82">14 MÓDULOS · 15 PULL REQUESTS · 87 TESTS · 7 ADR</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="Encargo.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 0 · EL ENCARGO</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">Cuatro requisitos, dos deseables</h1>
+
+  <div style="margin-top: 30px; display: flex; flex-direction: column">
+
+    <div style="display: flex; align-items: center; gap: 18px; padding: 12px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex: none"><path d="M3 8.4 6.2 11.6 13 4.8" stroke="#0b0b0c" stroke-width="1.6" stroke-linecap="square"/></svg>
+      <span style="flex: 1; font-size: 18px; font-weight: 500">Lista de productos con imagen, título y precio — con estados de carga y de error</span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; color: #5c5c56">catalog/ui/catalog · 13 tests</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 18px; padding: 12px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex: none"><path d="M3 8.4 6.2 11.6 13 4.8" stroke="#0b0b0c" stroke-width="1.6" stroke-linecap="square"/></svg>
+      <span style="flex: 1; font-size: 18px; font-weight: 500">Pantalla de detalle con imagen grande, descripción, precio y categoría</span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; color: #5c5c56">catalog/ui/detail</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 18px; padding: 12px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex: none"><path d="M3 8.4 6.2 11.6 13 4.8" stroke="#0b0b0c" stroke-width="1.6" stroke-linecap="square"/></svg>
+      <span style="flex: 1; font-size: 18px; font-weight: 500">Favoritos que sobreviven al reinicio</span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; color: #5c5c56">favorites/ · 3 módulos</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 18px; padding: 12px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex: none"><path d="M3 8.4 6.2 11.6 13 4.8" stroke="#0b0b0c" stroke-width="1.6" stroke-linecap="square"/></svg>
+      <span style="flex: 1; font-size: 18px; font-weight: 500">Caché offline con indicador visual de datos guardados</span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; color: #5c5c56">Room es la SSOT · FsStatusBanner</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 18px; padding: 12px 14px; margin: 10px -14px 0; background: rgba(198,42,27,0.06); border-bottom: 1px solid rgba(198,42,27,0.18)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex: none"><path d="M8 2.6 13.4 8 8 13.4 2.6 8Z" stroke="#c62a1b" stroke-width="1.4" stroke-dasharray="3 2.4"/></svg>
+      <span style="flex: 1; font-size: 18px; font-weight: 500; color: #0b0b0c">Deseable — construir mi propia API</span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: #c62a1b">DISEÑADO, NO CONSTRUIDO</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 18px; padding: 12px 14px; margin: 0 -14px; background: rgba(198,42,27,0.06)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex: none"><path d="M8 2.6 13.4 8 8 13.4 2.6 8Z" stroke="#c62a1b" stroke-width="1.4" stroke-dasharray="3 2.4"/></svg>
+      <span style="flex: 1; font-size: 18px; font-weight: 500; color: #0b0b0c">Deseable — <em style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 20px">“si logras hacerlo con server-driven UI, entonces eres un rockstar”</em></span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: #c62a1b">DISEÑADO, NO CONSTRUIDO</span>
+    </div>
+
+  </div>
+
+  <p style="margin: 26px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 21px; line-height: 1.36; color: #5c5c56; max-width: 900px; text-wrap: pretty">Quien evalúa debería poder distinguir lo que quedó fuera de tiempo de lo que quedó fuera de pensamiento.</p>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>README §WHAT THE CHALLENGE ASKED</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="DosIdeas.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; overflow: hidden">
+<svg viewBox="0 0 1280 720" width="1280" height="720" style="display: block" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="module-graph-title module-graph-desc">
+  <title id="module-graph-title">Layers are Gradle modules</title>
+  <desc id="module-graph-desc">Module graph of FakeStore Android: :app wires two bounded contexts, catalog and favorites, each with its ui, domain and data modules; ui and data depend on domain, the two contexts cross only at domain level, and both consume a shared technical core.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">ARCHITECTURE · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">Layers are Gradle modules</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">13 production modules · the purity of :domain is a classpath property, not a code-review convention</text>
+
+  <rect x="80" y="240" width="520" height="240" rx="8" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.10)" stroke-width="0.8"/>
+  <rect x="96" y="244" width="136" height="14" rx="2" fill="#fafaf7"/>
+  <text x="104" y="255" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">BOUNDED CONTEXT · CATALOG</text>
+  <rect x="680" y="240" width="520" height="240" rx="8" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.10)" stroke-width="0.8"/>
+  <rect x="696" y="244" width="146" height="14" rx="2" fill="#fafaf7"/>
+  <text x="704" y="255" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">BOUNDED CONTEXT · FAVORITES</text>
+  <rect x="80" y="508" width="1120" height="108" rx="8" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.10)" stroke-width="0.8"/>
+  <rect x="96" y="512" width="160" height="14" rx="2" fill="#fafaf7"/>
+  <text x="104" y="523" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">TECHNICAL CORE · CROSS-CUTTING</text>
+  <path d="M 600,216 V 224 Q 600,232 592,232 H 348 Q 340,232 340,240" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 680,216 V 224 Q 680,232 688,232 H 932 Q 940,232 940,240" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="446" y="208" width="48" height="16" rx="2" fill="#fafaf7"/>
+  <text x="470" y="220" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">WIRES</text>
+  <rect x="786" y="208" width="48" height="16" rx="2" fill="#fafaf7"/>
+  <text x="810" y="220" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">WIRES</text>
+  <path d="M 304,316 H 328 Q 336,316 336,324 V 342 Q 336,350 344,350 H 376" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 304,424 H 344 Q 352,424 352,416 V 388 Q 352,380 360,380 H 376" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 976,324 H 952 Q 944,324 944,332 V 342 Q 944,350 936,350 H 904" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 976,424 H 936 Q 928,424 928,416 V 388 Q 928,380 920,380 H 904" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 304,288 H 760 Q 768,288 768,296 V 332" fill="none" stroke="#c62a1b" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+  <path d="M 976,312 H 776 a 8,8 0 0,0 -16,0 H 528 Q 520,312 520,320 V 332" fill="none" stroke="#c62a1b" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+  <rect x="476" y="264" width="113" height="16" rx="2" fill="#fafaf7"/>
+  <text x="532" y="276" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">USES FAVORITES</text>
+  <rect x="601" y="320" width="98" height="16" rx="2" fill="#fafaf7"/>
+  <text x="650" y="332" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">USES CATALOG</text>
+  <line x1="340" y1="480" x2="340" y2="508" stroke="#5c5c56" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <line x1="940" y1="480" x2="940" y2="508" stroke="#5c5c56" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <rect x="540" y="152" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="540" y="152" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="552" y="162" width="31" height="14" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="568" y="172" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">ROOT</text>
+  <text x="640" y="196" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:app</text>
+  <text x="640" y="210" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">NavHost · Hilt · theme</text>
+  <rect x="104" y="272" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="104" y="272" width="200" height="64" rx="6" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <rect x="116" y="282" width="22" height="14" rx="2" fill="none" stroke="#8a8a82" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="127" y="292" fill="#8a8a82" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">UI</text>
+  <text x="204" y="316" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:catalog:ui</text>
+  <text x="204" y="330" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">Compose · ViewModel</text>
+  <rect x="376" y="332" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="376" y="332" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="388" y="342" width="31" height="14" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="404" y="352" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">PURE</text>
+  <text x="476" y="376" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:catalog:domain</text>
+  <text x="476" y="390" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">no Android</text>
+  <rect x="104" y="392" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="104" y="392" width="200" height="64" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="116" y="402" width="31" height="14" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="132" y="412" fill="#5c5c56" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DATA</text>
+  <text x="204" y="436" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:catalog:data</text>
+  <text x="204" y="450" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">Retrofit · Room · ACL</text>
+  <rect x="976" y="272" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="976" y="272" width="200" height="64" rx="6" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <rect x="988" y="282" width="22" height="14" rx="2" fill="none" stroke="#8a8a82" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="999" y="292" fill="#8a8a82" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">UI</text>
+  <text x="1076" y="316" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:favorites:ui</text>
+  <text x="1076" y="330" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">Compose · ViewModel</text>
+  <rect x="704" y="332" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="704" y="332" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="716" y="342" width="31" height="14" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="732" y="352" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">PURE</text>
+  <text x="804" y="376" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:favorites:domain</text>
+  <text x="804" y="390" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">no Android</text>
+  <rect x="976" y="392" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="976" y="392" width="200" height="64" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="988" y="402" width="31" height="14" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="1004" y="412" fill="#5c5c56" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DATA</text>
+  <text x="1076" y="436" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:favorites:data</text>
+  <text x="1076" y="450" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">Room · local-first</text>
+  <rect x="104" y="540" width="320" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="104" y="540" width="320" height="64" rx="6" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <rect x="116" y="550" width="36" height="14" rx="2" fill="none" stroke="rgba(11,11,12,0.30)" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="134" y="560" fill="rgba(11,11,12,0.30)" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">← :ui</text>
+  <text x="264" y="584" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:core:designsystem</text>
+  <text x="264" y="598" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">+ :core:connectivity</text>
+  <rect x="480" y="540" width="320" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="480" y="540" width="320" height="64" rx="6" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <rect x="492" y="550" width="46" height="14" rx="2" fill="none" stroke="rgba(11,11,12,0.30)" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="515" y="560" fill="rgba(11,11,12,0.30)" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">← :data</text>
+  <text x="640" y="584" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:core:network</text>
+  <text x="640" y="598" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">+ :core:database</text>
+  <rect x="856" y="540" width="320" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="856" y="540" width="320" height="64" rx="6" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <rect x="868" y="550" width="55" height="14" rx="2" fill="none" stroke="rgba(11,11,12,0.30)" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="896" y="560" fill="rgba(11,11,12,0.30)" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">← :domain</text>
+  <text x="1016" y="584" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:shared:kernel</text>
+  <text x="1016" y="598" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">+ :core:common</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">UI · presentation</text>
+  <rect x="328" y="645" width="14" height="12" rx="2" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="350" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">PURE · Kotlin/JVM</text>
+  <rect x="508" y="645" width="14" height="12" rx="2" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="530" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">DATA · Retrofit · Room</text>
+  <rect x="724" y="645" width="14" height="12" rx="2" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <text x="746" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">TECHNICAL core</text>
+  <line x1="882" y1="651" x2="900" y2="651" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="904" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">cross-context edge</text>
+</svg>
+</div></section>
+<section class="page" data-slide="CapaEsModulo.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 1 · LA CONSECUENCIA PRÁCTICA</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">Una capa es un módulo de Gradle, no una carpeta</h1>
+
+  <div style="margin-top: 34px; display: flex; gap: 56px; align-items: flex-start">
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 18px">
+      <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #0b0b0c; text-wrap: pretty">El módulo de dominio del catálogo no tiene Retrofit ni Room en su classpath.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 32px; line-height: 1.2; color: #0b0b0c; text-wrap: pretty">No es que esté mal visto importarlos: <span style="color: #c62a1b">no compila.</span></p>
+      <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #5c5c56; text-wrap: pretty">¿Imposible? No: se arregla agregando la dependencia al build. Lo que no se puede es cometer la violación <strong style="font-weight: 600; color: #0b0b0c">desde el código</strong> — hay que abrir un archivo de nueve líneas, que se toca dos veces al año, donde el diff dice textual que estás metiendo HTTP en el dominio.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 19px; line-height: 1.38; color: #5c5c56; text-wrap: pretty">No es una pared infranqueable. Es una pared que no cruzás distraído, y que deja marca cuando la cruzás.</p>
+    </div>
+
+    <div style="width: 470px; flex: none; display: flex; flex-direction: column; gap: 14px">
+      <div style="background: #f2f2ee; border: 1px solid rgba(11,11,12,0.14); border-radius: 6px; padding: 18px 22px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">CATALOG/DOMAIN/…/USECASE/REFRESHCATALOG.KT</div>
+        <pre style="margin: 14px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; color: #0b0b0c; white-space: pre-wrap">import retrofit2.Retrofit</pre>
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(11,11,12,0.12); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.55; color: #c62a1b">e: Unresolved reference 'retrofit2'</div>
+        <div style="margin-top: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 1.6; color: #8a8a82">se arregla editando el build del módulo</div>
+      </div>
+      <div style="background: rgba(198,42,27,0.05); border: 1px solid rgba(198,42,27,0.30); border-radius: 6px; padding: 18px 22px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #c62a1b">Y ACÁ SÍ ES ABSOLUTO</div>
+        <pre style="margin: 14px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; color: #0b0b0c; white-space: pre-wrap">import android.content.Context</pre>
+        <div style="margin-top: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 1.6; color: #5c5c56">el módulo es <span style="color: #0b0b0c">kotlin.jvm</span>, no <span style="color: #0b0b0c">android.library</span>:<br>no hay <span style="color: #0b0b0c">android.jar</span> en el classpath, y eso<br>no se arregla con ninguna dependencia</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 34px; display: flex; gap: 20px; align-items: flex-start; background: rgba(11,11,12,0.03); border-left: 2px solid #0b0b0c; padding: 18px 22px">
+    <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #5c5c56; flex: none; padding-top: 4px">LO QUE PAGA</span>
+    <span style="font-size: 16px; line-height: 1.5; color: #0b0b0c; text-wrap: pretty">Catorce módulos para dos pantallas. Sincronizaciones más lentas y más fricción de Gradle. En un equipo chico, o en un producto todavía exploratorio, elegiría <em>vertical slices</em>, con las capas como paquetes.</span>
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>README §KEY DECISIONS #1</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="FuenteUnica.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; overflow: hidden">
+<svg viewBox="0 0 1280 720" width="1280" height="720" style="display: block" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="single-source-of-truth-title single-source-of-truth-desc">
+  <title id="single-source-of-truth-title">Room is the single source of truth</title>
+  <desc id="single-source-of-truth-desc">Catalog data flow: the network only ever writes to Room through the data layer, and the UI only ever reads from Room through a Flow; the refresh the screen triggers goes back to the data layer, never straight to the screen.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">OFFLINE-FIRST · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">Room is the single source of truth</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">Exactly one arrow into the database and one arrow out · that is why no offline mode exists in the code</text>
+
+  <line x1="380" y1="248" x2="480" y2="248" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="410" y="224" width="41" height="16" rx="2" fill="#fafaf7"/>
+  <text x="430" y="236" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">HTTP</text>
+  <path d="M 720,248 H 772 Q 780,248 780,256 V 368 Q 780,376 788,376 H 820" fill="none" stroke="#0b0b0c" stroke-width="1.2" marker-end="url(#arrow-ink)"/>
+  <rect x="717" y="308" width="55" height="16" rx="2" fill="#fafaf7"/>
+  <text x="766" y="320" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end" letter-spacing="0.06em">WRITES</text>
+  <path d="M 900,416 V 512 Q 900,520 892,520 H 720" fill="none" stroke="#0b0b0c" stroke-width="1.2" marker-end="url(#arrow-ink)"/>
+  <rect x="908" y="456" width="106" height="16" rx="2" fill="#fafaf7"/>
+  <text x="914" y="468" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="start" letter-spacing="0.06em">Flow&lt;Product&gt;</text>
+  <line x1="480" y1="520" x2="380" y2="520" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="392" y="496" width="77" height="16" rx="2" fill="#fafaf7"/>
+  <text x="430" y="508" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">StateFlow</text>
+  <path d="M 260,480 V 400 Q 260,392 268,392 H 612 Q 620,392 620,384 V 288" fill="none" stroke="#5c5c56" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <rect x="409" y="368" width="62" height="16" rx="2" fill="#fafaf7"/>
+  <text x="440" y="380" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">REFRESH</text>
+  <rect x="140" y="208" width="240" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="140" y="208" width="240" height="80" rx="6" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <rect x="152" y="218" width="31" height="14" rx="2" fill="none" stroke="rgba(11,11,12,0.30)" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="168" y="228" fill="rgba(11,11,12,0.30)" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">HTTP</text>
+  <text x="260" y="252" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">fakestoreapi.com</text>
+  <text x="260" y="266" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">GET /products</text>
+  <rect x="480" y="208" width="240" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="480" y="208" width="240" height="80" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="492" y="218" width="31" height="14" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="508" y="228" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DATA</text>
+  <text x="600" y="252" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">:catalog:data</text>
+  <text x="600" y="266" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">DTO to domain · ACL</text>
+  <rect x="820" y="336" width="280" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="820" y="336" width="280" height="80" rx="6" fill="#c8f751" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="832" y="346" width="31" height="14" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="848" y="356" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">SSOT</text>
+  <text x="960" y="380" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Room</text>
+  <text x="960" y="394" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">products · favorites</text>
+  <rect x="480" y="480" width="240" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="480" y="480" width="240" height="80" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="492" y="490" width="22" height="14" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="503" y="500" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">VM</text>
+  <text x="600" y="524" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">ViewModel</text>
+  <text x="600" y="538" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">combine(5 flows)</text>
+  <rect x="140" y="480" width="240" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="140" y="480" width="240" height="80" rx="6" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <rect x="152" y="490" width="22" height="14" rx="2" fill="none" stroke="#8a8a82" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="163" y="500" fill="#8a8a82" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">UI</text>
+  <text x="260" y="524" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Compose</text>
+  <text x="260" y="538" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">only ever reads Room</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">network · writes only</text>
+  <rect x="357" y="645" width="14" height="12" rx="2" fill="#c8f751" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="379" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">single source of truth</text>
+  <rect x="573" y="645" width="14" height="12" rx="2" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <text x="595" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">presentation · reads only</text>
+  <line x1="811" y1="651" x2="829" y2="651" stroke="#5c5c56" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="833" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">refresh the UI triggers</text>
+</svg>
+</div></section>
+<section class="page" data-slide="CacheDecide.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; overflow: hidden">
+<svg viewBox="0 0 1280 720" width="1280" height="720" style="display: block" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="cache-decides-title cache-decides-desc">
+  <title id="cache-decides-title">The cache decides whether an error is blocking</title>
+  <desc id="cache-decides-desc">Decision tree for the catalog screen: the first question is not whether the network failed but whether there is usable data in Room; with no cache a failed refresh blocks the screen, with cache the content stays and only a staleness banner appears.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">PRESENTATION · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">The cache decides whether an error is blocking</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">The axis is not “did the network fail?” · a failed refresh must never hide data the user already had</text>
+
+  <line x1="640" y1="204" x2="640" y2="240" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 500,280 H 368 Q 360,280 360,288 V 364" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="425" y="256" width="26" height="16" rx="2" fill="#fafaf7"/>
+  <text x="438" y="268" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">NO</text>
+  <path d="M 780,280 H 942 Q 950,280 950,288 V 364" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="849" y="256" width="34" height="16" rx="2" fill="#fafaf7"/>
+  <text x="866" y="268" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">YES</text>
+  <path d="M 240,404 H 158 Q 150,404 150,412 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="162" y="380" width="77" height="16" rx="2" fill="#fafaf7"/>
+  <text x="200" y="392" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">IN FLIGHT</text>
+  <line x1="360" y1="444" x2="360" y2="488" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="368" y="458" width="55" height="16" rx="2" fill="#fafaf7"/>
+  <text x="374" y="470" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="start" letter-spacing="0.06em">FAILED</text>
+  <path d="M 480,404 H 562 Q 570,404 570,412 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="475" y="380" width="98" height="16" rx="2" fill="#fafaf7"/>
+  <text x="524" y="392" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">OK · 0 ITEMS</text>
+  <path d="M 950,444 V 464 Q 950,472 942,472 H 823 Q 815,472 815,480 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="826" y="448" width="113" height="16" rx="2" fill="#fafaf7"/>
+  <text x="882" y="460" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">IN FLIGHT · OK</text>
+  <path d="M 1070,404 H 1107 Q 1115,404 1115,412 V 488" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="1123" y="440" width="55" height="16" rx="2" fill="#fafaf7"/>
+  <text x="1129" y="452" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="start" letter-spacing="0.06em">FAILED</text>
+  <path d="M 1115,568 V 588 Q 1115,596 1107,596 H 823 Q 815,596 815,588 V 568" fill="none" stroke="#5c5c56" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <rect x="919" y="604" width="91" height="16" rx="2" fill="#fafaf7"/>
+  <text x="965" y="616" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">BACK ONLINE</text>
+  <rect x="540" y="156" width="200" height="48" rx="20" fill="#fafaf7"/>
+  <rect x="540" y="156" width="200" height="48" rx="20" fill="#ffffff" stroke="#5c5c56" stroke-width="1"/>
+  <text x="640" y="186" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">App opens</text>
+  <polygon points="640,240 780,280 640,320 500,280" fill="#fafaf7"/>
+  <polygon points="640,240 780,280 640,320 500,280" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <text x="640" y="276" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Is there usable data</text>
+  <text x="640" y="296" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">in Room?</text>
+  <polygon points="360,364 480,404 360,444 240,404" fill="#fafaf7"/>
+  <polygon points="360,364 480,404 360,444 240,404" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="360" y="410" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Refresh?</text>
+  <polygon points="950,364 1070,404 950,444 830,404" fill="#fafaf7"/>
+  <polygon points="950,364 1070,404 950,444 830,404" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="950" y="410" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Refresh?</text>
+  <rect x="60" y="488" width="180" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="60" y="488" width="180" height="80" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="150" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Loading</text>
+  <text x="150" y="544" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">skeletons</text>
+  <rect x="270" y="488" width="180" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="270" y="488" width="180" height="80" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="360" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Error</text>
+  <text x="360" y="544" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">blocking · retry</text>
+  <rect x="480" y="488" width="180" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="480" y="488" width="180" height="80" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="570" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Empty</text>
+  <text x="570" y="544" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">server returned nothing</text>
+  <rect x="700" y="488" width="230" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="700" y="488" width="230" height="80" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="815" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Content</text>
+  <text x="815" y="544" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">fresh</text>
+  <rect x="1000" y="488" width="230" height="80" rx="6" fill="#fafaf7"/>
+  <rect x="1000" y="488" width="230" height="80" rx="6" fill="#c8f751" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="1115" y="528" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Content</text>
+  <text x="1115" y="544" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">+ staleness banner</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">the axis that governs everything</text>
+  <rect x="436" y="645" width="14" height="12" rx="2" fill="#c8f751" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="458" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">a failed refresh never hides data</text>
+  <line x1="731" y1="651" x2="749" y2="651" stroke="#5c5c56" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="753" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">automatic retry when the network returns</text>
+</svg>
+</div></section>
+<section class="page" data-slide="Demo.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 2 · LA APP, CORRIENDO</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">El reintento es automático</h1>
+
+  <div style="margin-top: 24px; display: flex; gap: 44px; align-items: flex-start">
+
+    <div style="width: 190px; flex: none; display: flex; flex-direction: column; gap: 12px">
+      <img src="assets/demo-reintento.webp" alt="Secuencia real en el emulador: modo avión sin caché muestra la pantalla de error, vuelve la red y el catálogo carga solo." style="width: 190px; height: 398px; object-fit: cover; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 8px; background: #fafaf7">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; line-height: 1.7; color: #5c5c56">SIN CACHÉ<br><span style="color: #8a8a82">modo avión → red → carga sola</span></div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 20px; padding-top: 4px">
+      <p style="margin: 0; font-size: 18px; line-height: 1.52; text-wrap: pretty">Sin caché y sin red, la pantalla de error es lo correcto: no hay nada que mostrar.</p>
+      <p style="margin: 0; font-size: 18px; line-height: 1.52; text-wrap: pretty">Con caché, el contenido <strong style="font-weight: 600">se queda</strong>. Aparece una banda con la antigüedad de los datos, y un aviso que no bloquea nada.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 27px; line-height: 1.26; color: #c62a1b; text-wrap: pretty">Un fallo de red nunca debe tapar datos que el usuario ya tenía.</p>
+      <p style="margin: 0; font-size: 18px; line-height: 1.52; text-wrap: pretty">Y cuando vuelve la conexión, la app reintenta sola: la banda se cierra sin que nadie toque Reintentar.</p>
+      <div style="margin-top: 4px; display: flex; gap: 14px; align-items: center; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; color: #5c5c56; line-height: 1.6">
+        <span style="border: 1px solid rgba(11,11,12,0.20); border-radius: 4px; padding: 6px 10px">5 estados · 13 tests</span>
+        <span>cada rama es un test de presentación con tiempo virtual, no una verificación manual</span>
+      </div>
+      <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; color: #8a8a82">CAPTURAS REALES · TRES TOMAS CONSECUTIVAS DE LA MISMA CORRIDA</div>
+    </div>
+
+    <div style="width: 190px; flex: none; display: flex; flex-direction: column; gap: 12px">
+      <img src="assets/offline.jpg" alt="Catálogo en modo avión mostrando los datos guardados con la banda de antigüedad en la parte superior." style="width: 190px; height: 398px; object-fit: cover; object-position: top; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 8px">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; line-height: 1.7; color: #5c5c56">CON CACHÉ<br><span style="color: #8a8a82">el contenido se queda + banda</span></div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>CLIP DE 45 s · VER GUION §MARCA DE CLIP</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="LineaDeTiempo.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; overflow: hidden">
+<svg viewBox="0 0 1280 720" width="1280" height="720" style="display: block" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="linea-de-tiempo-title linea-de-tiempo-desc">
+  <title id="linea-de-tiempo-title">Cuatro días, quince pull requests</title>
+  <desc id="linea-de-tiempo-desc">Línea de tiempo de los cuatro días de construcción de FakeStore Android, de viernes a lunes: las fundaciones y la red el viernes, el design system completo el sábado, el domingo la infraestructura de build extraída tarde junto con Room, la corrección del precio y el catálogo, y el lunes la capa de presentación y el contexto de favoritos entero. Dos hitos marcados en coral: el design system antes que la primera pantalla, y favoritos agregado completo al final.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">CÓMO SE CONSTRUYÓ · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">Cuatro días, quince pull requests</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">126 commits · ninguna etapa reescribió la anterior: crecer fue agregar módulos</text>
+
+  <!-- day bands -->
+  <rect x="96" y="176" width="276" height="424" fill="rgba(11,11,12,0.022)"/>
+  <rect x="648" y="176" width="276" height="424" fill="rgba(11,11,12,0.022)"/>
+  <line x1="96" y1="176" x2="96" y2="600" stroke="rgba(11,11,12,0.08)" stroke-width="0.8"/>
+  <line x1="372" y1="176" x2="372" y2="600" stroke="rgba(11,11,12,0.08)" stroke-width="0.8"/>
+  <line x1="648" y1="176" x2="648" y2="600" stroke="rgba(11,11,12,0.08)" stroke-width="0.8"/>
+  <line x1="924" y1="176" x2="924" y2="600" stroke="rgba(11,11,12,0.08)" stroke-width="0.8"/>
+  <line x1="1200" y1="176" x2="1200" y2="600" stroke="rgba(11,11,12,0.08)" stroke-width="0.8"/>
+
+  <text x="234" y="204" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">VIERNES 21</text>
+  <text x="234" y="222" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.10em">PR #1–2</text>
+  <text x="510" y="204" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">SÁBADO 22</text>
+  <text x="510" y="222" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.10em">PR #3</text>
+  <text x="786" y="204" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">DOMINGO 23</text>
+  <text x="786" y="222" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.10em">PR #4–9</text>
+  <text x="1062" y="204" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">LUNES 24</text>
+  <text x="1062" y="222" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.10em">PR #10–15</text>
+
+  <!-- editorial aside -->
+  <text x="1200" y="256" fill="#5c5c56" font-size="16" font-family="'Instrument Serif', serif" font-style="italic" text-anchor="end">el lunes cierran los cuatro requisitos</text>
+
+  <!-- drop hairlines (drawn before the baseline and the dots) -->
+  <line x1="234" y1="356" x2="234" y2="396" stroke="rgba(11,11,12,0.28)" stroke-width="0.8"/>
+  <line x1="700" y1="356" x2="700" y2="396" stroke="rgba(11,11,12,0.28)" stroke-width="0.8"/>
+  <line x1="1000" y1="356" x2="1000" y2="396" stroke="rgba(11,11,12,0.28)" stroke-width="0.8"/>
+  <line x1="812" y1="284" x2="812" y2="396" stroke="rgba(11,11,12,0.28)" stroke-width="0.8"/>
+  <line x1="510" y1="404" x2="510" y2="452" stroke="#c62a1b" stroke-opacity="0.45" stroke-width="0.8"/>
+  <line x1="868" y1="404" x2="868" y2="452" stroke="rgba(11,11,12,0.28)" stroke-width="0.8"/>
+  <line x1="1108" y1="404" x2="1108" y2="452" stroke="#c62a1b" stroke-opacity="0.45" stroke-width="0.8"/>
+  <line x1="756" y1="404" x2="756" y2="524" stroke="rgba(11,11,12,0.28)" stroke-width="0.8"/>
+
+  <!-- baseline -->
+  <line x1="96" y1="400" x2="1208" y2="400" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- events -->
+  <circle cx="234" cy="400" r="4" fill="#0b0b0c"/>
+  <text x="234" y="328" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Fundaciones</text>
+  <text x="234" y="344" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">Either · AppError · red</text>
+
+  <circle cx="510" cy="400" r="6" fill="#c62a1b"/>
+  <text x="510" y="468" fill="#c62a1b" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Design system</text>
+  <text x="510" y="484" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">átomos → organismos</text>
+
+  <circle cx="700" cy="400" r="4" fill="#0b0b0c"/>
+  <text x="700" y="328" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">build-logic</text>
+  <text x="700" y="344" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">7 convention plugins</text>
+
+  <circle cx="756" cy="400" r="4" fill="#0b0b0c"/>
+  <text x="756" y="540" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Room</text>
+  <text x="756" y="556" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">el driver falla 2 veces</text>
+
+  <circle cx="812" cy="400" r="4" fill="#0b0b0c"/>
+  <text x="812" y="256" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Precio → Double</text>
+  <text x="812" y="272" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">ADR-0003 corrige ADR-0002</text>
+
+  <circle cx="868" cy="400" r="4" fill="#0b0b0c"/>
+  <text x="868" y="468" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Catálogo</text>
+  <text x="868" y="484" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">dominio + datos</text>
+
+  <circle cx="1000" cy="400" r="4" fill="#0b0b0c"/>
+  <text x="1000" y="328" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Catálogo UI</text>
+  <text x="1000" y="344" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">el corazón, desconectado</text>
+
+  <circle cx="1108" cy="400" r="6" fill="#c62a1b"/>
+  <text x="1108" y="468" fill="#c62a1b" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Favoritos</text>
+  <text x="1108" y="484" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">3 módulos de una vez</text>
+
+  <!-- legend -->
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEYENDA</text>
+  <circle cx="152" cy="652" r="4" fill="#0b0b0c"/>
+  <text x="168" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">bloque de trabajo, un pull request</text>
+  <circle cx="480" cy="652" r="6" fill="#c62a1b"/>
+  <text x="496" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">los dos hitos que prueban la flexibilidad de la arquitectura</text>
+</svg>
+</div></section>
+<section class="page" data-slide="SpecVsEntregado.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 3 · HITO UNO</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">El design system se construyó antes que la primera pantalla</h1>
+
+  <div style="margin-top: 30px; display: flex; gap: 56px; align-items: flex-start">
+
+    <div style="flex: none; display: flex; gap: 28px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <img src="assets/spec-lista.jpg" alt="Lámina de especificación de la lista de productos, dibujada en el design system antes de escribir la pantalla." style="width: 176px; height: 381px; object-fit: cover; object-position: top; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 8px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; line-height: 1.7; color: #5c5c56">ESPECIFICADO<br><span style="color: #8a8a82">1 de 13 láminas</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <img src="assets/catalogo.jpg" alt="La misma pantalla en el build entregado, con las fotos reales de la API." style="width: 176px; height: 381px; object-fit: cover; object-position: top; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 8px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; line-height: 1.7; color: #5c5c56">ENTREGADO<br><span style="color: #8a8a82">el build</span></div>
+      </div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 22px; padding-top: 4px">
+      <p style="margin: 0; font-size: 19px; line-height: 1.5; text-wrap: pretty">Trece láminas dibujadas antes del primer componente de código.</p>
+      <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #5c5c56; text-wrap: pretty">Atomic design se inventó para la web, donde una página es un archivo. En Android hay módulos, ViewModels y navegación, así que sus cinco capas hubo que <strong style="font-weight: 600; color: #0b0b0c">traducirlas, no copiarlas</strong>.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 27px; line-height: 1.26; color: #c62a1b; text-wrap: pretty">El corte que importa está entre el organismo y la plantilla: todo lo que está por encima se puede previsualizar sin lanzar la app.</p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; color: #5c5c56">
+        <span style="border: 1px solid rgba(11,11,12,0.20); border-radius: 4px; padding: 6px 10px">átomo</span>
+        <span style="border: 1px solid rgba(11,11,12,0.20); border-radius: 4px; padding: 6px 10px">molécula</span>
+        <span style="border: 1px solid rgba(11,11,12,0.20); border-radius: 4px; padding: 6px 10px">organismo</span>
+        <span style="border: 1px dashed rgba(11,11,12,0.28); border-radius: 4px; padding: 6px 10px; color: #8a8a82">plantilla</span>
+        <span style="border: 1px dashed rgba(11,11,12,0.28); border-radius: 4px; padding: 6px 10px; color: #8a8a82">página</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>ART/DESIGN-SYSTEM · 13 LÁMINAS</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="AtomoAPantalla.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; overflow: hidden">
+<svg viewBox="0 0 1280 720" width="1280" height="720" style="display: block" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="atom-to-screen-title atom-to-screen-desc">
+  <title id="atom-to-screen-title">From atom to screen</title>
+  <desc id="atom-to-screen-desc">Composition pyramid of the design system: atoms, molecules and organisms live in :core:designsystem and can be previewed without launching the app; template and page live in each feature and need state, a ViewModel and navigation.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">DESIGN SYSTEM · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">From atom to screen</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">Atomic design translated to Gradle and Compose · the cut that matters is between organism and template</text>
+
+  <text x="520" y="184" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">MORE SPECIFIC · LESS REUSABLE</text>
+  <polygon points="420,200 620,200 684,272 356,272" fill="#fafaf7"/>
+  <polygon points="420,200 620,200 684,272 356,272" fill="#ffffff" stroke="#5c5c56" stroke-width="1"/>
+  <text x="520" y="230" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Page</text>
+  <text x="520" y="250" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">hiltViewModel() · navigation</text>
+  <text x="980" y="242" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">feature/…Screen stateful</text>
+  <polygon points="356,272 684,272 748,344 292,344" fill="#fafaf7"/>
+  <polygon points="356,272 684,272 748,344 292,344" fill="#ffffff" stroke="#5c5c56" stroke-width="1"/>
+  <text x="520" y="302" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Template</text>
+  <text x="520" y="322" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">(state, callbacks) -&gt; Unit</text>
+  <text x="980" y="314" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">feature/…Screen stateless</text>
+  <polygon points="292,344 748,344 812,416 228,416" fill="#fafaf7"/>
+  <polygon points="292,344 748,344 812,416 228,416" fill="rgba(11,11,12,0.04)" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="520" y="374" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Organism</text>
+  <text x="520" y="394" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">owns layout and scrolling</text>
+  <text x="980" y="386" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">designsystem/organism/</text>
+  <polygon points="228,416 812,416 876,488 164,488" fill="#fafaf7"/>
+  <polygon points="228,416 812,416 876,488 164,488" fill="rgba(11,11,12,0.04)" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="520" y="446" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Molecule</text>
+  <text x="520" y="466" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">takes a UiModel, never domain</text>
+  <text x="980" y="458" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">designsystem/molecule/</text>
+  <polygon points="164,488 876,488 940,560 100,560" fill="#fafaf7"/>
+  <polygon points="164,488 876,488 940,560 100,560" fill="rgba(11,11,12,0.04)" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="520" y="518" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Atom</text>
+  <text x="520" y="538" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">drawn without knowing a store exists</text>
+  <text x="980" y="530" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">designsystem/atom/</text>
+  <text x="520" y="592" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.14em">MORE GENERIC · MORE REUSABLE</text>
+  <line x1="100" y1="344" x2="940" y2="344" stroke="#c62a1b" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="149" y="320" width="62" height="16" rx="2" fill="#fafaf7"/>
+  <text x="180" y="332" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">THE CUT</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">needs the app running</text>
+  <rect x="357" y="645" width="14" height="12" rx="2" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="379" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">previewable without launching the app</text>
+  <line x1="681" y1="651" x2="699" y2="651" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="703" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">the cut that matters</text>
+</svg>
+</div></section>
+<section class="page" data-slide="Favoritos.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 3 · HITO CINCO · EL QUE MÁS ME INTERESA</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">Se borra un contexto entero; no se desarma una app</h1>
+
+  <div style="margin-top: 30px; display: flex; gap: 56px; align-items: flex-start">
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 20px">
+      <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #5c5c56; text-wrap: pretty">Durante dos bloques enteros, esta app tuvo un corazón dibujado que no hacía absolutamente nada. Fue a propósito: simularlo con estado en memoria habría hecho <em>parecer</em> cumplido justo el requisito que pide persistir entre reinicios.</p>
+      <p style="margin: 0; font-size: 18px; line-height: 1.5; text-wrap: pretty">Cuando llegó el contexto completo —dominio, datos y su propia pantalla— el catálogo y el detalle <strong style="font-weight: 600">no se tocaron</strong>. Se agregó una línea en el ViewModel que cruza los dos flujos.</p>
+      <div style="background: #f2f2ee; border: 1px solid rgba(11,11,12,0.14); border-radius: 6px; padding: 16px 18px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.65; color: #0b0b0c">combine(catalogFlow, favoriteIdsFlow)</div>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1.28; color: #c62a1b; text-wrap: pretty">Y ahora demos vuelta el argumento. Si mañana el negocio decide que favoritos no va, se borran tres módulos y sus tres aristas, y el dominio del catálogo ni se entera.</p>
+    </div>
+
+    <svg width="470" height="380" viewBox="0 0 470 380" style="flex: none; display: block" role="img" aria-labelledby="fav-del-title fav-del-desc">
+      <title id="fav-del-title">Borrar el contexto de favoritos</title>
+      <desc id="fav-del-desc">Los tres módulos del contexto de favoritos —interfaz, dominio y datos— encerrados en un límite, y una sola arista punteada que los conecta con el dominio del catálogo. Borrar el contexto significa borrar esos tres módulos y las tres aristas de Gradle que entran en ellos.</desc>
+      <defs>
+        <marker id="fav-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+      </defs>
+
+      <text x="6" y="20" fill="#c62a1b" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">FAVORITES · CONTEXTO COMPLETO</text>
+      <rect x="6" y="32" width="222" height="232" rx="6" fill="rgba(198,42,27,0.05)" stroke="#c62a1b" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <line x1="117" y1="102" x2="117" y2="122" stroke="#c62a1b" stroke-width="1" marker-end="url(#fav-arrow-accent)"/>
+      <line x1="117" y1="200" x2="117" y2="180" stroke="#c62a1b" stroke-width="1" marker-end="url(#fav-arrow-accent)"/>
+      <line x1="288" y1="151" x2="216" y2="151" stroke="#c62a1b" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#fav-arrow-accent)"/>
+
+      <rect x="24" y="48" width="186" height="54" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+      <text x="117" y="80" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:favorites:ui</text>
+
+      <rect x="24" y="124" width="186" height="54" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+      <text x="117" y="156" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:favorites:domain</text>
+
+      <rect x="24" y="200" width="186" height="54" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+      <text x="117" y="232" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:favorites:data</text>
+
+      <rect x="290" y="124" width="164" height="54" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+      <text x="372" y="156" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:catalog:domain</text>
+
+      <rect x="226" y="129" width="52" height="14" fill="#fafaf7"/>
+      <text x="252" y="140" fill="#5c5c56" font-size="9" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">1 arista</text>
+
+      <line x1="6" y1="300" x2="460" y2="300" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+      <text x="6" y="324" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500">borrar favoritos = 3 módulos + 3 aristas de Gradle</text>
+      <text x="6" y="346" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace">:catalog:domain y :catalog:data: cero referencias · sin llave foránea</text>
+      <text x="6" y="366" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace">la presentación pierde un campo por estado · la tabla, una migración</text>
+    </svg>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>ADR-0007 · CONTEXTO DE FAVORITOS</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="Decisiones.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 4 · LAS DECISIONES Y SU PRECIO</div>
+  <div style="margin-top: 14px; display: flex; align-items: baseline; justify-content: space-between; gap: 40px">
+    <h1 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">Qué gané, qué pagué, cuándo elegiría distinto</h1>
+    <span style="flex: none; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em; color: #5c5c56">ocho acá · doce en arquitectura · van cuatro</span>
+  </div>
+  <p style="margin: 12px 0 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 20px; line-height: 1.34; color: #5c5c56">Una decisión sin costo declarado es una decisión que no se pensó.</p>
+
+  <div style="margin-top: 22px; display: grid; grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr); gap: 0 34px">
+
+    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr); gap: 0 34px; padding-bottom: 9px; border-bottom: 1px solid rgba(11,11,12,0.22); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.16em">
+      <span style="color: #5c5c56">LA DECISIÓN</span>
+      <span style="color: #5c5c56">GANÉ</span>
+      <span style="color: #c62a1b">PAGUÉ / CUÁNDO ELEGIRÍA DISTINTO</span>
+    </div>
+
+    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr); gap: 0 34px; padding: 14px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <span style="font-size: 16px; font-weight: 600; line-height: 1.35">La capa es un módulo de Gradle</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">La regla la impone el compilador, no la revisión de código.</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">Catorce módulos para dos pantallas. En un equipo chico: <em>vertical slices</em>.</span>
+    </div>
+
+    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr); gap: 0 34px; padding: 14px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <span style="font-size: 16px; font-weight: 600; line-height: 1.35">No hay interceptor de mocks</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">El arranque en frío —sin caché y sin red— fue un caso real que hubo que diseñar, en vez de un escenario que el mock esconde.</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">La primera apertura necesita conexión. Contra una API inestable o privada, el mock sí valdría la pena.</span>
+    </div>
+
+    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr); gap: 0 34px; padding: 14px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <span style="font-size: 16px; font-weight: 600; line-height: 1.35">El precio es un número simple, no un tipo monetario</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">La API no manda campo de moneda y en la app no hay una sola operación aritmética. Sin aritmética no hay error de redondeo.</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">El día que haya carrito, totales o impuestos hay que volver a modelarlo — y ese disparador ya está escrito.</span>
+    </div>
+
+    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr); gap: 0 34px; padding: 14px 0; border-bottom: 1px solid rgba(11,11,12,0.10)">
+      <span style="font-size: 16px; font-weight: 600; line-height: 1.35">El botón de favorito ignora lo que la pantalla le dice</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">Una transacción abre, lee la tabla y decide. La autoridad es la base, no lo que la pantalla tenía dibujado: dos taps rápidos no desincronizan nada.</span>
+      <span style="font-size: 13px; line-height: 1.5; color: #5c5c56">Un parámetro que se ignora y que, a primera vista, parece un descuido.</span>
+    </div>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>+ 4 MÁS EN ESTA TABLA, CON EL MISMO FORMATO</span>
+    <span>README §KEY DECISIONS · DOCS/ARCHITECTURE §6</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="ServerDriven.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 5 · HACIA DÓNDE CRECE · ETAPA 2</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">El servidor manda estructura y referencias, nunca contenido</h1>
+
+  <div style="margin-top: 26px; display: flex; gap: 48px; align-items: flex-start">
+
+    <div style="width: 560px; flex: none; background: #f2f2ee; border: 1px solid rgba(11,11,12,0.14); border-radius: 6px; padding: 20px 22px">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">PAYLOAD DE PANTALLA · CONTRACT VERSION 1</div>
+      <pre style="margin: 16px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 1.62; color: #0b0b0c; white-space: pre-wrap; word-break: break-word">{ "screenId": "product_list", "contractVersion": 1,
+  "root": { "type": "lazy_list", "id": "list", "source": "catalog",
+    "itemTemplate": { "type": "product_card", "id": "card",
+      "image": <span style="color: #c62a1b">"{product.image}"</span>, "title": <span style="color: #c62a1b">"{product.title}"</span>,
+      "price": <span style="color: #c62a1b">"{product.price}"</span>,
+      "trailing": { "type": "favorite_toggle",
+                    "productId": <span style="color: #c62a1b">"{product.id}"</span> } } } }</pre>
+      <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(11,11,12,0.12); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 1.7; color: #5c5c56">el cliente resuelve esas referencias contra el dominio<br>que ya tiene cacheado en Room</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 15px; padding-top: 2px">
+      <p style="margin: 0; font-size: 17px; line-height: 1.52; color: #5c5c56; text-wrap: pretty">El servidor decide cómo se ve la pantalla y la app la dibuja. El valor de negocio es directo: cambiar el orden de una pantalla, o lanzar una campaña, <strong style="font-weight: 600; color: #0b0b0c">sin pasar por una publicación en la tienda</strong>.</p>
+      <p style="margin: 0; font-size: 17px; line-height: 1.52; color: #5c5c56; text-wrap: pretty">Hecho de la forma habitual choca de frente con el offline-first: el servidor manda la pantalla ya rellena, y eso obliga a cachear pantallas renderizadas — justo lo que rompe la fuente única de verdad.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 27px; line-height: 1.26; color: #c62a1b; text-wrap: pretty">El payload no dice el título del producto. Dice «acá va el título del producto».</p>
+      <p style="margin: 0; font-size: 17px; line-height: 1.52; text-wrap: pretty">Layout cacheado más datos cacheados significa que la app puede renderizar una pantalla dirigida por el servidor <strong style="font-weight: 600">estando en modo avión</strong>.</p>
+      <div style="display: flex; gap: 20px; align-items: flex-start; border-left: 2px solid #0b0b0c; padding: 4px 0 4px 18px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #5c5c56; flex: none; padding-top: 3px">LO QUE PAGA</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5c5c56">Complejidad en el cliente, que tiene que resolver esas referencias.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>README §ROADMAP — DESIGNED, NOT BUILT</span>
+  </div>
+
+</div></section>
+<section class="page" data-slide="EscaleraSdui.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; overflow: hidden">
+<svg viewBox="0 0 1280 720" width="1280" height="720" style="display: block" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fallback-ladder-title fallback-ladder-desc">
+  <title id="fallback-ladder-title">The SDUI fallback ladder</title>
+  <desc id="fallback-ladder-desc">Four-level fallback ladder for the server-driven UI: fresh contract from the server, contract cached in Room, contract shipped in the APK assets and, as the floor, the native screen that is already built.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">DESIGNED, NOT BUILT · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">The SDUI fallback ladder</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">The real risk of SDUI is the server leaving you with no UI · each level is used only when the one above fails</text>
+
+  <line x1="88" y1="224" x2="88" y2="556" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="52" y="212" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">DEGRADES</text>
+  <rect x="120" y="208" width="1080" height="88" rx="6" fill="#fafaf7"/>
+  <rect x="120" y="208" width="1080" height="88" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="144" y="244" width="26" height="16" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.45" stroke-width="0.8"/>
+  <text x="157" y="256" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">01</text>
+  <text x="200" y="258" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif">Server</text>
+  <text x="440" y="257" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">fresh contract</text>
+  <text x="1176" y="257" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end">if unreachable  ↓</text>
+  <rect x="120" y="300" width="1080" height="88" rx="6" fill="#fafaf7"/>
+  <rect x="120" y="300" width="1080" height="88" rx="6" fill="#f2f2ee" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="144" y="336" width="26" height="16" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.45" stroke-width="0.8"/>
+  <text x="157" y="348" fill="#5c5c56" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">02</text>
+  <text x="200" y="350" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif">Room</text>
+  <text x="440" y="349" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">contract cached on disk</text>
+  <text x="1176" y="349" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end">if empty  ↓</text>
+  <rect x="120" y="392" width="1080" height="88" rx="6" fill="#fafaf7"/>
+  <rect x="120" y="392" width="1080" height="88" rx="6" fill="#edede6" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="144" y="428" width="26" height="16" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.45" stroke-width="0.8"/>
+  <text x="157" y="440" fill="#5c5c56" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">03</text>
+  <text x="200" y="442" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif">Bundled assets</text>
+  <text x="440" y="441" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">contract shipped in the APK</text>
+  <text x="1176" y="441" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end">if unparseable  ↓</text>
+  <rect x="120" y="484" width="1080" height="88" rx="6" fill="#fafaf7"/>
+  <rect x="120" y="484" width="1080" height="88" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <rect x="144" y="520" width="26" height="16" rx="2" fill="none" stroke="#c62a1b" stroke-opacity="0.45" stroke-width="0.8"/>
+  <text x="157" y="532" fill="#c62a1b" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">04</text>
+  <text x="200" y="534" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif">Native screen</text>
+  <text x="440" y="533" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">Compose · Stage 1, already built</text>
+  <text x="1176" y="533" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end">the app is never blank</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">remote or cached contract</text>
+  <rect x="386" y="645" width="14" height="12" rx="2" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <text x="408" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">the floor · work already done, not thrown away</text>
+</svg>
+</div></section>
+<section class="page" data-slide="SyncFavoritos.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; overflow: hidden">
+<svg viewBox="0 0 1280 720" width="1280" height="720" style="display: block" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="favorites-lww-title favorites-lww-desc">
+  <title id="favorites-lww-title">The favorite toggle does not wait for the network</title>
+  <desc id="favorites-lww-desc">Favorite toggle sequence: the screen writes to Room with a pending state and the UI reacts immediately; a worker sends the pending mutations, the server resolves last-write-wins by updatedAt and the worker reconciles Room, rolling back silently if the server won.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b0b0c"/></marker>
+    <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#5c5c56" stroke-width="1.2"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">DESIGNED, NOT BUILT · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">The favorite toggle does not wait for the network</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">Optimistic local write · deferred sync · last-write-wins with silent rollback</text>
+
+  <line x1="140" y1="212" x2="140" y2="616" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="390" y1="212" x2="390" y2="616" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="640" y1="212" x2="640" y2="616" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="890" y1="212" x2="890" y2="616" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="1140" y1="212" x2="1140" y2="616" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="616" y="460" width="300" height="156" rx="4" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.22)" stroke-width="1"/>
+  <rect x="616" y="460" width="44" height="16" rx="2" fill="#fafaf7" stroke="rgba(11,11,12,0.22)" stroke-width="1"/>
+  <text x="638" y="472" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.12em">ALT</text>
+  <text x="628" y="484" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">[client wins]</text>
+  <line x1="624" y1="544" x2="908" y2="544" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="628" y="568" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">[server wins · LWW]</text>
+  <rect x="386" y="244" width="8" height="128" fill="rgba(11,11,12,0.06)" stroke="#5c5c56" stroke-width="0.8"/>
+  <rect x="886" y="364" width="8" height="246" fill="rgba(11,11,12,0.06)" stroke="#5c5c56" stroke-width="0.8"/>
+  <rect x="1136" y="400" width="8" height="40" fill="rgba(11,11,12,0.06)" stroke="#5c5c56" stroke-width="0.8"/>
+  <line x1="140" y1="244" x2="390" y2="244" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="212" y="220" width="106" height="16" rx="2" fill="#fafaf7"/>
+  <text x="265" y="232" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">tap the heart</text>
+  <line x1="390" y1="284" x2="640" y2="284" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="441" y="260" width="149" height="16" rx="2" fill="#fafaf7"/>
+  <text x="515" y="272" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">PENDING · updatedAt</text>
+  <line x1="640" y1="324" x2="140" y2="324" stroke="#c62a1b" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+  <rect x="408" y="300" width="134" height="16" rx="2" fill="#fafaf7"/>
+  <text x="475" y="312" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">the UI reacts now</text>
+  <line x1="390" y1="364" x2="890" y2="364" stroke="#5c5c56" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-open)"/>
+  <rect x="658" y="340" width="113" height="16" rx="2" fill="#fafaf7"/>
+  <text x="714" y="352" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">enqueue · KEEP</text>
+  <line x1="890" y1="400" x2="1140" y2="400" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="966" y="376" width="98" height="16" rx="2" fill="#fafaf7"/>
+  <text x="1015" y="388" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">POST pending</text>
+  <line x1="1140" y1="436" x2="890" y2="436" stroke="#5c5c56" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <rect x="941" y="412" width="149" height="16" rx="2" fill="#fafaf7"/>
+  <text x="1015" y="424" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">authoritative state</text>
+  <line x1="890" y1="520" x2="640" y2="520" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="694" y="496" width="142" height="16" rx="2" fill="#fafaf7"/>
+  <text x="765" y="508" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">syncState = SYNCED</text>
+  <line x1="890" y1="604" x2="640" y2="604" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="705" y="580" width="120" height="16" rx="2" fill="#fafaf7"/>
+  <text x="765" y="592" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">silent rollback</text>
+  <rect x="40" y="148" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="40" y="148" width="200" height="64" rx="6" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <text x="140" y="180" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Compose</text>
+  <text x="140" y="196" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">FsFavoriteButton</text>
+  <rect x="290" y="148" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="290" y="148" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="390" y="180" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">ToggleFavorite</text>
+  <text x="390" y="196" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">use case</text>
+  <rect x="540" y="148" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="540" y="148" width="200" height="64" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="640" y="180" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Room</text>
+  <text x="640" y="196" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">favorites table</text>
+  <rect x="790" y="148" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="790" y="148" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="890" y="180" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">SyncWorker</text>
+  <text x="890" y="196" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">WorkManager · KEEP</text>
+  <rect x="1040" y="148" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="1040" y="148" width="200" height="64" rx="6" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <text x="1140" y="180" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Server</text>
+  <text x="1140" y="196" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">LWW by updatedAt</text>
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <line x1="148" y1="651" x2="166" y2="651" stroke="#c62a1b" stroke-width="1.2"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">the UI reacts before the network</text>
+  <line x1="436" y1="651" x2="454" y2="651" stroke="#5c5c56" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="458" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">return or async enqueue</text>
+  <rect x="659" y="645" width="14" height="12" rx="2" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <text x="681" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">local authority · Room decides</text>
+</svg>
+</div></section>
+<section class="page" data-slide="Cierre.dc.html"><div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">CIERRE</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">Está todo escrito en el repositorio</h1>
+
+  <div style="margin-top: 30px; display: flex; gap: 56px; align-items: flex-start">
+
+    <div style="width: 440px; flex: none; display: flex; flex-direction: column; gap: 22px">
+      <p style="margin: 0; font-size: 17px; line-height: 1.52; color: #5c5c56; text-wrap: pretty">El alcance quedó por encima del mínimo, y fue deliberado. La app que cumple los cuatro requisitos se sostiene sola; todo el resto existe para mostrar cómo pienso un producto que tiene que crecer.</p>
+
+      <div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; color: #c62a1b">LO QUE FALTA, Y LO SÉ</div>
+        <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 9px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 1.5; color: #5c5c56">
+          <div style="display: flex; gap: 12px"><span style="color: #8a8a82">01</span><span>los tests de arquitectura mecánicos</span></div>
+          <div style="display: flex; gap: 12px"><span style="color: #8a8a82">02</span><span>los tests de interfaz instrumentados</span></div>
+          <div style="display: flex; gap: 12px"><span style="color: #8a8a82">03</span><span>la etapa dos completa</span></div>
+        </div>
+      </div>
+
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 25px; line-height: 1.28; text-wrap: pretty">Decisión por decisión, con su fecha y su costo.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 30px; color: #c62a1b">Gracias.</p>
+    </div>
+
+    <div style="flex: 1; display: flex; gap: 16px; justify-content: flex-end">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <img src="assets/catalogo.jpg" alt="Pantalla del catálogo de productos." style="width: 146px; height: 325px; object-fit: cover; object-position: top; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 7px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; color: #8a8a82">CATÁLOGO</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <img src="assets/detalle.jpg" alt="Pantalla de detalle del producto." style="width: 146px; height: 325px; object-fit: cover; object-position: top; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 7px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; color: #8a8a82">DETALLE</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <img src="assets/favoritos.jpg" alt="Pantalla de favoritos." style="width: 146px; height: 325px; object-fit: cover; object-position: top; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 7px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; color: #8a8a82">FAVORITOS</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <img src="assets/offline.jpg" alt="Catálogo en modo avión con la banda de datos guardados." style="width: 146px; height: 325px; object-fit: cover; object-position: top; display: block; border: 1px solid rgba(11,11,12,0.18); border-radius: 7px">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; color: #8a8a82">OFFLINE</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>7 ADR · 6 DIAGRAMAS · 87 TESTS · 126 COMMITS</span>
+  </div>
+
+</div></section>
+</body>
+</html>

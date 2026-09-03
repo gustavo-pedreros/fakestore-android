@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #fafaf7; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    a { color: #c62a1b; } a:hover { color: #8f1e13; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 3 · HITO CINCO · EL QUE MÁS ME INTERESA</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">Se borra un contexto entero; no se desarma una app</h1>
+
+  <div style="margin-top: 30px; display: flex; gap: 56px; align-items: flex-start">
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 20px">
+      <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #5c5c56; text-wrap: pretty">Durante dos bloques enteros, esta app tuvo un corazón dibujado que no hacía absolutamente nada. Fue a propósito: simularlo con estado en memoria habría hecho <em>parecer</em> cumplido justo el requisito que pide persistir entre reinicios.</p>
+      <p style="margin: 0; font-size: 18px; line-height: 1.5; text-wrap: pretty">Cuando llegó el contexto completo —dominio, datos y su propia pantalla— el catálogo y el detalle <strong style="font-weight: 600">no se tocaron</strong>. Se agregó una línea en el ViewModel que cruza los dos flujos.</p>
+      <div style="background: #f2f2ee; border: 1px solid rgba(11,11,12,0.14); border-radius: 6px; padding: 16px 18px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.65; color: #0b0b0c">combine(catalogFlow, favoriteIdsFlow)</div>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1.28; color: #c62a1b; text-wrap: pretty">Y ahora demos vuelta el argumento. Si mañana el negocio decide que favoritos no va, se borran tres módulos y sus tres aristas, y el dominio del catálogo ni se entera.</p>
+    </div>
+
+    <svg width="470" height="380" viewBox="0 0 470 380" style="flex: none; display: block" role="img" aria-labelledby="fav-del-title fav-del-desc">
+      <title id="fav-del-title">Borrar el contexto de favoritos</title>
+      <desc id="fav-del-desc">Los tres módulos del contexto de favoritos —interfaz, dominio y datos— encerrados en un límite, y una sola arista punteada que los conecta con el dominio del catálogo. Borrar el contexto significa borrar esos tres módulos y las tres aristas de Gradle que entran en ellos.</desc>
+      <defs>
+        <marker id="fav-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+      </defs>
+
+      <text x="6" y="20" fill="#c62a1b" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">FAVORITES · CONTEXTO COMPLETO</text>
+      <rect x="6" y="32" width="222" height="232" rx="6" fill="rgba(198,42,27,0.05)" stroke="#c62a1b" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <line x1="117" y1="102" x2="117" y2="122" stroke="#c62a1b" stroke-width="1" marker-end="url(#fav-arrow-accent)"/>
+      <line x1="117" y1="200" x2="117" y2="180" stroke="#c62a1b" stroke-width="1" marker-end="url(#fav-arrow-accent)"/>
+      <line x1="288" y1="151" x2="216" y2="151" stroke="#c62a1b" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#fav-arrow-accent)"/>
+
+      <rect x="24" y="48" width="186" height="54" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+      <text x="117" y="80" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:favorites:ui</text>
+
+      <rect x="24" y="124" width="186" height="54" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+      <text x="117" y="156" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:favorites:domain</text>
+
+      <rect x="24" y="200" width="186" height="54" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+      <text x="117" y="232" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:favorites:data</text>
+
+      <rect x="290" y="124" width="164" height="54" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+      <text x="372" y="156" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle">:catalog:domain</text>
+
+      <rect x="226" y="129" width="52" height="14" fill="#fafaf7"/>
+      <text x="252" y="140" fill="#5c5c56" font-size="9" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">1 arista</text>
+
+      <line x1="6" y1="300" x2="460" y2="300" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+      <text x="6" y="324" fill="#0b0b0c" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500">borrar favoritos = 3 módulos + 3 aristas de Gradle</text>
+      <text x="6" y="346" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace">:catalog:domain y :catalog:data: cero referencias · sin llave foránea</text>
+      <text x="6" y="366" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace">la presentación pierde un campo por estado · la tabla, una migración</text>
+    </svg>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>ADR-0007 · CONTEXTO DE FAVORITOS</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

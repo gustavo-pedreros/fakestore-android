@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #fafaf7; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    a { color: #c62a1b; } a:hover { color: #8f1e13; }
+  </style>
+</helmet>
+<div style="width: 1280px; height: 720px; background: #fafaf7; color: #0b0b0c; padding: 64px; box-sizing: border-box; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif">
+
+  <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #5c5c56">BLOQUE 5 · HACIA DÓNDE CRECE · ETAPA 2</div>
+  <h1 style="margin: 14px 0 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 46px; line-height: 1.06; letter-spacing: -0.01em">El servidor manda estructura y referencias, nunca contenido</h1>
+
+  <div style="margin-top: 26px; display: flex; gap: 48px; align-items: flex-start">
+
+    <div style="width: 560px; flex: none; background: #f2f2ee; border: 1px solid rgba(11,11,12,0.14); border-radius: 6px; padding: 20px 22px">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">PAYLOAD DE PANTALLA · CONTRACT VERSION 1</div>
+      <pre style="margin: 16px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 1.62; color: #0b0b0c; white-space: pre-wrap; word-break: break-word">{ "screenId": "product_list", "contractVersion": 1,
+  "root": { "type": "lazy_list", "id": "list", "source": "catalog",
+    "itemTemplate": { "type": "product_card", "id": "card",
+      "image": <span style="color: #c62a1b">"{product.image}"</span>, "title": <span style="color: #c62a1b">"{product.title}"</span>,
+      "price": <span style="color: #c62a1b">"{product.price}"</span>,
+      "trailing": { "type": "favorite_toggle",
+                    "productId": <span style="color: #c62a1b">"{product.id}"</span> } } } }</pre>
+      <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(11,11,12,0.12); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 1.7; color: #5c5c56">el cliente resuelve esas referencias contra el dominio<br>que ya tiene cacheado en Room</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 15px; padding-top: 2px">
+      <p style="margin: 0; font-size: 17px; line-height: 1.52; color: #5c5c56; text-wrap: pretty">El servidor decide cómo se ve la pantalla y la app la dibuja. El valor de negocio es directo: cambiar el orden de una pantalla, o lanzar una campaña, <strong style="font-weight: 600; color: #0b0b0c">sin pasar por una publicación en la tienda</strong>.</p>
+      <p style="margin: 0; font-size: 17px; line-height: 1.52; color: #5c5c56; text-wrap: pretty">Hecho de la forma habitual choca de frente con el offline-first: el servidor manda la pantalla ya rellena, y eso obliga a cachear pantallas renderizadas — justo lo que rompe la fuente única de verdad.</p>
+      <p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 27px; line-height: 1.26; color: #c62a1b; text-wrap: pretty">El payload no dice el título del producto. Dice «acá va el título del producto».</p>
+      <p style="margin: 0; font-size: 17px; line-height: 1.52; text-wrap: pretty">Layout cacheado más datos cacheados significa que la app puede renderizar una pantalla dirigida por el servidor <strong style="font-weight: 600">estando en modo avión</strong>.</p>
+      <div style="display: flex; gap: 20px; align-items: flex-start; border-left: 2px solid #0b0b0c; padding: 4px 0 4px 18px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #5c5c56; flex: none; padding-top: 3px">LO QUE PAGA</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5c5c56">Complejidad en el cliente, que tiene que resolver esas referencias.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(11,11,12,0.12); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: #8a8a82">
+    <span>FAKESTORE ANDROID · GUSTAVO PEDREROS</span>
+    <span>README §ROADMAP — DESIGNED, NOT BUILT</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

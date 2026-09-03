@@ -1,0 +1,149 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "Encargo.dc.html",
+      "x": 1400,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "DosIdeas.dc.html",
+      "x": 2800,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "CapaEsModulo.dc.html",
+      "x": 4200,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "FuenteUnica.dc.html",
+      "x": 0,
+      "y": 880,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "CacheDecide.dc.html",
+      "x": 1400,
+      "y": 880,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "Demo.dc.html",
+      "x": 2800,
+      "y": 880,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "LineaDeTiempo.dc.html",
+      "x": 4200,
+      "y": 880,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "SpecVsEntregado.dc.html",
+      "x": 0,
+      "y": 1760,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "AtomoAPantalla.dc.html",
+      "x": 1400,
+      "y": 1760,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "Favoritos.dc.html",
+      "x": 2800,
+      "y": 1760,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "Decisiones.dc.html",
+      "x": 4200,
+      "y": 1760,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "ServerDriven.dc.html",
+      "x": 0,
+      "y": 2640,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "EscaleraSdui.dc.html",
+      "x": 1400,
+      "y": 2640,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "SyncFavoritos.dc.html",
+      "x": 2800,
+      "y": 2640,
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "file": "Cierre.dc.html",
+      "x": 4200,
+      "y": 2640,
+      "w": 1280,
+      "h": 720
+    }
+  ],
+  "annotations": [
+    {
+      "id": "fila-1",
+      "x": -760,
+      "y": 0,
+      "w": 640,
+      "text": "Bloques 0–1 · el encargo, y las dos ideas que ordenan todo"
+    },
+    {
+      "id": "fila-2",
+      "x": -760,
+      "y": 880,
+      "w": 640,
+      "text": "Bloque 2 · offline-first como propiedad, y la app corriendo\nAl final de la fila arranca el bloque 3."
+    },
+    {
+      "id": "fila-3",
+      "x": -760,
+      "y": 1760,
+      "w": 640,
+      "text": "Bloques 3–4 · cómo se construyó, y las decisiones con su precio"
+    },
+    {
+      "id": "fila-4",
+      "x": -760,
+      "y": 2640,
+      "w": 640,
+      "text": "Bloques 5–6 · hacia dónde crece, y el cierre"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}
