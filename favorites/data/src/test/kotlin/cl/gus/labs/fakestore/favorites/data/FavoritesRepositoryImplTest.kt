@@ -1,8 +1,8 @@
 package cl.gus.labs.fakestore.favorites.data
 
+import cl.gus.labs.fakestore.core.testing.FixedClock
 import cl.gus.labs.fakestore.favorites.data.datasource.FavoritesLocalDataSource
 import cl.gus.labs.fakestore.shared.kernel.ProductId
-import kotlin.time.Clock
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,9 +17,7 @@ import org.junit.jupiter.api.Test
 class FavoritesRepositoryImplTest {
 
     private val fixedInstant = Instant.fromEpochMilliseconds(1_700_000_000_000L)
-    private val fixedClock = object : Clock {
-        override fun now(): Instant = fixedInstant
-    }
+    private val fixedClock = FixedClock(fixedInstant)
 
     @Nested
     @DisplayName("observeIds")
