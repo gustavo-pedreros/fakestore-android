@@ -13,7 +13,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import kotlin.time.Clock
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,9 +21,6 @@ internal object CatalogDataModule {
     @Provides
     @Singleton
     fun provideCatalogApi(factory: ApiServiceFactory): CatalogApi = factory.create(CatalogApi::class.java)
-
-    @Provides
-    fun provideClock(): Clock = Clock.System
 
     @Provides
     fun provideObserveCatalog(repository: CatalogRepository): ObserveCatalog =
