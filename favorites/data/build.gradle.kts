@@ -11,4 +11,6 @@ android {
 dependencies {
     implementation(project(":favorites:domain"))
     implementation(project(":core:database"))
+
+    testImplementation(libs.turbine)
 }
