@@ -1,5 +1,6 @@
 package cl.gus.labs.fakestore.favorites.data
 
+import app.cash.turbine.test
 import cl.gus.labs.fakestore.core.testing.FixedClock
 import cl.gus.labs.fakestore.favorites.data.datasource.FavoritesLocalDataSource
 import cl.gus.labs.fakestore.shared.kernel.ProductId
@@ -7,6 +8,7 @@ import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
@@ -44,6 +46,23 @@ class FavoritesRepositoryImplTest {
 
             assertEquals(emptySet<ProductId>(), result)
         }
+
+        @Test
+        @DisplayName("maps every emission while observing, not only the first")
+        fun reflectsTogglesWhileObserving() = runTest {
+            val local = FakeFavoritesLocalDataSource(initialIds = listOf(1))
+            val repository = FavoritesRepositoryImpl(local = local, clock = fixedClock)
+
+            repository.observeIds().test {
+                assertEquals(setOf(ProductId(1)), awaitItem())
+
+                repository.toggle(ProductId(2))
+                assertEquals(setOf(ProductId(1), ProductId(2)), awaitItem())
+
+                repository.toggle(ProductId(1))
+                assertEquals(setOf(ProductId(2)), awaitItem())
+            }
+        }
     }
 
     @Nested
@@ -79,5 +98,6 @@ private class FakeFavoritesLocalDataSource(
     override suspend fun toggle(productId: Int, at: Instant) {
         lastToggledProductId = productId
         lastToggledAt = at
+        idsFlow.update { ids -> if (productId in ids) ids - productId else ids + productId }
     }
 }
