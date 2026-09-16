@@ -21,4 +21,5 @@ dependencies {
     testImplementation(platform(libs.okhttp.bom))
     testImplementation(libs.okhttp)
     testImplementation(libs.okhttp.mockwebserver)
+    testImplementation(libs.turbine)
 }
