@@ -46,7 +46,7 @@ design and a solid Stage 1.
 
 ## Quick start
 
-Requires **JDK 21**. Everything else — Gradle 9.5.0, the Android SDK platform, the Kotlin toolchain — is
+Requires **JDK 21**. Everything else — Gradle 9.6.0, the Android SDK platform, the Kotlin toolchain — is
 resolved by the wrapper.
 
 ```bash
