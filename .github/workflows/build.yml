@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ main, 'feature/**' ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 permissions:
   contents: read
@@ -26,7 +26,7 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
 
       - name: Install the compileSdk platform
         run: sdkmanager "platforms;android-37" || echo "not available from sdkmanager, relying on AGP"
@@ -34,7 +34,15 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Build, test and lint
-        run: ./gradlew build --stacktrace
+        run: ./gradlew build :koverXmlReportCoverage --stacktrace
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          files: build/reports/kover/reportCoverage.xml
+          disable_search: true
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload the debug APK
         if: success()
