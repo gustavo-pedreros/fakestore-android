@@ -49,6 +49,14 @@ class KoverRootConventionPlugin : Plugin<Project> {
                         // meta-annotations, hence the wildcard.
                         annotatedBy("androidx.compose.ui.tooling.preview.Preview*")
 
+                        // Finishes the job of the annotation filter above. Excluding a declaration
+                        // does not exclude its nested or anonymous classes, and the Compose compiler
+                        // hoists the constant lambdas of a preview body into `ComposableSingletons$X`,
+                        // which carries no annotation for `annotatedBy` to match. Measured: 21 such
+                        // classes, 372 lines, none of them covered, and 20 of the 21 sit in a file
+                        // that has previews — so nothing of value is lost today.
+                        classes("*ComposableSingletons*")
+
                         // *Activity, *Fragment, *.BuildConfig, *.databinding.*
                         androidGeneratedClasses()
 
