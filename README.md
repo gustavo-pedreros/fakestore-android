@@ -5,6 +5,7 @@ Kotlin, Compose, Room as the single source of truth, and a module graph where th
 enforces the architecture.
 
 [![build](https://github.com/gustavo-pedreros/fakestore-android/actions/workflows/build.yml/badge.svg)](https://github.com/gustavo-pedreros/fakestore-android/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/gustavo-pedreros/fakestore-android/branch/main/graph/badge.svg)](https://codecov.io/gh/gustavo-pedreros/fakestore-android)
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-7F52FF?logo=kotlin&logoColor=white)
 ![Compose](https://img.shields.io/badge/Compose%20BOM-2026.08.00-4285F4?logo=jetpackcompose&logoColor=white)
 ![minSdk](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)
@@ -317,8 +318,11 @@ that reconcile in the background need a way to answer *"what happened to my data
 
 ### Stage 4 — mechanical verification
 
-Kover for coverage, Konsist for the dependency rules above, ktlint/detekt for style. Rules 1–4 currently live
-in this README and in review; Stage 4 is where they become build failures instead of prose.
+Konsist for the dependency rules above, ktlint/detekt for style. Rules 1–4 currently live in this README
+and in review; Stage 4 is where they become build failures instead of prose.
+
+Coverage already got there: Kover merges the 13 production modules into a single report and Codecov gates
+every PR on it — new code must arrive 80% covered, and the total may not drop against the base branch.
 
 ---
 
