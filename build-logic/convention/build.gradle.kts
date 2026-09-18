@@ -16,6 +16,7 @@ dependencies {
     compileOnly(libs.compose.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
     compileOnly(libs.hilt.gradle.plugin)
+    compileOnly(libs.kover.gradle.plugin)
 }
 
 gradlePlugin {
@@ -47,6 +48,14 @@ gradlePlugin {
         register("androidRoom") {
             id = "fakestore.android.room"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidRoomConventionPlugin"
+        }
+        register("kover") {
+            id = "fakestore.kover"
+            implementationClass = "cl.gus.labs.fakestore.convention.KoverConventionPlugin"
+        }
+        register("koverRoot") {
+            id = "fakestore.kover.root"
+            implementationClass = "cl.gus.labs.fakestore.convention.KoverRootConventionPlugin"
         }
     }
 }
