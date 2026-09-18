@@ -8,4 +8,6 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.android.junit5) apply false
+    alias(libs.plugins.kover) apply false
+    id("fakestore.kover.root")
 }
