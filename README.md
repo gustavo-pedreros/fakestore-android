@@ -351,7 +351,7 @@ every PR on it — new code must arrive 80% covered, and the total may not drop 
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
 | `:core:testing` | Pure Kotlin | `MainDispatcherExtension` and the shared test dependencies |
 
-Seven **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
+Nine **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
 `build.gradle.kts` is usually a plugin list and a handful of dependencies.
 
 ---
