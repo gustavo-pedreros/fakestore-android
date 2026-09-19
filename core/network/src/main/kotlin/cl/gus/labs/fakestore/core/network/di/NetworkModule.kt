@@ -11,7 +11,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -29,14 +28,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        val interceptors = buildList {
-            if (BuildConfig.DEBUG) {
-                add(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
-            }
-        }
-        return OkHttpClientFactory.create(interceptors)
-    }
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClientFactory.create(BuildConfig.DEBUG)
 
     @Provides
     @Singleton
