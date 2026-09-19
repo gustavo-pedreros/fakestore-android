@@ -5,9 +5,10 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import cl.gus.labs.fakestore.core.common.di.IoDispatcher
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 
 internal class ConnectivityNetworkMonitor @Inject constructor(
     @ApplicationContext private val context: Context,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : NetworkMonitor {
 
     override val isOnline: Flow<Boolean> = callbackFlow {
@@ -52,7 +54,7 @@ internal class ConnectivityNetworkMonitor @Inject constructor(
     }
         .distinctUntilChanged()
         .conflate()
-        .flowOn(Dispatchers.IO)
+        .flowOn(ioDispatcher)
 }
 
 private fun ConnectivityManager.isCurrentlyOnline(): Boolean =
