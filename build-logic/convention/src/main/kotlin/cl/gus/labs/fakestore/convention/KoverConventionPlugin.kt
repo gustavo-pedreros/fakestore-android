@@ -34,6 +34,15 @@ class KoverConventionPlugin : Plugin<Project> {
             }
 
             reports {
+                // The same list the merging module applies. Filters do not cross module boundaries in
+                // either direction, so without this a module's own report counts the generated classes
+                // and the DI wiring that Codecov never sees, and reads far below the real number.
+                filters {
+                    excludes {
+                        excludeGeneratedAndWiring()
+                    }
+                }
+
                 // The total variant merges debug *and* release, so it double counts Android classes,
                 // and its verify task is wired into `check` by convention with `upToDateWhen { false }`.
                 // Left alone it would add a forced, always-rerunning task to every `./gradlew build`.
