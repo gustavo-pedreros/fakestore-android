@@ -53,7 +53,7 @@ resolved by the wrapper.
 git clone https://github.com/gustavo-pedreros/fakestore-android.git
 cd fakestore-android
 
-./gradlew build            # compiles every module, runs 87 tests, runs lint
+./gradlew build            # compiles every module, runs the tests, runs lint
 ./gradlew :app:installDebug
 ```
 
@@ -246,7 +246,7 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 
 ## Testing
 
-**87 tests across 16 files**, all run by `./gradlew build`.
+The whole suite runs on `./gradlew build` — the same command that produces the APK, locally and in CI.
 
 | Level | What is covered | Tooling |
 |---|---|---|
