@@ -53,7 +53,7 @@ resolved by the wrapper.
 git clone https://github.com/gustavo-pedreros/fakestore-android.git
 cd fakestore-android
 
-./gradlew build            # compiles every module, runs 87 tests, runs lint
+./gradlew build            # compiles every module, runs the tests, runs lint
 ./gradlew :app:installDebug
 ```
 
@@ -100,9 +100,8 @@ needs to know *which products are favorites* to draw its hearts, and the favorit
 crossing is allowed.
 
 `:core:testing` sits apart on purpose. The `fakestore.testing` convention plugin puts it on the test
-classpath of twelve of the other thirteen modules — all but `:core:connectivity`, which has no tests of
-its own — so drawing those twelve edges would bury the production graph under test-only wiring that no
-production code can see.
+classpath of all thirteen other modules, so drawing those thirteen edges would bury the production graph
+under test-only wiring that no production code can see.
 
 ### Dependency rules
 
@@ -246,7 +245,7 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 
 ## Testing
 
-**87 tests across 16 files**, all run by `./gradlew build`.
+The whole suite runs on `./gradlew build` — the same command that produces the APK, locally and in CI.
 
 | Level | What is covered | Tooling |
 |---|---|---|
@@ -255,16 +254,23 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 | ACL / mappers | DTO → domain, entity → domain | JUnit 5 |
 | Data | repositories against fakes; the remote datasource against **MockWebServer** with real payload shapes | JUnit 5 + MockWebServer |
 | Persistence | DAO behaviour, including the favorites toggle transaction | Robolectric + JUnit 4 via the vintage engine |
+| Connectivity | the `ConnectivityManager` callback flow: multi-network bookkeeping, captive portals, callback unregistration | Robolectric + JUnit 4 via the vintage engine + Turbine |
 | Presentation | **every state in the diagram above**, with virtual time | JUnit 5 + Turbine + `kotlinx-coroutines-test` |
 
-Two choices show up in the test source and are worth explaining:
+Three choices show up in the test source and are worth explaining:
 
 - **No mocking library.** Use cases are `fun interface`s, so a test double is a lambda. `MockK` never
   acquired a consumer, so it never entered the version catalog. Fakes that need state are hand-written
   classes of a few lines.
-- **Robolectric is confined to `:core:database`.** Because each `data` module talks to a `LocalDataSource`
-  *interface* rather than a DAO, repository tests are plain JVM tests. Only the DAO tests — where the real
-  SQLite behaviour is the thing under test — pay the Robolectric cost.
+- **Robolectric is confined to `:core:database` and `:core:connectivity`.** Because each `data` module talks
+  to a `LocalDataSource` *interface* rather than a DAO, repository tests are plain JVM tests. Only the two
+  places where framework behaviour — real SQLite, a real `ConnectivityManager` — *is* the thing under test
+  pay the Robolectric cost. Everything downstream of `NetworkMonitor` uses a three-line `FakeNetworkMonitor`.
+- **Dispatchers are injected, never hardcoded.** `ConnectivityNetworkMonitor` takes its dispatcher through
+  an `@IoDispatcher` qualifier, so tests pass an `UnconfinedTestDispatcher` sharing the `runTest` scheduler.
+  That is what makes the callback assertions deterministic: the `NetworkCallback` registers eagerly at
+  collection time, so firing a shadow callback cannot race registration and `conflate()` cannot drop an
+  emission before the collector sees it.
 
 ---
 
@@ -338,14 +344,14 @@ every PR on it — new code must arrive 80% covered, and the total may not drop 
 | `:favorites:data` | Android lib | Local-first writes over `FavoriteDao` |
 | `:favorites:ui` | Compose lib | Favorites screen and its nav entries |
 | `:shared:kernel` | Pure Kotlin | Ubiquitous language: `ProductId`, `AppError` |
-| `:core:common` | Pure Kotlin | `Either` |
+| `:core:common` | Pure Kotlin | `Either`, the `@IoDispatcher` qualifier |
 | `:core:network` | Android lib | Retrofit/OkHttp/kotlinx.serialization, `executeCall`, error ACL |
 | `:core:database` | Android lib | The single Room instance, entities, DAOs, migrations |
 | `:core:designsystem` | Compose lib | M3 theme, tokens, atoms → molecules → organisms, `FsIcons` |
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
 | `:core:testing` | Pure Kotlin | `MainDispatcherExtension` and the shared test dependencies |
 
-Seven **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
+Nine **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
 `build.gradle.kts` is usually a plugin list and a handful of dependencies.
 
 ---

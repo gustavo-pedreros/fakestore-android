@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":favorites:ui"))
     implementation(project(":favorites:data"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:common"))
 
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -41,6 +42,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.kotlinx.coroutines.core)
 
     androidTestImplementation(platform(libs.junit.bom))
     androidTestImplementation(libs.bundles.test.instrumented)
