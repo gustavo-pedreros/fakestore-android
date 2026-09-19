@@ -253,11 +253,12 @@ The whole suite runs on `./gradlew build` — the same command that produces the
 | Domain | use cases that carry real logic | JUnit 5 |
 | ACL / mappers | DTO → domain, entity → domain | JUnit 5 |
 | Data | repositories against fakes; the remote datasource against **MockWebServer** with real payload shapes | JUnit 5 + MockWebServer |
+| Network | the OkHttp/Retrofit/Json wiring, the empty-body converter, and the error ACL | JUnit 5 + MockWebServer |
 | Persistence | DAO behaviour, including the favorites toggle transaction | Robolectric + JUnit 4 via the vintage engine |
 | Connectivity | the `ConnectivityManager` callback flow: multi-network bookkeeping, captive portals, callback unregistration | Robolectric + JUnit 4 via the vintage engine + Turbine |
 | Presentation | **every state in the diagram above**, with virtual time | JUnit 5 + Turbine + `kotlinx-coroutines-test` |
 
-Three choices show up in the test source and are worth explaining:
+Four choices show up in the test source and are worth explaining:
 
 - **No mocking library.** Use cases are `fun interface`s, so a test double is a lambda. `MockK` never
   acquired a consumer, so it never entered the version catalog. Fakes that need state are hand-written
@@ -265,12 +266,18 @@ Three choices show up in the test source and are worth explaining:
 - **Robolectric is confined to `:core:database` and `:core:connectivity`.** Because each `data` module talks
   to a `LocalDataSource` *interface* rather than a DAO, repository tests are plain JVM tests. Only the two
   places where framework behaviour — real SQLite, a real `ConnectivityManager` — *is* the thing under test
-  pay the Robolectric cost. Everything downstream of `NetworkMonitor` uses a three-line `FakeNetworkMonitor`.
+  pay the Robolectric cost. Everything downstream of `NetworkMonitor` uses a three-line `FakeNetworkMonitor`,
+  and `:core:network` stays on plain JVM tests because nothing in it touches the framework.
 - **Dispatchers are injected, never hardcoded.** `ConnectivityNetworkMonitor` takes its dispatcher through
   an `@IoDispatcher` qualifier, so tests pass an `UnconfinedTestDispatcher` sharing the `runTest` scheduler.
   That is what makes the callback assertions deterministic: the `NetworkCallback` registers eagerly at
   collection time, so firing a shadow callback cannot race registration and `conflate()` cannot drop an
   emission before the collector sees it.
+- **Branch coverage finds the gaps; a mutation confirms the test.** Line coverage hides an untaken `when`
+  arm, and a class the tests merely *construct* reaches 100% with no assertion at all — deleting
+  `ignoreUnknownKeys` used to break nothing. Both are found in the per-method `BRANCH` counters of the Kover
+  XML, then confirmed by breaking the production line and watching a named test fail. A few missed branches
+  are unreachable and left alone, such as the `label` dispatch a `suspend` function compiles to.
 
 ---
 
@@ -328,7 +335,9 @@ Konsist for the dependency rules above, ktlint/detekt for style. Rules 1–4 cur
 and in review; Stage 4 is where they become build failures instead of prose.
 
 Coverage already got there: Kover merges the 13 production modules into a single report and Codecov gates
-every PR on it — new code must arrive 80% covered, and the total may not drop against the base branch.
+every PR on it — new code must arrive 80% covered, and the total may not drop against the base branch. The
+exclusion list — generated Dagger and Room output, Compose previews, DI wiring — is declared once and applied
+by both Kover convention plugins, since filters do not cross module boundaries in either direction.
 
 ---
 
