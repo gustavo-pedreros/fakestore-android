@@ -1,15 +1,23 @@
 package cl.gus.labs.fakestore.core.network.error
 
 import cl.gus.labs.fakestore.shared.kernel.AppError
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
+import okio.BufferedSource
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import retrofit2.HttpException
 import retrofit2.Response
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 
 @DisplayName("ErrorMapper")
 class ErrorMapperTest {
@@ -57,5 +65,50 @@ class ErrorMapperTest {
         val error = RuntimeException("weird").toAppError()
 
         assertTrue(error is AppError.Unknown)
+    }
+
+    @Test
+    @DisplayName("maps a successful response, which carries no error body, to a null raw body")
+    fun successfulResponseHasNoRawBody() {
+        val error = Response.success("payload").toAppError() as AppError.Http
+
+        assertEquals(200, error.httpStatus)
+        assertNull(error.rawBody)
+    }
+
+    @Test
+    @DisplayName("keeps the status when reading the error body fails")
+    fun unreadableBodyStillYieldsStatus() {
+        val unreadable = object : ResponseBody() {
+            override fun contentType(): MediaType = json
+            override fun contentLength(): Long = 1L
+            override fun source(): BufferedSource = throw IOException("socket closed mid-read")
+        }
+
+        val error = Response.error<Any>(502, unreadable).toAppError() as AppError.Http
+
+        assertEquals(502, error.httpStatus)
+        assertNull(error.rawBody)
+    }
+
+    @Test
+    @DisplayName("falls back to the status and message when an HttpException has lost its response")
+    fun httpExceptionWithoutResponseFallsBack() {
+        // HttpException holds its response in a transient field, so a round trip drops it.
+        val revived = roundTrip(HttpException(Response.error<Any>(418, "teapot".toResponseBody(json))))
+
+        val error = revived.toAppError() as AppError.Http
+
+        assertNull(revived.response())
+        assertEquals(418, error.httpStatus)
+        assertEquals(revived.message, error.rawBody)
+    }
+
+    private fun roundTrip(exception: HttpException): HttpException {
+        val bytes = ByteArrayOutputStream().also { out ->
+            ObjectOutputStream(out).use { it.writeObject(exception) }
+        }.toByteArray()
+
+        return ObjectInputStream(ByteArrayInputStream(bytes)).use { it.readObject() } as HttpException
     }
 }
