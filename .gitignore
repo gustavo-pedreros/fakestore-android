@@ -3,9 +3,11 @@
 .kotlin
 /local.properties
 /.idea/*
+/.vscode/*
 .DS_Store
 build/
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+
