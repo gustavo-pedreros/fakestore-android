@@ -30,6 +30,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 private val CardWidth = 173.dp
 
@@ -145,6 +146,9 @@ class MoleculesScreenshotTest {
         composeRule.onRoot().captureRoboImage(filePath = "molecule/MoleculesLongText.png")
     }
 
+    // Taller than the pinned viewport so the whole sheet is captured: at font scale 2 the stack
+    // overflows 915dp and the card would be cropped before its rating row and price.
+    @Config(qualifiers = "+h1600dp")
     @Test
     fun `molecules at font scale 2`() {
         composeRule.setContent {
