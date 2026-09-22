@@ -66,8 +66,8 @@ class MoleculesScreenshotTest {
                         onClick = {},
                         onFavoriteClick = {},
                         modifier = Modifier
-                            .width(CardWidth)
-                            .padding(FakeStoreTheme.spacing.lg),
+                            .padding(FakeStoreTheme.spacing.lg)
+                            .width(CardWidth),
                     )
                 }
             }
@@ -90,8 +90,8 @@ class MoleculesScreenshotTest {
                         onClick = {},
                         onFavoriteClick = {},
                         modifier = Modifier
-                            .width(CardWidth)
-                            .padding(FakeStoreTheme.spacing.lg),
+                            .padding(FakeStoreTheme.spacing.lg)
+                            .width(CardWidth),
                     )
                 }
             }
