@@ -30,6 +30,8 @@ private const val FilledAlpha = 1f
 private const val PartialAlpha = 0.55f
 private const val EmptyAlpha = 0.22f
 
+internal fun formatRating(rate: Double): String = String.format(Locale.US, "%.1f", rate)
+
 @Composable
 fun FsRatingStars(
     rate: Double,
@@ -40,7 +42,7 @@ fun FsRatingStars(
     val compact = size == FsSize.Compact
     val starSize = if (compact) 13.dp else 15.dp
     val gap = if (compact) 6.dp else FakeStoreTheme.spacing.sm
-    val rateText = String.format(Locale.US, "%.1f", rate)
+    val rateText = formatRating(rate)
     val description = pluralStringResource(
         R.plurals.fs_rating_content_description,
         count,

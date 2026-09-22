@@ -26,13 +26,15 @@ fun FsPriceText(
         FsPriceSize.Medium -> FakeStoreTheme.textStyles.priceMedium
     }
     Text(
-        text = String.format(Locale.US, "$%.2f", amount),
+        text = formatPrice(amount),
         modifier = modifier,
         color = FakeStoreTheme.colors.priceText,
         style = style,
         maxLines = 1,
     )
 }
+
+internal fun formatPrice(amount: Double): String = String.format(Locale.US, "$%.2f", amount)
 
 @PreviewLightDark
 @Composable
