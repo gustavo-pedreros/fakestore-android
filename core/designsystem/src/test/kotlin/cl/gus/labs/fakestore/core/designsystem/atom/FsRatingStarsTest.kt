@@ -1,13 +1,20 @@
 package cl.gus.labs.fakestore.core.designsystem.atom
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.unit.dp
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziActivity
 import com.github.takahirom.roborazzi.registerRoborazziActivityToRobolectricIfNeeded
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestWatcher
@@ -50,5 +57,27 @@ class FsRatingStarsTest {
         }
         composeRule.onAllNodes(hasText("3.9")).assertCountEquals(0)
         composeRule.onAllNodes(hasText("(120)")).assertCountEquals(0)
+    }
+
+    @Test
+    fun `drops the count when the row has no room for it`() {
+        val offered = 140.dp
+        composeRule.setContent {
+            FakeStoreTheme {
+                Column {
+                    Box { FsRatingStars(rate = 3.9, count = 120) }
+                    Box(Modifier.width(offered)) { FsRatingStars(rate = 3.9, count = 120) }
+                }
+            }
+        }
+        val nodes = composeRule.onAllNodesWithContentDescription("3.9 de 5 estrellas, 120 valoraciones")
+        val roomy = nodes[0].fetchSemanticsNode().size.width
+        val cramped = nodes[1].fetchSemanticsNode().size.width
+        val offeredPx = with(composeRule.density) { offered.roundToPx() }
+
+        assertTrue(cramped < roomy)
+        // Dropping the count makes the row report back narrower than the space it was given;
+        // clipping or wrapping it would instead fill that space.
+        assertTrue(cramped < offeredPx)
     }
 }
