@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,9 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 
 private val MissingGlyphSize = 26.dp
+
+internal const val ImageTileImageTag = "fs_image_tile_image"
+internal const val ImageTileMissingIconTag = "fs_image_tile_missing_icon"
 
 @Composable
 fun FsImageTile(
@@ -62,7 +66,8 @@ fun FsImageTile(
                 contentDescription = contentDescription,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding),
+                    .padding(contentPadding)
+                    .testTag(ImageTileImageTag),
                 contentScale = ContentScale.Fit,
             )
 
@@ -72,7 +77,9 @@ fun FsImageTile(
                 painter = FsIcons.ImageMissing,
                 contentDescription = contentDescription,
                 tint = StoneSoft,
-                modifier = Modifier.size(MissingGlyphSize),
+                modifier = Modifier
+                    .size(MissingGlyphSize)
+                    .testTag(ImageTileMissingIconTag),
             )
         }
     }
