@@ -26,7 +26,7 @@ fun FsSkeleton(
 
 @PreviewLightDark
 @Composable
-private fun FsSkeletonPreview() {
+private fun PreviewFsSkeleton() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

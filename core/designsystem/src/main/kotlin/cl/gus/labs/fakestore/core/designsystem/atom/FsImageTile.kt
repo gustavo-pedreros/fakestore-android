@@ -80,7 +80,7 @@ fun FsImageTile(
 
 @PreviewLightDark
 @Composable
-private fun FsImageTilePreview() {
+private fun PreviewFsImageTile() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Row(

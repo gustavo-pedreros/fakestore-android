@@ -29,6 +29,8 @@ javaxInject = "1"
 ksp = "2.3.9"
 room = "2.8.4"
 robolectric = "4.16.1"
+roborazzi = "1.75.0"
+composablePreviewScanner = "0.9.3"
 kover = "0.9.9"
 
 [libraries]
@@ -39,6 +41,7 @@ compose-gradle-plugin = { group = "org.jetbrains.kotlin", name = "compose-compil
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 hilt-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 kover-gradle-plugin = { group = "org.jetbrains.kotlinx", name = "kover-gradle-plugin", version.ref = "kover" }
+roborazzi-gradle-plugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 
 # AndroidX core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -81,6 +84,12 @@ junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engi
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
+# Screenshot tests
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-compose-preview-scanner-support = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
+composable-preview-scanner = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "android", version.ref = "composablePreviewScanner" }
+
 # Network
 retrofit-bom = { group = "com.squareup.retrofit2", name = "retrofit-bom", version.ref = "retrofitBom" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit" }
@@ -118,6 +127,12 @@ compose-debug = [
 ]
 test-unit = ["junit-jupiter-api", "junit-jupiter-params", "junit-jupiter-engine"]
 test-instrumented = ["junit-jupiter-api", "mannodermaus-android-test-core", "mannodermaus-android-test-runner"]
+test-screenshot = [
+    "roborazzi",
+    "roborazzi-compose",
+    "roborazzi-compose-preview-scanner-support",
+    "composable-preview-scanner",
+]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -129,3 +144,4 @@ android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "android
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
