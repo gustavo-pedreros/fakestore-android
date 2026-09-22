@@ -32,6 +32,20 @@ private const val EmptyAlpha = 0.22f
 
 internal fun formatRating(rate: Double): String = String.format(Locale.US, "%.1f", rate)
 
+internal enum class StarFill { Filled, Partial, Empty }
+
+internal fun starFills(rate: Double): List<StarFill> {
+    val filled = floor(rate).toInt().coerceIn(0, StarCount)
+    val hasPartial = filled < StarCount && rate - filled >= 0.5
+    return List(StarCount) { index ->
+        when {
+            index < filled -> StarFill.Filled
+            index == filled && hasPartial -> StarFill.Partial
+            else -> StarFill.Empty
+        }
+    }
+}
+
 @Composable
 fun FsRatingStars(
     rate: Double,
@@ -49,8 +63,7 @@ fun FsRatingStars(
         rateText,
         count,
     )
-    val filled = floor(rate).toInt().coerceIn(0, StarCount)
-    val hasPartial = filled < StarCount && rate - filled >= 0.5
+    val fills = starFills(rate)
 
     Row(
         modifier = modifier.clearAndSetSemantics { contentDescription = description },
@@ -64,10 +77,10 @@ fun FsRatingStars(
                     painter = star,
                     contentDescription = null,
                     tint = FakeStoreTheme.colors.ratingStar.copy(
-                        alpha = when {
-                            index < filled -> FilledAlpha
-                            index == filled && hasPartial -> PartialAlpha
-                            else -> EmptyAlpha
+                        alpha = when (fills[index]) {
+                            StarFill.Filled -> FilledAlpha
+                            StarFill.Partial -> PartialAlpha
+                            StarFill.Empty -> EmptyAlpha
                         },
                     ),
                     modifier = Modifier.size(starSize),
