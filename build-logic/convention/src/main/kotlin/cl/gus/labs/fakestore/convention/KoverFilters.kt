@@ -18,14 +18,23 @@ internal fun KoverReportFilter.excludeGeneratedAndWiring() {
     // files, so only an annotation filter reaches them. @PreviewLightDark and
     // friends are separate annotation classes and Kover does not resolve
     // meta-annotations, hence the wildcard.
+    //
+    // The filter also drops the lambdas of any function whose name is a prefix of
+    // a preview's: `ProductCardPreview` hid the whole content of `ProductCard`
+    // from the report (ProductCard.kt measured 38 lines, and 72 once the preview
+    // was renamed). Previews are therefore named `Preview<Name>`, and
+    // PreviewNamingTest fails the build when one is not.
     annotatedBy("androidx.compose.ui.tooling.preview.Preview*")
 
     // Finishes the job of the annotation filter above. Excluding a declaration
     // does not exclude its nested or anonymous classes, and the Compose compiler
     // hoists the constant lambdas of a preview body into `ComposableSingletons$X`,
     // which carries no annotation for `annotatedBy` to match. Measured: 21 such
-    // classes, 372 lines, none of them covered, and 20 of the 21 sit in a file
-    // that has previews — so nothing of value is lost today.
+    // classes, 372 lines, nearly all of them preview content. The exception is
+    // the two skeletons, `ProductCardSkeleton` and `ProductGridSkeleton`: they
+    // capture nothing, so the compiler hoists their bodies here too, and about
+    // 40 lines of production code drop out of the report. The screenshot tests
+    // still render both.
     classes("*ComposableSingletons*")
 
     // *Activity, *Fragment, *.BuildConfig, *.databinding.*
