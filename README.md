@@ -281,6 +281,10 @@ A few choices show up in the test source and are worth explaining:
   and after an intended visual change `./gradlew :core:designsystem:recordRoborazziDebug
   -Proborazzi.cleanupOldScreenshots=true` re-records — the new images go in the same commit, where GitHub
   shows them as image diffs.
+- **Design system tests never touch the network.** `DesignSystemTestApplication`, set as
+  `robolectric.properties`' `application=`, installs a `FakeImageLoaderEngine` as the Coil singleton: a fixed
+  set of test URLs resolve to a loaded, broken or perpetually-loading image, and anything else fails fast with
+  "No interceptors handled this request".
 - **Previews are named `Preview<Component>`, and a test enforces it.** Kover's `@Preview*` filter matches by
   name prefix, so `ProductCardPreview` also took the whole content of `ProductCard` out of the coverage
   report. `PreviewNamingTest` fails the build on a preview that does not start with `Preview`; the reason is
