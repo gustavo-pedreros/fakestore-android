@@ -87,7 +87,7 @@ fun FsFavoriteButton(
 
 @PreviewLightDark
 @Composable
-private fun FsFavoriteButtonPreview() {
+private fun PreviewFsFavoriteButton() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

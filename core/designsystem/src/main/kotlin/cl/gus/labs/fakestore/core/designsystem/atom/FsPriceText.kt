@@ -36,7 +36,7 @@ fun FsPriceText(
 
 @PreviewLightDark
 @Composable
-private fun FsPriceTextPreview() {
+private fun PreviewFsPriceText() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

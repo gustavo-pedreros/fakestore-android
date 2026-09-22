@@ -92,7 +92,7 @@ fun FsButton(
 
 @PreviewLightDark
 @Composable
-private fun FsButtonPreview() {
+private fun PreviewFsButton() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

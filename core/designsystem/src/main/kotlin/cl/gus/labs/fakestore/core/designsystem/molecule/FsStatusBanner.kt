@@ -85,7 +85,7 @@ fun FsStatusBanner(
 
 @PreviewLightDark
 @Composable
-private fun FsStatusBannerPreview() {
+private fun PreviewFsStatusBanner() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(

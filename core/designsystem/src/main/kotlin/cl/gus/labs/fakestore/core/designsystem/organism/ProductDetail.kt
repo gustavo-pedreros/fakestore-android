@@ -133,7 +133,7 @@ private val SampleDetail = ProductDetailUiModel(
 
 @PreviewLightDark
 @Composable
-private fun ProductDetailPreview() {
+private fun PreviewProductDetail() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column {

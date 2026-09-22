@@ -176,7 +176,7 @@ private val PreviewCardWidth = 173.dp
 
 @PreviewLightDark
 @Composable
-private fun ProductCardPreview() {
+private fun PreviewProductCard() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(

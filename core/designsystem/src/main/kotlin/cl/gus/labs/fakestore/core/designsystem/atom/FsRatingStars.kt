@@ -91,7 +91,7 @@ fun FsRatingStars(
 
 @PreviewLightDark
 @Composable
-private fun FsRatingStarsPreview() {
+private fun PreviewFsRatingStars() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

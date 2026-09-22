@@ -48,7 +48,7 @@ fun FsCategoryBadge(
 
 @PreviewLightDark
 @Composable
-private fun FsCategoryBadgePreview() {
+private fun PreviewFsCategoryBadge() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

@@ -116,7 +116,7 @@ private fun StateSample(
 @Preview(name = "Light", heightDp = 1060, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", heightDp = 1060, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun FsStateHostPreview() {
+private fun PreviewFsStateHost() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(
