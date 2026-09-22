@@ -245,7 +245,8 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 
 ## Testing
 
-The whole suite runs on `./gradlew build` — the same command that produces the APK, locally and in CI.
+The whole suite runs on `./gradlew build` — the same command that produces the APK, locally and in CI. CI adds
+one flag, `-Proborazzi.test.verify=true`, which is what makes the screenshot tests compare anything.
 
 | Level | What is covered | Tooling |
 |---|---|---|
@@ -257,17 +258,33 @@ The whole suite runs on `./gradlew build` — the same command that produces the
 | Persistence | DAO behaviour, including the favorites toggle transaction | Robolectric + JUnit 4 via the vintage engine |
 | Connectivity | the `ConnectivityManager` callback flow: multi-network bookkeeping, captive portals, callback unregistration | Robolectric + JUnit 4 via the vintage engine + Turbine |
 | Presentation | **every state in the diagram above**, with virtual time | JUnit 5 + Turbine + `kotlinx-coroutines-test` |
+| Design system | every `@Preview` as an image, light and dark, compared against a committed baseline; the preview naming rule | Robolectric + Roborazzi + ComposablePreviewScanner (JUnit 4 via the vintage engine); JUnit 5 for the naming rule |
 
-Four choices show up in the test source and are worth explaining:
+A few choices show up in the test source and are worth explaining:
 
 - **No mocking library.** Use cases are `fun interface`s, so a test double is a lambda. `MockK` never
   acquired a consumer, so it never entered the version catalog. Fakes that need state are hand-written
   classes of a few lines.
-- **Robolectric is confined to `:core:database` and `:core:connectivity`.** Because each `data` module talks
-  to a `LocalDataSource` *interface* rather than a DAO, repository tests are plain JVM tests. Only the two
-  places where framework behaviour — real SQLite, a real `ConnectivityManager` — *is* the thing under test
-  pay the Robolectric cost. Everything downstream of `NetworkMonitor` uses a three-line `FakeNetworkMonitor`,
-  and `:core:network` stays on plain JVM tests because nothing in it touches the framework.
+- **Robolectric is confined to `:core:database`, `:core:connectivity` and `:core:designsystem`.** Because each
+  `data` module talks to a `LocalDataSource` *interface* rather than a DAO, repository tests are plain JVM
+  tests. Only the places where framework behaviour — real SQLite, a real `ConnectivityManager`, real text and
+  pixel rendering — *is* the thing under test pay the Robolectric cost. Everything downstream of
+  `NetworkMonitor` uses a three-line `FakeNetworkMonitor`, and `:core:network` stays on plain JVM tests
+  because nothing in it touches the framework.
+- **Screenshots are baselines in git, compared in CI.** `PreviewScreenshotTest` scans `:core:designsystem` for
+  every `@Preview` and renders each one with Robolectric's native graphics — on the JVM, so there is no
+  emulator and Kover sees the run. The images live in `core/designsystem/src/test/screenshots/`, grouped by
+  layer, and every one is rendered at a pinned SDK and screen size (`src/test/resources/robolectric.properties`).
+  Roborazzi captures nothing unless a mode is on, so a plain `./gradlew build` passes over them; CI passes
+  `-Proborazzi.test.verify=true`, and when a comparison fails the `*_actual.png` and `*_compare.png` diffs
+  are uploaded with the build reports. Locally, `./gradlew :core:designsystem:verifyRoborazziDebug` checks,
+  and after an intended visual change `./gradlew :core:designsystem:recordRoborazziDebug
+  -Proborazzi.cleanupOldScreenshots=true` re-records — the new images go in the same commit, where GitHub
+  shows them as image diffs.
+- **Previews are named `Preview<Component>`, and a test enforces it.** Kover's `@Preview*` filter matches by
+  name prefix, so `ProductCardPreview` also took the whole content of `ProductCard` out of the coverage
+  report. `PreviewNamingTest` fails the build on a preview that does not start with `Preview`; the reason is
+  written next to the filter in `KoverFilters.kt`.
 - **Dispatchers are injected, never hardcoded.** `ConnectivityNetworkMonitor` takes its dispatcher through
   an `@IoDispatcher` qualifier, so tests pass an `UnconfinedTestDispatcher` sharing the `runTest` scheduler.
   That is what makes the callback assertions deterministic: the `NetworkCallback` registers eagerly at
@@ -360,7 +377,7 @@ by both Kover convention plugins, since filters do not cross module boundaries i
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
 | `:core:testing` | Pure Kotlin | `MainDispatcherExtension` and the shared test dependencies |
 
-Nine **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
+Ten **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
 `build.gradle.kts` is usually a plugin list and a handful of dependencies.
 
 ---
@@ -377,4 +394,4 @@ Nine **convention plugins** in `build-logic/` carry the shared build configurati
 | Persistence | Room 2.8.4, schemas exported and version-controlled |
 | Images | Coil 3 over OkHttp, stock `ImageLoader` — the disk cache is Coil's default, not a setting here |
 | Time | `kotlin.time.Instant` / `Clock` from the stdlib |
-| Test | JUnit 5, Turbine, MockWebServer, Robolectric |
+| Test | JUnit 5, Turbine, MockWebServer, Robolectric, Roborazzi |
