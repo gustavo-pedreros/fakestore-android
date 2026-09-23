@@ -20,9 +20,6 @@ class KoverRootConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("org.jetbrains.kotlinx.kover")
 
-        // `subprojects` also returns the container projects that `include(":catalog:data")` creates
-        // implicitly — `:catalog`, `:core`, `:favorites`, `:shared`. They have no build script, so no
-        // convention plugin, no Kover and no `coverage` variant to merge.
         val measured = subprojects.filter { it.buildFile.exists() && it.path !in MODULES_WITHOUT_COVERAGE }
         dependencies {
             measured.forEach { add("kover", project(it.path)) }
@@ -52,10 +49,5 @@ class KoverRootConventionPlugin : Plugin<Project> {
     }
 }
 
-// Test infrastructure that lives in src/main (MainDispatcherExtension, FixedClock). It sits on the
-// production classpath but it is not production code, and it has no tests of its own.
-private val MODULES_WITHOUT_COVERAGE = setOf(":core:testing")
-
-// Mirrors the Codecov `project` target so `./gradlew koverVerifyCoverage` is a local dry run of the
-// same gate. Kover bounds are Int, so the 0.2% tolerance lives only in codecov.yml.
 private const val PROJECT_COVERAGE_TARGET = 60
+private val MODULES_WITHOUT_COVERAGE = setOf(":core:testing")
