@@ -56,6 +56,8 @@ class KoverRootConventionPlugin : Plugin<Project> {
 // production classpath but it is not production code, and it has no tests of its own.
 private val MODULES_WITHOUT_COVERAGE = setOf(":core:testing")
 
-// Mirrors the Codecov `project` target so `./gradlew koverVerifyCoverage` is a local dry run of the
-// same gate. Kover bounds are Int, so the 0.2% tolerance lives only in codecov.yml.
+// A floor, not the Codecov gate. Codecov runs a ratchet (`target: auto`): a PR may not drop the
+// aggregate against its base branch, whatever that number happens to be. This bound is the separate,
+// weaker promise that coverage never falls below 60% at all, and it is what `koverVerifyCoverage`
+// checks locally. Kover bounds are Int, so the 0.2% tolerance lives only in codecov.yml.
 private const val PROJECT_COVERAGE_TARGET = 60
