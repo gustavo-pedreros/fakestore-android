@@ -356,7 +356,9 @@ Konsist for the dependency rules above, ktlint/detekt for style. Rules 1–4 cur
 and in review; Stage 4 is where they become build failures instead of prose.
 
 Coverage already got there: Kover merges the 13 production modules into a single report and Codecov gates
-every PR on it — new code must arrive 80% covered, and the total may not drop against the base branch. The
+every PR on it — new code must arrive 80% covered, and the total may not drop against the base branch. That
+ratchet is the gate even now that the 60% goal is met: an absolute target would let the number slide back to
+the floor without failing, so `koverVerifyCoverage`'s 60% bound is a local floor rather than the same check. The
 exclusion list — generated Dagger and Room output, Compose previews, DI wiring — is declared once and applied
 by both Kover convention plugins, since filters do not cross module boundaries in either direction.
 

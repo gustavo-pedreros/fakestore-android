@@ -6,23 +6,15 @@ codecov:
 coverage:
   precision: 2
   round: down
-  # Colour ramp for the badge and the UI, set to the range this repo actually moves in.
   range: "60...90"
   status:
     project:
-      # The gate that blocks: coverage may not drop against the base branch. The 60% goal is met —
-      # the aggregate cleared it once :core:designsystem got its test suite — and the ratchet stays
-      # on rather than becoming `target: 60%`. An absolute target would let the number slide all the
-      # way back to the floor without failing; the ratchet holds whatever has been earned. It needs
-      # coverage on the base branch, which is why build.yml keeps running on pushes to main and
-      # develop.
       default:
         target: auto
         threshold: 0.2%
         if_ci_failed: error
     patch:
-      # New code comes with tests. This one blocks from day one: it only measures changed lines, so
-      # the state of the existing code does not hold it back.
+      # New code comes with tests.
       default:
         target: 80%
         threshold: 0.2%
