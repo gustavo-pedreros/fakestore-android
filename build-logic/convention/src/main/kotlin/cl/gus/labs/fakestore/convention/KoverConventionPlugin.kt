@@ -34,6 +34,12 @@ class KoverConventionPlugin : Plugin<Project> {
             }
 
             reports {
+                filters {
+                    excludes {
+                        excludeGeneratedAndWiring()
+                    }
+                }
+
                 // The total variant merges debug *and* release, so it double counts Android classes,
                 // and its verify task is wired into `check` by convention with `upToDateWhen { false }`.
                 // Left alone it would add a forced, always-rerunning task to every `./gradlew build`.

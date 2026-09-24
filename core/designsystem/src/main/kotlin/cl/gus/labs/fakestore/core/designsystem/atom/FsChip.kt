@@ -75,7 +75,7 @@ fun FsChip(
 
 @PreviewLightDark
 @Composable
-private fun FsChipPreview() {
+private fun PreviewFsChip() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

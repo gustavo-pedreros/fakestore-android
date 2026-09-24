@@ -53,7 +53,7 @@ resolved by the wrapper.
 git clone https://github.com/gustavo-pedreros/fakestore-android.git
 cd fakestore-android
 
-./gradlew build            # compiles every module, runs 87 tests, runs lint
+./gradlew build            # compiles every module, runs the tests, runs lint
 ./gradlew :app:installDebug
 ```
 
@@ -100,9 +100,8 @@ needs to know *which products are favorites* to draw its hearts, and the favorit
 crossing is allowed.
 
 `:core:testing` sits apart on purpose. The `fakestore.testing` convention plugin puts it on the test
-classpath of twelve of the other thirteen modules — all but `:core:connectivity`, which has no tests of
-its own — so drawing those twelve edges would bury the production graph under test-only wiring that no
-production code can see.
+classpath of all thirteen other modules, so drawing those thirteen edges would bury the production graph
+under test-only wiring that no production code can see.
 
 ### Dependency rules
 
@@ -246,7 +245,8 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 
 ## Testing
 
-**87 tests across 16 files**, all run by `./gradlew build`.
+The whole suite runs on `./gradlew build` — the same command that produces the APK, locally and in CI. CI adds
+one flag, `-Proborazzi.test.verify=true`, which is what makes the screenshot tests compare anything.
 
 | Level | What is covered | Tooling |
 |---|---|---|
@@ -254,17 +254,51 @@ The honest way to present a decision is: **what I gained, what I paid, and when 
 | Domain | use cases that carry real logic | JUnit 5 |
 | ACL / mappers | DTO → domain, entity → domain | JUnit 5 |
 | Data | repositories against fakes; the remote datasource against **MockWebServer** with real payload shapes | JUnit 5 + MockWebServer |
+| Network | the OkHttp/Retrofit/Json wiring, the empty-body converter, and the error ACL | JUnit 5 + MockWebServer |
 | Persistence | DAO behaviour, including the favorites toggle transaction | Robolectric + JUnit 4 via the vintage engine |
+| Connectivity | the `ConnectivityManager` callback flow: multi-network bookkeeping, captive portals, callback unregistration | Robolectric + JUnit 4 via the vintage engine + Turbine |
 | Presentation | **every state in the diagram above**, with virtual time | JUnit 5 + Turbine + `kotlinx-coroutines-test` |
+| Design system | every `@Preview` as an image, light and dark, compared against a committed baseline; the preview naming rule | Robolectric + Roborazzi + ComposablePreviewScanner (JUnit 4 via the vintage engine); JUnit 5 for the naming rule |
 
-Two choices show up in the test source and are worth explaining:
+A few choices show up in the test source and are worth explaining:
 
 - **No mocking library.** Use cases are `fun interface`s, so a test double is a lambda. `MockK` never
   acquired a consumer, so it never entered the version catalog. Fakes that need state are hand-written
   classes of a few lines.
-- **Robolectric is confined to `:core:database`.** Because each `data` module talks to a `LocalDataSource`
-  *interface* rather than a DAO, repository tests are plain JVM tests. Only the DAO tests — where the real
-  SQLite behaviour is the thing under test — pay the Robolectric cost.
+- **Robolectric is confined to `:core:database`, `:core:connectivity` and `:core:designsystem`.** Because each
+  `data` module talks to a `LocalDataSource` *interface* rather than a DAO, repository tests are plain JVM
+  tests. Only the places where framework behaviour — real SQLite, a real `ConnectivityManager`, real text and
+  pixel rendering — *is* the thing under test pay the Robolectric cost. Everything downstream of
+  `NetworkMonitor` uses a three-line `FakeNetworkMonitor`, and `:core:network` stays on plain JVM tests
+  because nothing in it touches the framework.
+- **Screenshots are baselines in git, compared in CI.** `PreviewScreenshotTest` scans `:core:designsystem` for
+  every `@Preview` and renders each one with Robolectric's native graphics — on the JVM, so there is no
+  emulator and Kover sees the run. The images live in `core/designsystem/src/test/screenshots/`, grouped by
+  layer, and every one is rendered at a pinned SDK and screen size (`src/test/resources/robolectric.properties`).
+  Roborazzi captures nothing unless a mode is on, so a plain `./gradlew build` passes over them; CI passes
+  `-Proborazzi.test.verify=true`, and when a comparison fails the `*_actual.png` and `*_compare.png` diffs
+  are uploaded with the build reports. Locally, `./gradlew :core:designsystem:verifyRoborazziDebug` checks,
+  and after an intended visual change `./gradlew :core:designsystem:recordRoborazziDebug
+  -Proborazzi.cleanupOldScreenshots=true` re-records — the new images go in the same commit, where GitHub
+  shows them as image diffs.
+- **Design system tests never touch the network.** `DesignSystemTestApplication`, set as
+  `robolectric.properties`' `application=`, installs a `FakeImageLoaderEngine` as the Coil singleton: a fixed
+  set of test URLs resolve to a loaded, broken or perpetually-loading image, and anything else fails fast with
+  "No interceptors handled this request".
+- **Previews are named `Preview<Component>`, and a test enforces it.** Kover's `@Preview*` filter matches by
+  name prefix, so `ProductCardPreview` also took the whole content of `ProductCard` out of the coverage
+  report. `PreviewNamingTest` fails the build on a preview that does not start with `Preview`; the reason is
+  written next to the filter in `KoverFilters.kt`.
+- **Dispatchers are injected, never hardcoded.** `ConnectivityNetworkMonitor` takes its dispatcher through
+  an `@IoDispatcher` qualifier, so tests pass an `UnconfinedTestDispatcher` sharing the `runTest` scheduler.
+  That is what makes the callback assertions deterministic: the `NetworkCallback` registers eagerly at
+  collection time, so firing a shadow callback cannot race registration and `conflate()` cannot drop an
+  emission before the collector sees it.
+- **Branch coverage finds the gaps; a mutation confirms the test.** Line coverage hides an untaken `when`
+  arm, and a class the tests merely *construct* reaches 100% with no assertion at all — deleting
+  `ignoreUnknownKeys` used to break nothing. Both are found in the per-method `BRANCH` counters of the Kover
+  XML, then confirmed by breaking the production line and watching a named test fail. A few missed branches
+  are unreachable and left alone, such as the `label` dispatch a `suspend` function compiles to.
 
 ---
 
@@ -322,7 +356,11 @@ Konsist for the dependency rules above, ktlint/detekt for style. Rules 1–4 cur
 and in review; Stage 4 is where they become build failures instead of prose.
 
 Coverage already got there: Kover merges the 13 production modules into a single report and Codecov gates
-every PR on it — new code must arrive 80% covered, and the total may not drop against the base branch.
+every PR on it — new code must arrive 80% covered, and the total may not drop against the base branch. That
+ratchet is the gate even now that the 60% goal is met: an absolute target would let the number slide back to
+the floor without failing, so `koverVerifyCoverage`'s 60% bound is a local floor rather than the same check. The
+exclusion list — generated Dagger and Room output, Compose previews, DI wiring — is declared once and applied
+by both Kover convention plugins, since filters do not cross module boundaries in either direction.
 
 ---
 
@@ -338,14 +376,14 @@ every PR on it — new code must arrive 80% covered, and the total may not drop 
 | `:favorites:data` | Android lib | Local-first writes over `FavoriteDao` |
 | `:favorites:ui` | Compose lib | Favorites screen and its nav entries |
 | `:shared:kernel` | Pure Kotlin | Ubiquitous language: `ProductId`, `AppError` |
-| `:core:common` | Pure Kotlin | `Either` |
+| `:core:common` | Pure Kotlin | `Either`, the `@IoDispatcher` qualifier |
 | `:core:network` | Android lib | Retrofit/OkHttp/kotlinx.serialization, `executeCall`, error ACL |
 | `:core:database` | Android lib | The single Room instance, entities, DAOs, migrations |
 | `:core:designsystem` | Compose lib | M3 theme, tokens, atoms → molecules → organisms, `FsIcons` |
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
 | `:core:testing` | Pure Kotlin | `MainDispatcherExtension` and the shared test dependencies |
 
-Seven **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
+Ten **convention plugins** in `build-logic/` carry the shared build configuration, so a module's
 `build.gradle.kts` is usually a plugin list and a handful of dependencies.
 
 ---
@@ -362,4 +400,4 @@ Seven **convention plugins** in `build-logic/` carry the shared build configurat
 | Persistence | Room 2.8.4, schemas exported and version-controlled |
 | Images | Coil 3 over OkHttp, stock `ImageLoader` — the disk cache is Coil's default, not a setting here |
 | Time | `kotlin.time.Instant` / `Clock` from the stdlib |
-| Test | JUnit 5, Turbine, MockWebServer, Robolectric |
+| Test | JUnit 5, Turbine, MockWebServer, Robolectric, Roborazzi |

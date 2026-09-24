@@ -17,6 +17,7 @@ dependencies {
     compileOnly(libs.ksp.gradle.plugin)
     compileOnly(libs.hilt.gradle.plugin)
     compileOnly(libs.kover.gradle.plugin)
+    compileOnly(libs.roborazzi.gradle.plugin)
 }
 
 gradlePlugin {
@@ -36,6 +37,10 @@ gradlePlugin {
         register("androidCompose") {
             id = "fakestore.android.compose"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidComposeConventionPlugin"
+        }
+        register("androidComposeTesting") {
+            id = "fakestore.android.compose.testing"
+            implementationClass = "cl.gus.labs.fakestore.convention.AndroidComposeTestingConventionPlugin"
         }
         register("androidHilt") {
             id = "fakestore.android.hilt"

@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,13 +43,14 @@ fun FsCategoryBadge(
             color = color,
             style = style,
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
 
 @PreviewLightDark
 @Composable
-private fun FsCategoryBadgePreview() {
+private fun PreviewFsCategoryBadge() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

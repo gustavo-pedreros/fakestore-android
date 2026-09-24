@@ -2,6 +2,7 @@ plugins {
     id("fakestore.android.library")
     id("fakestore.android.compose")
     id("fakestore.testing")
+    id("fakestore.android.compose.testing")
 }
 
 android {
@@ -16,10 +17,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    debugImplementation(libs.bundles.compose.debug)
+    testImplementation(libs.coil.test)
 
-    androidTestImplementation(platform(libs.junit.bom))
-    androidTestImplementation(libs.bundles.test.instrumented)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.bundles.compose.debug)
 }

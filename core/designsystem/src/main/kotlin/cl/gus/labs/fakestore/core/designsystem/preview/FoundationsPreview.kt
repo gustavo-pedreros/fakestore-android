@@ -30,7 +30,7 @@ import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 @Preview(name = "Light", heightDp = 1600, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", heightDp = 1600, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun FoundationsPreview() {
+private fun PreviewFoundations() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),

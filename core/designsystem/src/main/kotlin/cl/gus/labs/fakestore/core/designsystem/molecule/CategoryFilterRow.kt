@@ -66,7 +66,7 @@ fun CategoryFilterRow(
 
 @PreviewLightDark
 @Composable
-private fun CategoryFilterRowPreview() {
+private fun PreviewCategoryFilterRow() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(

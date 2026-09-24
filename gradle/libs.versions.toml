@@ -25,9 +25,12 @@ kotlinxSerialization = "1.10.0"
 kotlinxCoroutines = "1.10.1"
 hilt = "2.60.1"
 androidxHilt = "1.4.0"
+javaxInject = "1"
 ksp = "2.3.9"
 room = "2.8.4"
 robolectric = "4.16.1"
+roborazzi = "1.75.0"
+composablePreviewScanner = "0.9.3"
 kover = "0.9.9"
 
 [libraries]
@@ -38,6 +41,7 @@ compose-gradle-plugin = { group = "org.jetbrains.kotlin", name = "compose-compil
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 hilt-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 kover-gradle-plugin = { group = "org.jetbrains.kotlinx", name = "kover-gradle-plugin", version.ref = "kover" }
+roborazzi-gradle-plugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 
 # AndroidX core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +69,7 @@ androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name 
 # Images
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+coil-test = { group = "io.coil-kt.coil3", name = "coil-test", version.ref = "coil" }
 
 # Test
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitJupiter" }
@@ -79,6 +84,12 @@ junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+
+# Screenshot tests
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-compose-preview-scanner-support = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
+composable-preview-scanner = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "android", version.ref = "composablePreviewScanner" }
 
 # Network
 retrofit-bom = { group = "com.squareup.retrofit2", name = "retrofit-bom", version.ref = "retrofitBom" }
@@ -97,6 +108,7 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-lifecycle-viewmodel-compose = { group = "androidx.hilt", name = "hilt-lifecycle-viewmodel-compose", version.ref = "androidxHilt" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 
 # Persistence
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -116,6 +128,12 @@ compose-debug = [
 ]
 test-unit = ["junit-jupiter-api", "junit-jupiter-params", "junit-jupiter-engine"]
 test-instrumented = ["junit-jupiter-api", "mannodermaus-android-test-core", "mannodermaus-android-test-runner"]
+test-screenshot = [
+    "roborazzi",
+    "roborazzi-compose",
+    "roborazzi-compose-preview-scanner-support",
+    "composable-preview-scanner",
+]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -127,3 +145,4 @@ android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "android
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

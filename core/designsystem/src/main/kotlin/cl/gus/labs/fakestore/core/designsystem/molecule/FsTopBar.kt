@@ -198,7 +198,7 @@ private fun TopBarAction(
 
 @PreviewLightDark
 @Composable
-private fun FsTopBarPreview() {
+private fun PreviewFsTopBar() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(

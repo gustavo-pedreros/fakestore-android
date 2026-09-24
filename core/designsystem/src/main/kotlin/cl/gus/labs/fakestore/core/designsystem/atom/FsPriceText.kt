@@ -26,7 +26,7 @@ fun FsPriceText(
         FsPriceSize.Medium -> FakeStoreTheme.textStyles.priceMedium
     }
     Text(
-        text = String.format(Locale.US, "$%.2f", amount),
+        text = formatPrice(amount),
         modifier = modifier,
         color = FakeStoreTheme.colors.priceText,
         style = style,
@@ -34,9 +34,11 @@ fun FsPriceText(
     )
 }
 
+internal fun formatPrice(amount: Double): String = String.format(Locale.US, "$%.2f", amount)
+
 @PreviewLightDark
 @Composable
-private fun FsPriceTextPreview() {
+private fun PreviewFsPriceText() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

@@ -2,10 +2,24 @@
 .gradle
 .kotlin
 /local.properties
+
+# ide
 /.idea/*
+/.vscode/*
+
+# ia
+/.agents
+/.claude
+skills-lock.json
+
+# roborazzi: a failed comparison writes these under build/; they must never sit next to the baselines
+*_actual.png
+*_compare.png
+
 .DS_Store
 build/
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+

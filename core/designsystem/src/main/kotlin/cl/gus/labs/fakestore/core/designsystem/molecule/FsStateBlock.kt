@@ -86,7 +86,7 @@ fun FsStateBlock(
 @Preview(name = "Light", heightDp = 800, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", heightDp = 800, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun FsStateBlockPreview() {
+private fun PreviewFsStateBlock() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(

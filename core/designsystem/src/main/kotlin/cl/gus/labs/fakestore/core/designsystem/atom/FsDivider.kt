@@ -38,7 +38,7 @@ fun FsDivider(
 
 @PreviewLightDark
 @Composable
-private fun FsDividerPreview() {
+private fun PreviewFsDivider() {
     FakeStoreTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),

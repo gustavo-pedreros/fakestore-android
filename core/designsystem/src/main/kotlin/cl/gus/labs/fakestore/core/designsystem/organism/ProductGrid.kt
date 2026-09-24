@@ -119,7 +119,7 @@ private val SampleProducts = listOf(
 
 @PreviewLightDark
 @Composable
-private fun ProductGridPreview() {
+private fun PreviewProductGrid() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             ProductGrid(
@@ -136,7 +136,7 @@ private fun ProductGridPreview() {
 
 @PreviewLightDark
 @Composable
-private fun ProductGridSkeletonPreview() {
+private fun PreviewProductGridSkeleton() {
     FakeStoreTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             ProductGridSkeleton(modifier = Modifier.fillMaxSize())
