@@ -97,3 +97,17 @@ jobs:
             **/build/reports/**
             **/build/outputs/roborazzi/**
           if-no-files-found: ignore
+
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Offline: links between repo files and their anchors. External URLs would only add flakiness.
+      - name: Check links between docs
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --include-fragments --no-progress './**/*.md'
+          fail: true
