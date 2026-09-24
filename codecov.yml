@@ -30,3 +30,8 @@ comment:
 
 ignore:
   - "**/build/generated/**"
+  # Docs: lets the empty upload of a docs-only PR pass.
+  - "docs/**"
+  - "art/**"
+  - "**/*.md"
+  - "LICENSE"
