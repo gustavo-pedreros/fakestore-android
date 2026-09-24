@@ -33,5 +33,6 @@ ignore:
   # Docs: lets the empty upload of a docs-only PR pass.
   - "docs/**"
   - "art/**"
+  - "*.md"
   - "**/*.md"
   - "LICENSE"
