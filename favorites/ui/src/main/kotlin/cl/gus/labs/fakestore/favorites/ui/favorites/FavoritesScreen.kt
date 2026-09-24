@@ -149,18 +149,18 @@ private fun FavoritesScreenPreview(state: FavoritesUiState) {
 
 @PreviewLightDark
 @Composable
-private fun FavoritesScreenLoadingPreview() {
+private fun PreviewFavoritesScreenLoading() {
     FavoritesScreenPreview(FavoritesUiState(content = FavoritesContent.Loading))
 }
 
 @PreviewLightDark
 @Composable
-private fun FavoritesScreenReadyPreview() {
+private fun PreviewFavoritesScreenReady() {
     FavoritesScreenPreview(FavoritesUiState(content = FavoritesContent.Ready(PreviewProducts)))
 }
 
 @PreviewLightDark
 @Composable
-private fun FavoritesScreenEmptyPreview() {
+private fun PreviewFavoritesScreenEmpty() {
     FavoritesScreenPreview(FavoritesUiState(content = FavoritesContent.Empty))
 }
