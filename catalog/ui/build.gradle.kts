@@ -3,6 +3,7 @@ plugins {
     id("fakestore.android.compose")
     id("fakestore.android.hilt")
     id("fakestore.testing")
+    id("fakestore.android.compose.testing")
     alias(libs.plugins.kotlin.serialization)
 }
 

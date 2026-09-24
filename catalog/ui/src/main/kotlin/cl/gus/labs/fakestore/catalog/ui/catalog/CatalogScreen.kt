@@ -300,13 +300,13 @@ private fun CatalogScreenPreview(state: CatalogUiState) {
 
 @PreviewLightDark
 @Composable
-private fun CatalogScreenLoadingPreview() {
+private fun PreviewCatalogScreenLoading() {
     CatalogScreenPreview(CatalogUiState(content = CatalogContent.Loading))
 }
 
 @PreviewLightDark
 @Composable
-private fun CatalogScreenReadyPreview() {
+private fun PreviewCatalogScreenReady() {
     CatalogScreenPreview(
         CatalogUiState(
             content = CatalogContent.Ready(PreviewProducts),
@@ -318,7 +318,7 @@ private fun CatalogScreenReadyPreview() {
 
 @PreviewLightDark
 @Composable
-private fun CatalogScreenStalePreview() {
+private fun PreviewCatalogScreenStale() {
     CatalogScreenPreview(
         CatalogUiState(
             content = CatalogContent.Ready(PreviewProducts),
@@ -331,7 +331,7 @@ private fun CatalogScreenStalePreview() {
 
 @PreviewLightDark
 @Composable
-private fun CatalogScreenEmptyPreview() {
+private fun PreviewCatalogScreenEmpty() {
     CatalogScreenPreview(
         CatalogUiState(
             content = CatalogContent.Empty,
@@ -344,7 +344,7 @@ private fun CatalogScreenEmptyPreview() {
 
 @PreviewLightDark
 @Composable
-private fun CatalogScreenFailurePreview() {
+private fun PreviewCatalogScreenFailure() {
     CatalogScreenPreview(
         CatalogUiState(
             content = CatalogContent.Failure(AppError.Network(message = null), offline = true),
