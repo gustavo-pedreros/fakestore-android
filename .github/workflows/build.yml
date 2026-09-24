@@ -11,7 +11,8 @@ permissions:
 
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: true
+  # Runs on main and develop are Codecov's base reports: never cancel them.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -32,6 +33,9 @@ jobs:
         run: sdkmanager "platforms;android-37" || echo "not available from sdkmanager, relying on AGP"
 
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          # Default: only main writes. develop moves daily, main only on release.
+          cache-read-only: ${{ github.event_name == 'pull_request' || (github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop') }}
 
       - name: Build, test and lint
         run: ./gradlew build :koverXmlReportCoverage -Proborazzi.test.verify=true --stacktrace
