@@ -111,3 +111,10 @@ jobs:
         with:
           args: --offline --include-fragments --no-progress './**/*.md'
           fail: true
+
+      # The README is a landing page; detail goes to docs/.
+      - name: Keep the README within its line budget
+        run: |
+          lines=$(wc -l < README.md)
+          echo "README.md: $lines lines, budget 120"
+          [ "$lines" -le 120 ]
