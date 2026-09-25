@@ -6,6 +6,8 @@ architecture tests and instrumented tests.
 
 ## Strategy by layer
 
+![Tests by layer: JVM unit tests cover ViewModels, use cases, repositories and network wiring; Robolectric covers design-system components, Room DAOs and connectivity callbacks; screenshots cover every screen and design-system preview; instrumented, contract and architecture tests are planned.](diagrams/08-testing-by-layer.png)
+
 | Layer | What is tested | Tooling | Status |
 |---|---|---|---|
 | Kernel and common | `Either`, error types | JUnit 5 | ✅ |
@@ -76,8 +78,16 @@ Swap the module for `:catalog:ui` or `:favorites:ui` as needed.
 - **The gate is Codecov** ([`codecov.yml`](../codecov.yml)): the project total may not drop against the
   base branch, and new code needs its own patch coverage. A ratchet catches a slide that an absolute
   target would allow.
-- **By layer.** Codecov components split the same report into domain, data, presentation, design
-  system and infrastructure.
+- **By layer.** Codecov components split the same report into the layers of the diagram above.
+
+| Layer | Coverage on `main` |
+|---|---|
+| domain | ![domain coverage](https://codecov.io/gh/gustavo-pedreros/fakestore-android/branch/main/graph/badge.svg?component=domain) |
+| data | ![data coverage](https://codecov.io/gh/gustavo-pedreros/fakestore-android/branch/main/graph/badge.svg?component=data) |
+| presentation | ![presentation coverage](https://codecov.io/gh/gustavo-pedreros/fakestore-android/branch/main/graph/badge.svg?component=presentation) |
+| design system | ![design system coverage](https://codecov.io/gh/gustavo-pedreros/fakestore-android/branch/main/graph/badge.svg?component=design_system) |
+| infrastructure | ![infrastructure coverage](https://codecov.io/gh/gustavo-pedreros/fakestore-android/branch/main/graph/badge.svg?component=infrastructure) |
+
 - **The local floor is not a gate.** `:koverVerifyCoverage` checks a minimum in
   [`KoverRootConventionPlugin.kt`](../build-logic/convention/src/main/kotlin/cl/gus/labs/fakestore/convention/KoverRootConventionPlugin.kt),
   but neither `check` nor CI runs it.
