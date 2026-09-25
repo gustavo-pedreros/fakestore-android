@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #0B0B0C; }
+    a:hover { color: #5C5C56; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; background: {{t.bg}}; color: {{t.ink}}; font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;">
+
+  <!-- FsTopBar -->
+  <div style="flex-shrink: 0; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 16px; background: {{t.surface}}; border-bottom: 1px solid {{t.hairline}};">
+    <div style="display: flex; flex-direction: column; line-height: 0.88;">
+      <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.03em;">FAKE</div>
+      <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.03em;">STORE</div>
+    </div>
+    <div style="display: flex;">
+      <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.ink}}" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3 4.2 12.6a4.8 4.8 0 0 1 6.8-6.8l1 1 1-1a4.8 4.8 0 0 1 6.8 6.8Z"/></svg>
+      </div>
+      <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.ink}}" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- OfflineBanner -->
+  <sc-if value="{{ui.showBanner}}" hint-placeholder-val="{{ true }}">
+    <div style="flex-shrink: 0; height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 16px; background: {{t.invBg}}; color: {{t.invInk}};">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{t.invInk}}" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M2 3.5 21.5 21"/><path d="M5.2 11.2a10 10 0 0 1 3.4-2.2"/><path d="M1.8 7.6A15 15 0 0 1 7 4.4"/><path d="M15.6 8.9a10 10 0 0 1 3.3 2.3"/><path d="M12.7 4.1a15 15 0 0 1 9 4.5"/><path d="M8.6 14.7a5 5 0 0 1 6 .3"/><path d="M12 19.4h.01"/></svg>
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em;">SIN CONEXION · CATALOGO GUARDADO</div>
+    </div>
+  </sc-if>
+
+  <!-- CategoryFilterRow -->
+  <div style="flex-shrink: 0; height: 68px; display: flex; align-items: center; gap: 8px; padding: 0 16px; background: {{t.surface}}; border-bottom: 1px solid {{t.hairline}}; overflow: hidden;">
+    <div style="height: 44px; display: flex; align-items: center; padding: 0 16px; background: {{t.ink}}; color: {{t.bg}}; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap;">TODOS</div>
+    <div style="height: 44px; display: flex; align-items: center; padding: 0 16px; border: 1px solid {{t.outline}}; color: {{t.ink}}; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap;">JEWELERY</div>
+    <div style="height: 44px; display: flex; align-items: center; padding: 0 16px; border: 1px solid {{t.outline}}; color: {{t.ink}}; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap;">ELECTRONICS</div>
+    <div style="height: 44px; display: flex; align-items: center; padding: 0 16px; border: 1px solid {{t.outline}}; color: {{t.ink}}; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; white-space: nowrap;">MENS</div>
+  </div>
+
+  <!-- FsStateHost -->
+  <div style="flex-grow: 1; overflow: hidden; background: {{t.bg}};">
+
+    <!-- Content -->
+    <sc-if value="{{ui.content}}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px;">
+
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+          <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 24h28v28a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4Z"/><path d="M25 24v-6a7 7 0 0 1 14 0v6"/><path d="M24 38h16"/></svg>
+            <div onClick="{{ fav.p1.toggle }}" style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: {{fav.p1.bg}}; border: 1px solid {{fav.p1.border}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="{{fav.p1.fill}}" stroke="{{fav.p1.stroke}}" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+            <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">MENS</div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">Fjallraven Foldsack No. 1</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">3.9</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: {{t.dim}};">(120)</div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$109.95</div>
+          </div>
+        </div>
+
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+          <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 20h20l4 10v24a2 2 0 0 1-2 2H20a2 2 0 0 1-2-2V30Z"/><path d="M26 20a6 6 0 0 0 12 0"/></svg>
+            <div onClick="{{ fav.p2.toggle }}" style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: {{fav.p2.bg}}; border: 1px solid {{fav.p2.border}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="{{fav.p2.fill}}" stroke="{{fav.p2.stroke}}" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+            <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">MENS</div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">Mens Casual Premium Slim…</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">4.1</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: {{t.dim}};">(259)</div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$ 22.30</div>
+          </div>
+        </div>
+
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+          <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="34" r="14"/><path d="M32 20v-6"/><path d="M26 14h12"/></svg>
+            <div onClick="{{ fav.p3.toggle }}" style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: {{fav.p3.bg}}; border: 1px solid {{fav.p3.border}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="{{fav.p3.fill}}" stroke="{{fav.p3.stroke}}" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+            <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">JEWELERY</div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">John Hardy Legends Naga…</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">4.6</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: {{t.dim}};">(400)</div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$695.00</div>
+          </div>
+        </div>
+
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+          <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="24" width="36" height="20" rx="3"/><path d="M20 44v6h24v-6"/><circle cx="42" cy="34" r="2"/></svg>
+            <div onClick="{{ fav.p4.toggle }}" style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: {{fav.p4.bg}}; border: 1px solid {{fav.p4.border}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="{{fav.p4.fill}}" stroke="{{fav.p4.stroke}}" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+            <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">ELECTRONICS</div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">WD 2TB Elements Portable…</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">3.3</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: {{t.dim}};">(203)</div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$ 64.00</div>
+          </div>
+        </div>
+
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+          <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 22h32v20H16z"/><path d="M22 42v8h20v-8"/><path d="M22 28h8"/></svg>
+            <div onClick="{{ fav.p5.toggle }}" style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: {{fav.p5.bg}}; border: 1px solid {{fav.p5.border}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="{{fav.p5.fill}}" stroke="{{fav.p5.stroke}}" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+            <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">ELECTRONICS</div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">SanDisk SSD PLUS 1TB</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">2.9</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: {{t.dim}};">(470)</div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$109.00</div>
+          </div>
+        </div>
+
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;">
+          <div style="position: relative; aspect-ratio: 1 / 1; background: {{t.tile}}; border-bottom: 1px solid {{t.tileBorder}}; display: flex; align-items: center; justify-content: center; padding: 26px;">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none" stroke="#3A3A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 22h24l-4 30H24Z"/><path d="M27 22a5 5 0 0 1 10 0"/></svg>
+            <div onClick="{{ fav.p6.toggle }}" style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 999px; background: {{fav.p6.bg}}; border: 1px solid {{fav.p6.border}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="{{fav.p6.fill}}" stroke="{{fav.p6.stroke}}" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.4 4.1 12.5a4.85 4.85 0 0 1 6.86-6.86l1.04 1.04 1.04-1.04a4.85 4.85 0 0 1 6.86 6.86Z"/></svg>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+            <div style="display: inline-flex; align-self: flex-start; align-items: center; height: 20px; padding: 0 6px; border: 1px solid {{t.ink}}; border-radius: 2px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em;">WOMENS</div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.33;">Opna Womens Short Sleeve…</div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="{{t.ink}}" aria-hidden="true"><path d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8 9.4 9Z"/></svg>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700;">4.5</div>
+              <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: {{t.dim}};">(146)</div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">$ 7.95</div>
+          </div>
+        </div>
+
+      </div>
+    </sc-if>
+
+    <!-- Loading -->
+    <sc-if value="{{ui.loading}}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px;">
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 60%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; width: 70%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 50%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 72%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; width: 58%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 44%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 54%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; width: 76%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 58%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+        <div style="background: {{t.surface}}; border: 1px solid {{t.hairline}}; border-radius: 4px; overflow: hidden;"><div style="aspect-ratio: 1 / 1; background: {{t.skeleton}}; border-bottom: 1px solid {{t.tileBorder}};"></div><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px;"><div style="height: 20px; width: 66%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 14px; width: 62%; background: {{t.skeleton}}; border-radius: 2px;"></div><div style="height: 20px; width: 48%; background: {{t.skeleton}}; border-radius: 2px;"></div></div></div>
+      </div>
+    </sc-if>
+
+    <!-- Failure -->
+    <sc-if value="{{ui.error}}" hint-placeholder-val="{{ true }}">
+      <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 32px; text-align: center;">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="{{t.error}}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6 22 20.4H2Z"/><path d="M12 10v4.4"/><path d="M12 17.6h.01"/></svg>
+        <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.3;">No pudimos cargar el catálogo</div>
+        <div style="font-size: 14px; line-height: 1.5; color: {{t.dim}}; max-width: 260px;">Revisa tu conexión y vuelve a intentarlo.</div>
+        <div style="height: 48px; display: flex; align-items: center; padding: 0 22px; background: {{t.ink}}; color: {{t.bg}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; margin-top: 6px;">REINTENTAR</div>
+      </div>
+    </sc-if>
+
+    <!-- Empty -->
+    <sc-if value="{{ui.empty}}" hint-placeholder-val="{{ true }}">
+      <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 32px; text-align: center;">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="{{t.dim}}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5Z"/><path d="m3 7.5 9 4.5 9-4.5"/><path d="M12 12v9"/></svg>
+        <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.3;">Sin productos en esta categoría</div>
+        <div style="font-size: 14px; line-height: 1.5; color: {{t.dim}}; max-width: 260px;">Prueba con otro filtro.</div>
+        <div style="height: 48px; display: flex; align-items: center; padding: 0 22px; border: 2px solid {{t.ink}}; color: {{t.ink}}; border-radius: 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; margin-top: 6px;">VER TODO</div>
+      </div>
+    </sc-if>
+
+  </div>
+
+</div>
+
+<script data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","oscuro"],"default":"claro"},"estado":{"editor":"enum","options":["contenido","cargando","error","sin resultados"],"default":"contenido"},"desdeCache":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { favs: { p1: true, p2: false, p3: false, p4: false, p5: false, p6: false } };
+  }
+
+  favVals(key) {
+    const on = !!(this.state.favs && this.state.favs[key]);
+    return {
+      bg: on ? '#C8F751' : '#FFFFFF',
+      border: on ? '#0B0B0C' : '#E3E3DB',
+      fill: on ? '#0B0B0C' : 'none',
+      stroke: on ? 'none' : '#5C5C56',
+      toggle: () => {
+        const next = Object.assign({}, this.state.favs);
+        next[key] = !next[key];
+        this.setState({ favs: next });
+      },
+    };
+  }
+
+  renderVals() {
+    const dark = (this.props.tema ?? 'claro') === 'oscuro';
+    const t = dark
+      ? { bg: '#0B0B0C', surface: '#131315', container: '#1B1B1E', ink: '#FAFAF7', dim: '#9C9C95', hairline: '#2B2B2F', outline: '#3D3D42', tile: '#F2F2EE', tileBorder: '#2B2B2F', error: '#FF6B5A', invBg: '#FAFAF7', invInk: '#0B0B0C', skeleton: '#202024' }
+      : { bg: '#FAFAF7', surface: '#FFFFFF', container: '#F0F0EA', ink: '#0B0B0C', dim: '#5C5C56', hairline: '#E3E3DB', outline: '#C9C9C0', tile: '#FFFFFF', tileBorder: '#E3E3DB', error: '#C62A1B', invBg: '#0B0B0C', invInk: '#FAFAF7', skeleton: '#EDEDE6' };
+
+    const estado = this.props.estado ?? 'contenido';
+    const content = estado === 'contenido';
+    const ui = {
+      content: content,
+      loading: estado === 'cargando',
+      error: estado === 'error',
+      empty: estado === 'sin resultados',
+      showBanner: content && (this.props.desdeCache ?? false),
+    };
+
+    const fav = {
+      p1: this.favVals('p1'),
+      p2: this.favVals('p2'),
+      p3: this.favVals('p3'),
+      p4: this.favVals('p4'),
+      p5: this.favVals('p5'),
+      p6: this.favVals('p6'),
+    };
+
+    return { t, ui, fav };
+  }
+}
+</script>
+</body>
+</html>

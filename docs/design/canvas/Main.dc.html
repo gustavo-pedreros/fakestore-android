@@ -1,0 +1,345 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #0B0B0C; }
+    a:hover { color: #5C5C56; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif; background: #FAFAF7; color: #0B0B0C; padding: 56px 48px 72px; display: flex; flex-direction: column; gap: 56px;">
+
+  <!-- ENCABEZADO -->
+  <div style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 3px solid #0B0B0C; padding-bottom: 20px;">
+      <div style="display: flex; flex-direction: column;">
+        <div style="font-size: 52px; font-weight: 700; letter-spacing: -0.035em; line-height: 0.92;">FAKE</div>
+        <div style="font-size: 52px; font-weight: 700; letter-spacing: -0.035em; line-height: 0.92;">STORE</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px; align-items: flex-end;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">FUNDACIONES</div>
+        <div style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em;">Color</div>
+      </div>
+    </div>
+    <p style="margin: 0; max-width: 780px; font-size: 15px; line-height: 1.65; color: #5C5C56; text-wrap: pretty;">Dos capas. Abajo los roles de Material 3, que alimentan gratis a los componentes M3. Arriba una capa semántica propia, con nombres que dicen para qué sirve el color y no qué rol ocupa. Cada ficha muestra el valor claro a la izquierda y el oscuro a la derecha.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; padding: 8px 12px; border: 1px solid #0B0B0C;">claro = papel #FAFAF7</div>
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; padding: 8px 12px; border: 1px solid #0B0B0C;">oscuro = tinta #0B0B0C</div>
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; padding: 8px 12px; background: #C8F751; border: 1px solid #0B0B0C;">acento lima #C8F751</div>
+    </div>
+  </div>
+
+  <!-- 01 — BASE MATERIAL 3 -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">01 — MATERIALTHEME.COLORSCHEME</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Base Material 3</h2>
+      <p style="margin: 0; max-width: 780px; font-size: 14px; line-height: 1.6; color: #5C5C56;">Estos catorce roles son los que realmente usa la app. El resto del esquema M3 se deriva, pero no lo documento: un token que nadie usa es deuda.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;">
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #FAFAF7;"></div><div style="flex: 1; background: #0B0B0C;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">background</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#FAFAF7</span><span style="color: #C9C9C0;">/</span><span>#0B0B0C</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Fondo de pantalla. Nunca lleva contenido directamente encima.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #FFFFFF;"></div><div style="flex: 1; background: #131315;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">surface</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#FFFFFF</span><span style="color: #C9C9C0;">/</span><span>#131315</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Tarjetas de producto y barra superior.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #F0F0EA;"></div><div style="flex: 1; background: #1B1B1E;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">surfaceContainer</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#F0F0EA</span><span style="color: #C9C9C0;">/</span><span>#1B1B1E</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Chips sin seleccionar, bloques de estado.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #E8E8E0;"></div><div style="flex: 1; background: #232327;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">surfaceContainerHigh</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#E8E8E0</span><span style="color: #C9C9C0;">/</span><span>#232327</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Estado presionado y separadores gruesos.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #FAFAF7;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">onSurface</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#FAFAF7</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Títulos y todo el texto principal. 18.6:1.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #5C5C56;"></div><div style="flex: 1; background: #9C9C95;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">onSurfaceVariant</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#5C5C56</span><span style="color: #C9C9C0;">/</span><span>#9C9C95</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Texto secundario y descripción. 6.5:1 y 7.0:1.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #C8F751;"></div><div style="flex: 1; background: #C8F751;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">primary</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#C8F751</span><span style="color: #C9C9C0;">/</span><span>#C8F751</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Idéntico en ambos temas: siempre es bloque con tinta encima.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #0B0B0C;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">onPrimary</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#0B0B0C</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Tinta sobre lima: 15.5:1 en los dos temas.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #E3E3DB;"></div><div style="flex: 1; background: #2B2B2F;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">outlineVariant</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#E3E3DB</span><span style="color: #C9C9C0;">/</span><span>#2B2B2F</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Filete de 1dp. Reemplaza a la sombra.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #C9C9C0;"></div><div style="flex: 1; background: #3D3D42;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">outline</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#C9C9C0</span><span style="color: #C9C9C0;">/</span><span>#3D3D42</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Borde de control interactivo sin seleccionar.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #C62A1B;"></div><div style="flex: 1; background: #FF6B5A;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">error</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#C62A1B</span><span style="color: #C9C9C0;">/</span><span>#FF6B5A</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">El único color funcional fuera del acento. 5.4:1 y 6.9:1.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #FAFAF7;"></div><div style="flex: 1; background: #0B0B0C;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">onError</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#FAFAF7</span><span style="color: #C9C9C0;">/</span><span>#0B0B0C</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Solo cuando el error es bloque lleno, no texto.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #FAFAF7;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">inverseSurface</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#FAFAF7</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Banda invertida: así se ve el aviso de caché.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #FAFAF7;"></div><div style="flex: 1; background: #0B0B0C;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">inverseOnSurface</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#FAFAF7</span><span style="color: #C9C9C0;">/</span><span>#0B0B0C</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Texto sobre la banda invertida.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 02 — CAPA SEMÁNTICA -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">02 — FAKESTORETHEME.COLOR</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Capa semántica</h2>
+      <p style="margin: 0; max-width: 780px; font-size: 14px; line-height: 1.6; color: #5C5C56;">Un token entra acá solo si su nombre responde <em>para qué</em> y no <em>qué rol M3 ocupa</em>. La regla filtra: si la respuesta honesta es «es el onSurface», no merece token propio.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;">
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #FFFFFF;"></div><div style="flex: 1; background: #F2F2EE;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">imageTile</div>
+            <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 5px; background: #C8F751; color: #0B0B0C;">CLAVE</div>
+          </div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#FFFFFF</span><span style="color: #C9C9C0;">/</span><span>#F2F2EE</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Sigue siendo claro en tema oscuro. Las fotos de la API son PNG recortados sobre blanco.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #E3E3DB;"></div><div style="flex: 1; background: #2B2B2F;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">imageTileBorder</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#E3E3DB</span><span style="color: #C9C9C0;">/</span><span>#2B2B2F</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Cierra el recuadro claro contra el fondo oscuro.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #FAFAF7;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">priceText</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#FAFAF7</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Coincide con onSurface hoy, pero el precio es el dato que más cambia de estilo.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #C8F751;"></div><div style="flex: 1; background: #C8F751;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">favoriteOnBg</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#C8F751</span><span style="color: #C9C9C0;">/</span><span>#C8F751</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Disco lima detrás del corazón activo. El único uso del acento en la lista.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #0B0B0C;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">favoriteOnGlyph</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#0B0B0C</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Corazón lleno sobre el disco lima.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #5C5C56;"></div><div style="flex: 1; background: #9C9C95;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">favoriteOffGlyph</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#5C5C56</span><span style="color: #C9C9C0;">/</span><span>#9C9C95</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Contorno sin relleno, sobre el recuadro claro de imagen.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #FAFAF7;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">offlineBg</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#FAFAF7</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Banda invertida. Imposible confundirla con contenido.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #FAFAF7;"></div><div style="flex: 1; background: #0B0B0C;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">offlineText</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#FAFAF7</span><span style="color: #C9C9C0;">/</span><span>#0B0B0C</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Texto y punto indicador sobre la banda.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #FAFAF7;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">categoryBadge</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#FAFAF7</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Borde y texto en el mismo valor: una sola insignia para las cuatro categorías.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #EDEDE6;"></div><div style="flex: 1; background: #202024;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">skeleton</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#EDEDE6</span><span style="color: #C9C9C0;">/</span><span>#202024</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Bloque de carga. Un paso sobre surface, sin brillo animado.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #0B0B0C;"></div><div style="flex: 1; background: #FAFAF7;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">ratingStar</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#0B0B0C</span><span style="color: #C9C9C0;">/</span><span>#FAFAF7</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Estrella llena. La vacía usa el mismo valor al 25%.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; border: 1px solid #E3E3DB; background: #FFFFFF;">
+        <div style="display: flex; height: 60px;"><div style="flex: 1; background: #C62A1B;"></div><div style="flex: 1; background: #FF6B5A;"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-top: 1px solid #E3E3DB;">
+          <div style="font-size: 13px; font-weight: 600; letter-spacing: -0.01em;">statusError</div>
+          <div style="display: flex; gap: 7px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56;"><span>#C62A1B</span><span style="color: #C9C9C0;">/</span><span>#FF6B5A</span></div>
+          <div style="font-size: 11px; line-height: 1.45; color: #5C5C56;">Alias de error. Existe para que el bloque de estado no importe M3.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DECISIONES -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">03 — DECISIONES</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Qué se ganó y qué se pagó</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 22px; border: 2px solid #0B0B0C; background: #FFFFFF;">
+        <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.02em; text-wrap: pretty;">El recuadro de imagen no se oscurece</div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">GANO</div><div style="font-size: 12.5px; line-height: 1.55; color: #0B0B0C;">Los PNG de la API llegan recortados sobre blanco. Sobre un recuadro claro no aparece el halo blanco alrededor del producto.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">PAGO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">En tema oscuro la grilla tiene parches claros; el modo oscuro no es «todo negro» y hay que asumirlo como estilo.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">SI NO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">Con imágenes que tuvieran alfa real o un backend propio que las normalizara, el recuadro seguiría al tema.</div></div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 22px; border: 2px solid #0B0B0C; background: #FFFFFF;">
+        <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.02em; text-wrap: pretty;">Una sola insignia de categoría</div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">GANO</div><div style="font-size: 12.5px; line-height: 1.55; color: #0B0B0C;">Ningún color inventado. La categoría ya se lee como texto, y las cuatro de la API pueden crecer sin repintar la paleta.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">PAGO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">No se distingue la categoría de un vistazo al recorrer la grilla; hay que leer.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">SI NO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">Con un catálogo de categorías fijo y corto que el negocio quisiera reforzar, un tinte por categoría sí vale.</div></div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 22px; border: 2px solid #0B0B0C; background: #FFFFFF;">
+        <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.02em; text-wrap: pretty;">El acento no cambia entre temas</div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">GANO</div><div style="font-size: 12.5px; line-height: 1.55; color: #0B0B0C;">El lima es siempre bloque con tinta encima, nunca texto. 15.5:1 en los dos temas sin mantener dos valores.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">PAGO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">Prohibido usar el acento como color de texto o de ícono suelto: se rompe en tema claro.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">SI NO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">Si la marca pidiera acento en texto, harían falta dos valores por tema y una prueba de contraste por cada uso.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -42,8 +42,8 @@ theme); the boards stay as drawn.
 
 ## Boards
 
-Exported from the design canvas. Each component decision on them states what it gained, what it cost
-and when another choice would win, like [the decisions log](decisions.md).
+Exported from the [design canvas](design/canvas/). Each component decision on them states what it
+gained, what it cost and when another choice would win, like [the decisions log](decisions.md).
 
 | Board | What it settles |
 |---|---|

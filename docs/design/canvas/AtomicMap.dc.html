@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #0B0B0C; }
+    a:hover { color: #5C5C56; }
+  </style>
+</helmet>
+
+<div style="font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif; background: #FAFAF7; color: #0B0B0C; padding: 56px 48px 72px; display: flex; flex-direction: column; gap: 52px;">
+
+  <!-- ENCABEZADO -->
+  <div style="display: flex; flex-direction: column; gap: 18px;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 3px solid #0B0B0C; padding-bottom: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">EL MAPA</div>
+        <div style="font-size: 44px; font-weight: 700; letter-spacing: -0.035em; line-height: 1;">De átomo a pantalla</div>
+      </div>
+    </div>
+    <p style="margin: 0; max-width: 800px; font-size: 15px; line-height: 1.65; color: #5C5C56; text-wrap: pretty;">Atomic design se inventó para la web, donde una página es un archivo. En Android hay módulos Gradle, ViewModels y navegación, así que las cinco capas hay que traducirlas. Esta lámina es esa traducción: qué capa es qué cosa en Kotlin, dónde vive el archivo y qué le está permitido importar.</p>
+  </div>
+
+  <!-- LAS CINCO CAPAS -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">01 — TRADUCCION</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Las cinco capas en Kotlin</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 150px 1fr 1fr 210px; border-top: 2px solid #0B0B0C;">
+
+      <div style="padding: 13px 16px 13px 0; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5C5C56;">CAPA</div>
+      <div style="padding: 13px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5C5C56;">LA PRUEBA QUE DEBE PASAR</div>
+      <div style="padding: 13px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5C5C56;">EN ESTE PROYECTO</div>
+      <div style="padding: 13px 0 13px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5C5C56;">DONDE VIVE</div>
+
+      <div style="padding: 18px 16px 18px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 15px; font-weight: 700; letter-spacing: -0.015em;">Átomo</div></div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #5C5C56;">Se puede dibujar sin saber que existe una tienda. No importa nada de <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #0B0B0C;">domain</span>.</div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #0B0B0C;">FsButton, FsChip, FsPriceText, FsImageTile, FsFavoriteButton, FsRatingStars, FsSkeleton, FsCategoryBadge, FsDivider</div>
+      <div style="padding: 18px 0 18px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.5; color: #5C5C56;">core/designsystem/<br>atom/</div>
+
+      <div style="padding: 18px 16px 18px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 15px; font-weight: 700; letter-spacing: -0.015em;">Molécula</div></div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #5C5C56;">Varios átomos con un solo propósito. Puede recibir un modelo de UI, nunca un modelo de dominio.</div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #0B0B0C;">ProductCard, ProductCardSkeleton, OfflineBanner, FsStateBlock, FsTopBar, CategoryFilterRow</div>
+      <div style="padding: 18px 0 18px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.5; color: #5C5C56;">core/designsystem/<br>molecule/</div>
+
+      <div style="padding: 18px 16px 18px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 15px; font-weight: 700; letter-spacing: -0.015em;">Organismo</div></div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #5C5C56;">Manda sobre el layout y el desplazamiento de una sección entera. Sigue recibiendo listas y lambdas.</div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #0B0B0C;">ProductGrid, ProductGridSkeleton, ProductDetailHeader, ProductDetailBody, FsStateHost</div>
+      <div style="padding: 18px 0 18px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.5; color: #5C5C56;">core/designsystem/<br>organism/</div>
+
+      <div style="padding: 18px 16px 18px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 15px; font-weight: 700; letter-spacing: -0.015em;">Plantilla</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56; margin-top: 4px;">…Screen</div></div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #5C5C56;">Firma <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #0B0B0C;">(state, callbacks) -&gt; Unit</span>. Sin ViewModel, sin Hilt, sin navegación. Es lo que se puede previsualizar y testear.</div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #0B0B0C;">ProductListScreen, ProductDetailScreen</div>
+      <div style="padding: 18px 0 18px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.5; color: #5C5C56;">feature/products/<br>list/ · detail/</div>
+
+      <div style="padding: 18px 16px 18px 0; border-bottom: 1px solid #E3E3DB;"><div style="font-size: 15px; font-weight: 700; letter-spacing: -0.015em;">Página</div><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #5C5C56; margin-top: 4px;">…Route</div></div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #5C5C56;">Lo único que toca <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; color: #0B0B0C;">hiltViewModel()</span> y la navegación. Cinco líneas: recoge estado, llama a la plantilla.</div>
+      <div style="padding: 18px 16px; border-bottom: 1px solid #E3E3DB; font-size: 13px; line-height: 1.55; color: #0B0B0C;">ProductListRoute, ProductDetailRoute</div>
+      <div style="padding: 18px 0 18px 16px; border-bottom: 1px solid #E3E3DB; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.5; color: #5C5C56;">feature/products/<br>list/ · detail/</div>
+
+    </div>
+
+    <div style="display: flex; gap: 14px; padding: 20px 22px; border: 2px solid #0B0B0C; background: #FFFFFF; border-radius: 4px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em; color: #5C5C56; padding-top: 3px; min-width: 96px;">EL CORTE</div>
+      <div style="font-size: 13px; line-height: 1.6; color: #0B0B0C; max-width: 860px; text-wrap: pretty;">Las tres primeras capas viven en el design system y no saben que existe FakeStore. Las dos últimas viven en la feature y sí. Esa línea entre organismo y plantilla es la única frontera que importa: por encima de ella todo se puede previsualizar sin levantar la app.</div>
+    </div>
+  </div>
+
+  <!-- ARBOL -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">02 — ARCHIVOS</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Los dos módulos nuevos</h2>
+      <p style="margin: 0; max-width: 800px; font-size: 14px; line-height: 1.6; color: #5C5C56;">Se suman a lo que ya existe: <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; color: #0B0B0C;">app</span>, <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; color: #0B0B0C;">core:common</span>, <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; color: #0B0B0C;">core:network</span> y <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; color: #0B0B0C;">shared:kernel</span>.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+
+      <div style="display: flex; flex-direction: column; gap: 0; padding: 24px; background: #FFFFFF; border: 1px solid #E3E3DB; border-radius: 4px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.85;">
+        <div style="font-weight: 700; color: #0B0B0C;">core/designsystem/</div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">theme/</span></div>
+        <div style="color: #5C5C56;">│    Color.kt <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">valores crudos</span></div>
+        <div style="color: #5C5C56;">│    FakeStoreColors.kt <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">capa semántica</span></div>
+        <div style="color: #5C5C56;">│    Type.kt · Shape.kt · Spacing.kt</div>
+        <div style="color: #5C5C56;">│    FakeStoreTheme.kt <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">el wrapper</span></div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">atom/</span> <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">9 archivos</span></div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">molecule/</span> <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">6 archivos</span></div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">organism/</span> <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">5 archivos</span></div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">model/</span></div>
+        <div style="color: #5C5C56;">│    ProductCardUiModel.kt</div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">preview/</span></div>
+        <div style="color: #5C5C56;">│    FsPreviewParameters.kt</div>
+        <div style="color: #5C5C56;">└─ FsTestTags.kt</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0; padding: 24px; background: #FFFFFF; border: 1px solid #E3E3DB; border-radius: 4px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.85;">
+        <div style="font-weight: 700; color: #0B0B0C;">feature/products/</div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">list/</span></div>
+        <div style="color: #5C5C56;">│    ProductListRoute.kt <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">página</span></div>
+        <div style="color: #5C5C56;">│    ProductListScreen.kt <span style="font-family: 'Space Grotesk', sans-serif; font-size: 11px;">plantilla</span></div>
+        <div style="color: #5C5C56;">│    ProductListUiState.kt</div>
+        <div style="color: #5C5C56;">│    ProductListViewModel.kt</div>
+        <div style="color: #5C5C56;">│    ProductUiMapper.kt</div>
+        <div style="color: #5C5C56;">├─ <span style="color: #0B0B0C; font-weight: 500;">detail/</span></div>
+        <div style="color: #5C5C56;">│    ProductDetailRoute.kt</div>
+        <div style="color: #5C5C56;">│    ProductDetailScreen.kt</div>
+        <div style="color: #5C5C56;">│    ProductDetailUiState.kt</div>
+        <div style="color: #5C5C56;">│    ProductDetailViewModel.kt</div>
+        <div style="color: #5C5C56;">└─ <span style="color: #0B0B0C; font-weight: 500;">navigation/</span></div>
+        <div style="color: #5C5C56;">     ProductsNavigation.kt</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DEPENDENCIAS -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">03 — LA REGLA</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Las flechas van en un solo sentido</h2>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+      <div style="display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; border: 2px solid #0B0B0C; background: #FFFFFF; border-radius: 4px; min-width: 150px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 700;">app</div>
+        <div style="font-size: 11px; color: #5C5C56;">NavHost, tema raíz</div>
+      </div>
+      <svg width="34" height="16" viewBox="0 0 34 16" fill="none" stroke="#0B0B0C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8h30"/><path d="m25 3 6 5-6 5"/></svg>
+      <div style="display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; border: 2px solid #0B0B0C; background: #FFFFFF; border-radius: 4px; min-width: 180px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 700;">feature:products</div>
+        <div style="font-size: 11px; color: #5C5C56;">ViewModels, plantillas, mappers</div>
+      </div>
+      <svg width="34" height="16" viewBox="0 0 34 16" fill="none" stroke="#0B0B0C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8h30"/><path d="m25 3 6 5-6 5"/></svg>
+      <div style="display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; background: #C8F751; border: 2px solid #0B0B0C; border-radius: 4px; min-width: 190px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 700; color: #0B0B0C;">core:designsystem</div>
+        <div style="font-size: 11px; color: #0B0B0C;">átomos, moléculas, organismos</div>
+      </div>
+      <svg width="34" height="16" viewBox="0 0 34 16" fill="none" stroke="#C9C9C0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8h30"/><path d="m25 3 6 5-6 5"/></svg>
+      <div style="display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; border: 1px dashed #C9C9C0; border-radius: 4px; min-width: 150px;">
+        <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 700; color: #5C5C56;">nada del proyecto</div>
+        <div style="font-size: 11px; color: #5C5C56;">solo Compose y M3</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 22px; border: 1px solid #E3E3DB; background: #FFFFFF; border-radius: 4px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">Por qué ProductCard puede vivir en el design system</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #5C5C56; text-wrap: pretty;">Porque no recibe <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; color: #0B0B0C;">Product</span> sino <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; color: #0B0B0C;">ProductCardUiModel</span>, un data class que el propio módulo declara: id, título, precio, url de imagen, categoría, rating. La feature traduce de dominio a modelo de UI en su mapper.</div>
+        <div style="display: flex; flex-direction: column; gap: 9px; padding-top: 2px;">
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">GANO</div><div style="font-size: 12.5px; line-height: 1.55; color: #0B0B0C;">El árbol atómico completo queda en un módulo que compila y se previsualiza sin la app. Los previews no necesitan Hilt ni red.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">PAGO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">Un modelo espejo y un mapper por pantalla. Si cambia el dominio hay que tocar dos archivos, no uno.</div></div>
+          <div style="display: flex; gap: 10px;"><div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #5C5C56; min-width: 56px; padding-top: 2px;">SI NO</div><div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">En una app de una sola feature, mover ProductCard a <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">feature:products</span> y dejar el DS solo con piezas genéricas también es correcto, y ahorra el mapper.</div></div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 22px; border: 1px solid #E3E3DB; background: #FFFFFF; border-radius: 4px;">
+        <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">Cómo se verifica que la regla se cumple</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #5C5C56; text-wrap: pretty;">Una regla que solo vive en un documento se rompe en la tercera semana. En Gradle esto es comprobable: <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; color: #0B0B0C;">core:designsystem</span> simplemente no declara a <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; color: #0B0B0C;">domain</span> ni a ninguna feature en sus dependencias, así que el import ni siquiera compila.</div>
+        <div style="padding: 16px; background: #F0F0EA; border-radius: 4px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.75; color: #0B0B0C;">
+          <div style="color: #5C5C56;">// core/designsystem/build.gradle.kts</div>
+          <div>dependencies {</div>
+          <div>&nbsp;&nbsp;implementation(platform(libs.androidx.compose.bom))</div>
+          <div>&nbsp;&nbsp;implementation(libs.androidx.compose.material3)</div>
+          <div>&nbsp;&nbsp;implementation(libs.androidx.compose.ui)</div>
+          <div style="color: #5C5C56;">&nbsp;&nbsp;// nada de :domain, nada de :feature</div>
+          <div>}</div>
+        </div>
+        <div style="font-size: 12.5px; line-height: 1.55; color: #5C5C56;">El día que alguien intente importar <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px;">Product</span> dentro de un átomo, la compilación se cae. Eso es la regla, no el README.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANTILLA VS PAGINA -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5C5C56;">04 — EL PAR</div>
+      <h2 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.025em;">Route y Screen</h2>
+      <p style="margin: 0; max-width: 800px; font-size: 14px; line-height: 1.6; color: #5C5C56;">Partir cada pantalla en dos es lo que hace testeable a la app. La plantilla no puede llamar al ViewModel porque no lo tiene; la página no puede dibujar porque no sabe cómo.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 2px solid #0B0B0C; background: #FFFFFF; border-radius: 4px;">
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">ProductListRoute</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 6px; background: #C8F751; color: #0B0B0C;">PAGINA</div>
+        </div>
+        <div style="padding: 16px; background: #F0F0EA; border-radius: 4px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.8; color: #0B0B0C; overflow-x: auto;">
+          <div><span style="color: #5C5C56;">@Composable</span></div>
+          <div>fun ProductListRoute(</div>
+          <div>&nbsp;&nbsp;onProductClick: (Int) -&gt; Unit,</div>
+          <div>&nbsp;&nbsp;vm: ProductListViewModel = hiltViewModel(),</div>
+          <div>) {</div>
+          <div>&nbsp;&nbsp;val state by vm.uiState</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;.collectAsStateWithLifecycle()</div>
+          <div>&nbsp;&nbsp;ProductListScreen(</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;state = state,</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;onProductClick = onProductClick,</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;onFavoriteClick = vm::toggleFavorite,</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;onRetry = vm::refresh,</div>
+          <div>&nbsp;&nbsp;)</div>
+          <div>}</div>
+        </div>
+        <div style="font-size: 12px; line-height: 1.55; color: #5C5C56;">No se testea con Compose: no hay nada que afirmar. Se prueba el ViewModel por separado.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 2px solid #0B0B0C; background: #FFFFFF; border-radius: 4px;">
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <div style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">ProductListScreen</div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 6px; border: 1px solid #0B0B0C; color: #0B0B0C;">PLANTILLA</div>
+        </div>
+        <div style="padding: 16px; background: #F0F0EA; border-radius: 4px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.8; color: #0B0B0C; overflow-x: auto;">
+          <div><span style="color: #5C5C56;">@Composable</span></div>
+          <div>fun ProductListScreen(</div>
+          <div>&nbsp;&nbsp;state: ProductListUiState,</div>
+          <div>&nbsp;&nbsp;onProductClick: (Int) -&gt; Unit,</div>
+          <div>&nbsp;&nbsp;onFavoriteClick: (Int) -&gt; Unit,</div>
+          <div>&nbsp;&nbsp;onRetry: () -&gt; Unit,</div>
+          <div>) {</div>
+          <div>&nbsp;&nbsp;Scaffold(topBar = { FsTopBar(…) }) {</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;FsStateHost(state) { content -&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ProductGrid(content.items, …)</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+          <div>&nbsp;&nbsp;}</div>
+          <div>}</div>
+        </div>
+        <div style="font-size: 12px; line-height: 1.55; color: #5C5C56;">Aquí sí van los <span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px;">@PreviewLightDark</span> de los cuatro estados, y los tests de UI que pulsan el corazón y afirman que llegó la lambda.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
