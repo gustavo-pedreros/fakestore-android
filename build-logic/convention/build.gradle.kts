@@ -62,5 +62,9 @@ gradlePlugin {
             id = "fakestore.kover.root"
             implementationClass = "cl.gus.labs.fakestore.convention.KoverRootConventionPlugin"
         }
+        register("uiGallery") {
+            id = "fakestore.ui.gallery"
+            implementationClass = "cl.gus.labs.fakestore.convention.UiGalleryConventionPlugin"
+        }
     }
 }

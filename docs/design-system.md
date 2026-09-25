@@ -2,7 +2,7 @@
 
 Atomic design, translated to Android: atoms, molecules and organisms live in `:core:designsystem`;
 templates and pages live in each feature. Everything in the design system renders from a preview,
-without the app.
+without the app; the [UI gallery](ui-gallery.md) shows each one as the screenshot tests draw it.
 
 ## Atomic design, translated
 
