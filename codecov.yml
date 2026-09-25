@@ -20,10 +20,36 @@ coverage:
         threshold: 0.2%
         if_ci_failed: error
 
-# No `flags` and no `component_management`: a single aggregated report, with no per-module breakdown.
-# The layout below leaves out `components` and `flags` for the same reason.
+# Coverage per layer, from the same merged report. No component statuses: project and patch stay the only gates.
+component_management:
+  individual_components:
+    - component_id: domain
+      paths:
+        - "catalog/domain/**"
+        - "favorites/domain/**"
+        - "shared/kernel/**"
+    - component_id: data
+      paths:
+        - "catalog/data/**"
+        - "favorites/data/**"
+    - component_id: presentation
+      paths:
+        - "catalog/ui/**"
+        - "favorites/ui/**"
+        - "app/**"
+    - component_id: design_system
+      name: design system
+      paths:
+        - "core/designsystem/**"
+    - component_id: infrastructure
+      paths:
+        - "core/network/**"
+        - "core/database/**"
+        - "core/connectivity/**"
+        - "core/common/**"
+
 comment:
-  layout: "condensed_header, diff, files, condensed_footer"
+  layout: "condensed_header, diff, components, files, condensed_footer"
   behavior: default
   require_changes: false
   hide_project_coverage: false
@@ -33,5 +59,6 @@ ignore:
   # Docs: lets the empty upload of a docs-only PR pass.
   - "docs/**"
   - "art/**"
+  - "*.md"
   - "**/*.md"
   - "LICENSE"
