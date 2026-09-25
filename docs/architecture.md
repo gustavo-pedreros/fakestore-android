@@ -42,6 +42,8 @@ No test enforces these rules yet. Architecture tests are on the [roadmap](roadma
 
 ## Context map
 
+![Context map: the catalog and favorites contexts meet only in presentation, where each ui uses the other context's domain. Both domains depend on the shared kernel. The catalog's data module reaches the Fake Store API through an ACL. An own API behind :shared:contract and an :audit context are planned.](diagrams/07-context-map.png)
+
 - **Shared kernel.** `:shared:kernel` is the only code both contexts own.
 - **Anti-corruption layer.** `:catalog:data` translates the API in two steps, DTO → Room entity →
   domain ([`ProductMappers.kt`](../catalog/data/src/main/kotlin/cl/gus/labs/fakestore/catalog/data/mapper/ProductMappers.kt)).
@@ -52,6 +54,32 @@ No test enforces these rules yet. Architecture tests are on the [roadmap](roadma
   API.
 - **Planned.** `:shared:contract` as the Published Language of an own API
   ([proposal](proposals/sdui-and-own-api.md)), and an `:audit` context ([roadmap](roadmap.md#later)).
+
+## A refresh, end to end
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Screen as CatalogScreen
+    participant VM as CatalogViewModel
+    participant Repo as CatalogRepositoryImpl
+    participant API as Fake Store API
+    participant Room
+
+    User->>Screen: pull to refresh
+    Screen->>VM: refresh()
+    VM->>Repo: refreshCatalog() → refresh()
+    Repo->>API: GET /products (executeCall)
+    API-->>Repo: ProductDto list
+    Repo->>Room: syncAll(dto.toEntity()), writeLastSyncedAt(now)
+    Repo-->>VM: Either.Right(Unit)
+    Room-->>VM: rows emitted, entity.toDomain() (ObserveCatalog)
+    VM-->>Screen: new CatalogUiState
+    Note over VM,Screen: On Either.Left(AppError): stale banner if Room has products, failure screen if not
+```
+
+The screen never receives the network response: the refresh only writes to Room, and the new state
+arrives through the same `Flow` the screen already observes.
 
 ## Navigation
 

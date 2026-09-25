@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How the contexts relate</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #fafaf7; --ink: #0b0b0c; --muted: #5c5c56; --accent: #c62a1b;
+    --sans: 'Space Grotesk', system-ui, sans-serif; --serif: 'Instrument Serif', serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans); background: var(--paper); color: var(--ink);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  svg { width: 100%; min-width: 900px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="context-map-title context-map-desc">
+  <title id="context-map-title">How the contexts relate</title>
+  <desc id="context-map-desc">Context map of FakeStore Android: the catalog and favorites contexts integrate only in presentation, where each ui module uses the other context's domain; both domains depend on a shared kernel with ProductId and AppError; the catalog's data module reaches the external Fake Store API through an anti-corruption layer; an own API behind :shared:contract and an :audit context are planned.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+    <marker id="arrow-planned" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8a8a82"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">ARCHITECTURE · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">How the contexts relate</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">context map · the contexts meet only in presentation, share a small kernel, and translate the API at the edge</text>
+
+  <!-- Zones -->
+  <rect x="280" y="176" width="232" height="320" rx="8" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.10)" stroke-width="0.8"/>
+  <rect x="292" y="180" width="164" height="16" rx="2" fill="#fafaf7"/>
+  <text x="300" y="192" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">BOUNDED CONTEXT · CATALOG</text>
+  <rect x="768" y="176" width="232" height="320" rx="8" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.10)" stroke-width="0.8"/>
+  <rect x="780" y="180" width="176" height="16" rx="2" fill="#fafaf7"/>
+  <text x="788" y="192" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">BOUNDED CONTEXT · FAVORITES</text>
+
+  <!-- Arrows: integration in presentation (focal) -->
+  <path d="M 496,232 H 612 Q 620,232 620,240 V 344 Q 620,352 628,352 H 784" fill="none" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+  <path d="M 784,248 H 668 Q 660,248 660,256 V 328 Q 660,336 652,336 H 628 a 8,8 0 0,0 -16,0 H 496" fill="none" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+
+  <!-- Arrows: shared kernel -->
+  <path d="M 496,364 H 552 Q 560,364 560,372 V 536" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 784,368 H 728 Q 720,368 720,376 V 536" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- Arrows: upstream API through the ACL, and the planned edges -->
+  <line x1="296" y1="448" x2="220" y2="448" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <rect x="240" y="424" width="32" height="16" rx="2" fill="#fafaf7"/>
+  <text x="256" y="436" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">ACL</text>
+  <path d="M 296,464 H 264 Q 256,464 256,472 V 560 Q 256,568 248,568 H 220" fill="none" stroke="#8a8a82" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-planned)"/>
+  <line x1="984" y1="448" x2="1040" y2="448" stroke="#8a8a82" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-planned)"/>
+
+  <!-- Catalog -->
+  <rect x="296" y="208" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="296" y="208" width="200" height="64" rx="6" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <rect x="308" y="216" width="24" height="16" rx="2" fill="none" stroke="#8a8a82" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="320" y="228" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">UI</text>
+  <text x="396" y="248" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Screens</text>
+  <text x="396" y="264" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:catalog:ui</text>
+
+  <rect x="296" y="312" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="296" y="312" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="308" y="320" width="48" height="16" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="332" y="332" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DOMAIN</text>
+  <text x="396" y="352" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Product, use cases</text>
+  <text x="396" y="368" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:catalog:domain</text>
+
+  <rect x="296" y="416" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="296" y="416" width="200" height="64" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="308" y="424" width="36" height="16" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="326" y="436" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DATA</text>
+  <text x="396" y="456" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Repository, ACL</text>
+  <text x="396" y="472" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:catalog:data</text>
+
+  <!-- Favorites -->
+  <rect x="784" y="208" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="784" y="208" width="200" height="64" rx="6" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <rect x="796" y="216" width="24" height="16" rx="2" fill="none" stroke="#8a8a82" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="808" y="228" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">UI</text>
+  <text x="884" y="248" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Screen</text>
+  <text x="884" y="264" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:favorites:ui</text>
+
+  <rect x="784" y="312" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="784" y="312" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="796" y="320" width="48" height="16" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="820" y="332" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DOMAIN</text>
+  <text x="884" y="352" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Favorite IDs, toggle</text>
+  <text x="884" y="368" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:favorites:domain</text>
+
+  <rect x="784" y="416" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="784" y="416" width="200" height="64" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="796" y="424" width="36" height="16" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="814" y="436" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DATA</text>
+  <text x="884" y="456" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Local-first writes</text>
+  <text x="884" y="472" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:favorites:data</text>
+
+  <!-- Shared kernel -->
+  <rect x="540" y="536" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="540" y="536" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="552" y="544" width="88" height="16" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="596" y="556" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">SHARED KERNEL</text>
+  <text x="640" y="576" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">ProductId, AppError</text>
+  <text x="640" y="592" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:shared:kernel</text>
+
+  <!-- External API -->
+  <rect x="40" y="416" width="180" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="40" y="416" width="180" height="64" rx="6" fill="rgba(11,11,12,0.03)" stroke="rgba(11,11,12,0.30)" stroke-width="1"/>
+  <rect x="52" y="424" width="60" height="16" rx="2" fill="none" stroke="rgba(11,11,12,0.30)" stroke-width="0.8"/>
+  <text x="82" y="436" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">EXTERNAL</text>
+  <text x="130" y="456" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Fake Store API</text>
+  <text x="130" y="472" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">fakestoreapi.com</text>
+
+  <!-- Planned -->
+  <rect x="40" y="536" width="180" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="40" y="536" width="180" height="64" rx="6" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="52" y="544" width="52" height="16" rx="2" fill="none" stroke="rgba(11,11,12,0.20)" stroke-width="0.8"/>
+  <text x="78" y="556" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">PLANNED</text>
+  <text x="130" y="576" fill="#5c5c56" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Own API</text>
+  <text x="130" y="592" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:shared:contract</text>
+
+  <rect x="1040" y="416" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="1040" y="416" width="200" height="64" rx="6" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="1052" y="424" width="52" height="16" rx="2" fill="none" stroke="rgba(11,11,12,0.20)" stroke-width="0.8"/>
+  <text x="1078" y="436" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">PLANNED</text>
+  <text x="1140" y="456" fill="#5c5c56" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Audit trail</text>
+  <text x="1140" y="472" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:audit</text>
+
+  <!-- Legend -->
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <line x1="120" y1="652" x2="144" y2="652" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="152" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">depends on</text>
+  <line x1="256" y1="652" x2="280" y2="652" stroke="#8a8a82" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-planned)"/>
+  <text x="288" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">planned</text>
+  <line x1="372" y1="652" x2="396" y2="652" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+  <text x="404" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">ui uses the other context's domain</text>
+</svg>
+</div>
+</body>
+</html>
