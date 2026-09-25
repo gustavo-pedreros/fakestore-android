@@ -25,7 +25,7 @@ screens and break the [single source of truth](../offline-first.md#room-as-the-s
 
 The server must never leave the app without UI:
 
-![Four-level SDUI fallback ladder: a fresh contract from the server, the contract cached in Room, the contract shipped in the APK assets and, as the floor, the native screen already built.](../diagrams/04-fallback-ladder.png)
+![Four-level SDUI fallback ladder: a fresh contract from the server, the contract cached in Room, the contract shipped in the APK assets and, as the floor, the native screen already built.](diagrams/fallback-ladder.png)
 
 The floor is the native screen that exists today. The renderer targets the same design-system atoms,
 so the native screens stay useful ([design system](../design-system.md#atomic-design-translated)).
@@ -34,7 +34,7 @@ so the native screens stay useful ([design system](../design-system.md#atomic-de
 
 Favorites become a synced entity: optimistic local writes, then last-write-wins reconciliation.
 
-![Favorite toggle sequence: the screen writes to Room with a pending state and the UI reacts at once; a worker later sends the pending mutations, the server resolves last-write-wins by updatedAt, and the worker reconciles Room, rolling back silently if the server won.](../diagrams/06-favorites-lww.png)
+![Favorite toggle sequence: the screen writes to Room with a pending state and the UI reacts at once; a worker later sends the pending mutations, the server resolves last-write-wins by updatedAt, and the worker reconciles Room, rolling back silently if the server won.](diagrams/favorites-lww.png)
 
 The `favorites` table already has the `updatedAt` and `syncState` columns this needs, so adding sync
 costs no migration.
