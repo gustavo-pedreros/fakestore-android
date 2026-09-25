@@ -42,8 +42,10 @@ theme); the boards stay as drawn.
 
 ## Boards
 
-Exported from the design canvas. Each component decision on them states what it gained, what it cost
-and when another choice would win, like [the decisions log](decisions.md).
+Exported from the design canvas, archived under the tag
+[`archive/design-system-canvas`](https://github.com/gustavo-pedreros/fakestore-android/tree/archive/design-system-canvas/docs/design/canvas)
+to keep it out of the working tree. Each component decision on them states what it gained, what it
+cost and when another choice would win, like [the decisions log](decisions.md).
 
 | Board | What it settles |
 |---|---|
