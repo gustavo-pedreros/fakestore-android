@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,7 @@
 <div class="frame">
 <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="module-graph-title module-graph-desc">
   <title id="module-graph-title">Layers are Gradle modules</title>
-  <desc id="module-graph-desc">Module graph of FakeStore Android: :app wires two bounded contexts, catalog and favorites, each with its ui, domain and data modules; ui and data depend on domain, the two contexts cross only at domain level, and both consume a shared technical core.</desc>
+  <desc id="module-graph-desc">Module graph of FakeStore Android: :app wires two bounded contexts, catalog and favorites, each with its ui, domain and data modules; ui and data depend on their own domain, each ui also depends on the other context's domain, and both consume a shared technical core.</desc>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
     <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>

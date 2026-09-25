@@ -11,7 +11,8 @@ permissions:
 
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: true
+  # Runs on main and develop are Codecov's base reports: never cancel them.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -20,23 +21,49 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect code changes
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD)
+          printf '%s\n' "$changed"
+          if printf '%s\n' "$changed" | grep -Ev '^(docs/|art/)|\.md$|^LICENSE$' | grep -q .; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/setup-java@v4
+        if: steps.changes.outputs.code == 'true'
         with:
           distribution: temurin
           java-version: '21'
 
       - uses: android-actions/setup-android@v4
+        if: steps.changes.outputs.code == 'true'
 
       - name: Install the compileSdk platform
+        if: steps.changes.outputs.code == 'true'
         run: sdkmanager "platforms;android-37" || echo "not available from sdkmanager, relying on AGP"
 
       - uses: gradle/actions/setup-gradle@v4
+        if: steps.changes.outputs.code == 'true'
+        with:
+          # Default: only main writes. develop moves daily, main only on release.
+          cache-read-only: ${{ github.event_name == 'pull_request' || (github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop') }}
 
       - name: Build, test and lint
+        if: steps.changes.outputs.code == 'true'
         run: ./gradlew build :koverXmlReportCoverage -Proborazzi.test.verify=true --stacktrace
 
       - name: Upload coverage to Codecov
+        if: steps.changes.outputs.code == 'true'
         uses: codecov/codecov-action@v7
         with:
           files: build/reports/kover/reportCoverage.xml
@@ -44,8 +71,17 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
+      # Codecov's statuses are required. It passes them only if every changed file is one it ignores.
+      - name: Report a docs-only change to Codecov
+        if: steps.changes.outputs.code == 'false'
+        uses: codecov/codecov-action@v7
+        with:
+          run_command: empty-upload
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Upload the debug APK
-        if: success()
+        if: steps.changes.outputs.code == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: fakestore-debug-apk
@@ -53,7 +89,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload reports on failure
-        if: failure()
+        if: failure() && steps.changes.outputs.code == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: build-reports
@@ -61,3 +97,24 @@ jobs:
             **/build/reports/**
             **/build/outputs/roborazzi/**
           if-no-files-found: ignore
+
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Offline: links between repo files and their anchors. External URLs would only add flakiness.
+      - name: Check links between docs
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --include-fragments --no-progress './**/*.md'
+          fail: true
+
+      # The README is a landing page; detail goes to docs/.
+      - name: Keep the README within its line budget
+        run: |
+          lines=$(wc -l < README.md)
+          echo "README.md: $lines lines, budget 120"
+          [ "$lines" -le 120 ]
