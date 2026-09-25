@@ -33,7 +33,9 @@ jobs:
           fi
           changed=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD)
           printf '%s\n' "$changed"
-          if printf '%s\n' "$changed" | grep -Ev '^(docs/|art/)|\.md$|^LICENSE$' | grep -q .; then
+          # The UI gallery is generated: only Gradle can check it.
+          if printf '%s\n' "$changed" | grep -Ev '^(docs/|art/)|\.md$|^LICENSE$' | grep -q . \
+            || printf '%s\n' "$changed" | grep -qx 'docs/ui-gallery.md'; then
             echo "code=true" >> "$GITHUB_OUTPUT"
           else
             echo "code=false" >> "$GITHUB_OUTPUT"
