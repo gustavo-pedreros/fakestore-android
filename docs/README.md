@@ -12,6 +12,7 @@ next to the code it describes.
 | [Testing](testing.md) | Which test protects each layer, what gates a merge, and how do screenshots work? |
 | [Decisions](decisions.md) | What did each key decision buy, what did it cost, and when would I choose otherwise? |
 | [Roadmap](roadmap.md) | What comes now, next and later? |
+| [Influences](influences.md) | Where do the ideas come from, and where does this repo depart from them? |
 | [Own API and SDUI](proposals/sdui-and-own-api.md) | How would server-driven UI and a sync API fit offline-first? |
 
 Diagram sources and their PNGs live in [`diagrams/`](diagrams/).
