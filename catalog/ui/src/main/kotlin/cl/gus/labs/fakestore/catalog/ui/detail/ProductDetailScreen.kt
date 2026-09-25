@@ -223,7 +223,7 @@ private fun ProductDetailScreenPreview(state: ProductDetailUiState) {
 
 @PreviewLightDark
 @Composable
-private fun ProductDetailScreenReadyPreview() {
+private fun PreviewProductDetailScreenReady() {
     ProductDetailScreenPreview(
         ProductDetailUiState(
             content = ProductDetailContent.Ready(PreviewProduct),
@@ -234,7 +234,7 @@ private fun ProductDetailScreenReadyPreview() {
 
 @PreviewLightDark
 @Composable
-private fun ProductDetailScreenStalePreview() {
+private fun PreviewProductDetailScreenStale() {
     ProductDetailScreenPreview(
         ProductDetailUiState(
             content = ProductDetailContent.Ready(PreviewProduct),
@@ -246,13 +246,13 @@ private fun ProductDetailScreenStalePreview() {
 
 @PreviewLightDark
 @Composable
-private fun ProductDetailScreenLoadingPreview() {
+private fun PreviewProductDetailScreenLoading() {
     ProductDetailScreenPreview(ProductDetailUiState(content = ProductDetailContent.Loading))
 }
 
 @PreviewLightDark
 @Composable
-private fun ProductDetailScreenUnavailablePreview() {
+private fun PreviewProductDetailScreenUnavailable() {
     ProductDetailScreenPreview(
         ProductDetailUiState(
             content = ProductDetailContent.Unavailable,
@@ -263,7 +263,7 @@ private fun ProductDetailScreenUnavailablePreview() {
 
 @PreviewLightDark
 @Composable
-private fun ProductDetailScreenFailurePreview() {
+private fun PreviewProductDetailScreenFailure() {
     ProductDetailScreenPreview(
         ProductDetailUiState(
             content = ProductDetailContent.Failure(AppError.Network(message = null), offline = true),

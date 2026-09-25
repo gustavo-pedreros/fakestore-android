@@ -38,6 +38,8 @@ class AndroidComposeTestingConventionPlugin : Plugin<Project> {
         tasks.withType<Test>().configureEach {
             systemProperty("robolectric.graphicsMode", "NATIVE")
             systemProperty("robolectric.pixelCopyRenderMode", "hardware")
+            // Previews format dates in the default zone: same image on every machine.
+            systemProperty("user.timezone", "UTC")
         }
 
         // Baselines are committed next to the tests. Diffs of a failed comparison stay in build/, where
