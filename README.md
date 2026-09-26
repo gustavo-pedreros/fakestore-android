@@ -88,10 +88,22 @@ The first launch needs a network connection: there is no mock backend.
 | [Architecture](docs/architecture.md) | Which modules exist, which dependencies are allowed, and how is each rule checked? |
 | [Offline-first](docs/offline-first.md) | Where does the data come from, and what does the user see when the network fails? |
 | [Design system](docs/design-system.md) | Where does each piece of UI live, and what did the design settle? |
+| [UI gallery](docs/ui-gallery.md) | What does every component and screen look like today, in light and dark? |
 | [Testing](docs/testing.md) | Which test protects each layer, what gates a merge, and how do screenshots work? |
 | [Decisions](docs/decisions.md) | What did each key decision buy, what did it cost, and when would I choose otherwise? |
 | [Roadmap](docs/roadmap.md) | What comes now, next and later? |
 | [Own API and SDUI](docs/proposals/sdui-and-own-api.md) | How would server-driven UI and a sync API fit offline-first? |
+
+## Influences
+
+- **[Now in Android](https://github.com/android/nowinandroid):** convention plugins, test doubles over
+  mocks, screenshot tests.
+- **Google's [guide to app architecture](https://developer.android.com/topic/architecture):**
+  unidirectional data flow and a single source of truth.
+- **Clean Architecture:** the dependency rule, enforced by the classpath.
+- **Domain-Driven Design:** bounded contexts as module groups that meet only in presentation.
+
+Where each one shows in the code, and where I depart from it: [influences](docs/influences.md).
 
 ## Roadmap, origin and license
 

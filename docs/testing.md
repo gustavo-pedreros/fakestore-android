@@ -66,9 +66,12 @@ Kover sees the run.
 ./gradlew :core:designsystem:verifyRoborazziDebug
 # After an intended visual change; commit the images with the change.
 ./gradlew :core:designsystem:recordRoborazziDebug -Proborazzi.cleanupOldScreenshots=true
+# Then regenerate the UI gallery; `check` fails while it misses a baseline.
+./gradlew uiGallery
 ```
 
-Swap the module for `:catalog:ui` or `:favorites:ui` as needed.
+Swap the module for `:catalog:ui` or `:favorites:ui` as needed. The [UI gallery](ui-gallery.md) is
+generated from these baselines, so it cannot drift from what the tests verify.
 
 ## Coverage
 
@@ -104,7 +107,7 @@ requests to both.
 | Change | What runs |
 |---|---|
 | Code | `./gradlew build :koverXmlReportCoverage -Proborazzi.test.verify=true`, the Codecov upload and the debug APK artifact |
-| Docs only (`docs/`, `art/`, `*.md`, `LICENSE`) | No Gradle. An empty Codecov upload, which passes because every changed file is ignored |
+| Docs only (`docs/`, `art/`, `*.md`, `LICENSE`) | No Gradle. An empty Codecov upload, which passes because every changed file is ignored. `docs/ui-gallery.md` counts as code: its check runs in Gradle |
 | Any | lychee checks the links and anchors between Markdown files, offline |
 
 Runs on `main` and `develop` are Codecov's base reports: they are never cancelled, and both branches

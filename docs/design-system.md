@@ -2,7 +2,7 @@
 
 Atomic design, translated to Android: atoms, molecules and organisms live in `:core:designsystem`;
 templates and pages live in each feature. Everything in the design system renders from a preview,
-without the app.
+without the app; the [UI gallery](ui-gallery.md) shows each one as the screenshot tests draw it.
 
 ## Atomic design, translated
 
@@ -42,8 +42,10 @@ theme); the boards stay as drawn.
 
 ## Boards
 
-Exported from the design canvas. Each component decision on them states what it gained, what it cost
-and when another choice would win, like [the decisions log](decisions.md).
+Exported from the design canvas, archived under the tag
+[`archive/design-system-canvas`](https://github.com/gustavo-pedreros/fakestore-android/tree/archive/design-system-canvas/docs/design/canvas)
+to keep it out of the working tree. Each component decision on them states what it gained, what it
+cost and when another choice would win, like [the decisions log](decisions.md).
 
 | Board | What it settles |
 |---|---|
