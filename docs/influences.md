@@ -52,3 +52,57 @@ Eric Evans, *Domain-Driven Design* (2003).
   that meet only in presentation ([context map](architecture.md#context-map)). A published language
   (`:shared:contract`) and a generic subdomain (`:audit`) are planned.
 - **Where I depart:** the tactical patterns stay light: no aggregates or domain events yet.
+
+## Atomic Design
+
+Brad Frost, [*Atomic Design*](https://atomicdesign.bradfrost.com/) (2016).
+
+- **Here:** atoms, molecules and organisms live in `:core:designsystem`; templates and pages live in each
+  feature ([atomic design, translated](design-system.md#atomic-design-translated)). The classpath keeps
+  the cut: the design system depends on no `domain`, so an atom cannot import `Product`.
+- **Where I depart:**
+  - The book offers a mental model; here each layer has a rule that decides where a file goes, because
+    Android adds modules, ViewModels and navigation.
+  - A template is the stateless `…Screen`; a page is its stateful overload, the only code that touches
+    `hiltViewModel()` and navigation. In the book, a page is a template filled with real content.
+  - Colors, type, shapes and spacing are theme tokens beneath the atoms, the gallery's [Foundations](ui-gallery.md#foundations);
+    Frost's original post counts color palettes and fonts as atoms.
+
+## xUnit Test Patterns
+
+Gerard Meszaros, *xUnit Test Patterns* (2007), the book that named test doubles.
+
+- **Here:**
+  - Its taxonomy of doubles, all hand-written ([test doubles](testing.md#test-doubles)):
+    - Stubs feed indirect inputs: `FixedClock`, or `refresh = { Either.Error(networkError) }`.
+    - Spies record indirect outputs: `onToggleFavorite = { id -> toggledIds.add(id) }`.
+    - Fake objects are working in-memory versions: `FakeCatalogLocalDataSource` filters rows like the
+      DAO does.
+  - State verification: a test asserts what a fake or a spy holds after the call, never expectations
+    set up front.
+  - Four-phase tests, each with a fresh fixture built by creation methods with defaults
+    (`createProductEntity(…)`, `viewModel(…)`).
+- **Where I depart:**
+  - No mock objects: nothing here needs behavior verification. It is the classicist side of Martin
+    Fowler's [*Mocks Aren't Stubs*](https://martinfowler.com/articles/mocksArentStubs.html), which
+    builds on this vocabulary.
+  - The names do not follow the taxonomy: every double class is a `Fake…`, including stubs such as
+    `FakeCatalogRemoteDataSource`.
+
+## Fitness functions
+
+Neal Ford, Rebecca Parsons and Patrick Kua, *Building Evolutionary Architectures* (2017).
+
+- **Here:** checks that fail the build when a property erodes, instead of trusting review:
+  - The classpath keeps `domain` pure ([rule 1](architecture.md#dependency-rules)).
+  - `PreviewNamingTest` keeps every preview named `Preview<Name>`, so Kover's filter cannot hide
+    production code again ([screenshots](testing.md#screenshots)).
+  - Roborazzi fails when a screen no longer matches its baseline, and `uiGalleryCheck` when the
+    [UI gallery](ui-gallery.md) no longer matches the baselines.
+  - Codecov's ratchet fails when coverage drops against the base branch ([coverage](testing.md#coverage)).
+  - lychee fails on a broken link between docs, and a line budget keeps the README a landing page.
+- **Where I depart:**
+  - Dependency rules 2 to 5 still rely on build files or review; architecture tests are on the
+    [roadmap](roadmap.md#now).
+  - Only structure, pixels and docs are guarded. Runtime properties such as startup time get no
+    fitness function until benchmarks arrive ([roadmap](roadmap.md#later)).
