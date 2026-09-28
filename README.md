@@ -102,6 +102,9 @@ The first launch needs a network connection: there is no mock backend.
   unidirectional data flow and a single source of truth.
 - **Clean Architecture:** the dependency rule, enforced by the classpath.
 - **Domain-Driven Design:** bounded contexts as module groups that meet only in presentation.
+- **Atomic Design:** atoms, molecules and organisms as a module; templates and pages in each feature.
+- **Meszaros's *xUnit Test Patterns*:** stubs, spies and fakes written by hand, and no mocks.
+- **Fitness functions:** the build fails when a rule, a screenshot or a doc drifts.
 
 Where each one shows in the code, and where I depart from it: [influences](docs/influences.md).
 
