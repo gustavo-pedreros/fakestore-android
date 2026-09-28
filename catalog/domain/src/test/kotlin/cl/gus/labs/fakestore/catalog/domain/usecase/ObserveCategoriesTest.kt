@@ -27,7 +27,7 @@ class ObserveCategoriesTest {
         @Test
         @DisplayName("deduplicates repeated categories")
         fun deduplicatesRepeatedCategories() = runTest {
-            val repository = FakeCatalogRepository(
+            val repository = StubCatalogRepository(
                 listOf(
                     product(id = 1, category = "electronics"),
                     product(id = 2, category = "electronics"),
@@ -43,7 +43,7 @@ class ObserveCategoriesTest {
         @Test
         @DisplayName("sorts categories alphabetically")
         fun sortsCategoriesAlphabetically() = runTest {
-            val repository = FakeCatalogRepository(
+            val repository = StubCatalogRepository(
                 listOf(
                     product(id = 1, category = "women's clothing"),
                     product(id = 2, category = "electronics"),
@@ -62,7 +62,7 @@ class ObserveCategoriesTest {
         @Test
         @DisplayName("returns an empty list for an empty catalog")
         fun returnsEmptyListForEmptyCatalog() = runTest {
-            val repository = FakeCatalogRepository(emptyList())
+            val repository = StubCatalogRepository(emptyList())
 
             val result = ObserveCategories(repository)().first()
 
@@ -81,7 +81,7 @@ private fun product(id: Int, category: String) = Product(
     rating = Rating(rate = 4.0, count = 10),
 )
 
-private class FakeCatalogRepository(private val products: List<Product>) : CatalogRepository {
+private class StubCatalogRepository(private val products: List<Product>) : CatalogRepository {
     override fun observeAll(category: Category?): Flow<List<Product>> = flowOf(products)
     override fun observeById(id: ProductId): Flow<Product?> = flowOf(null)
     override fun observeLastSyncedAt(): Flow<Instant?> = flowOf(null)

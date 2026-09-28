@@ -73,8 +73,9 @@ Brad Frost, [*Atomic Design*](https://atomicdesign.bradfrost.com/) (2016).
 Gerard Meszaros, *xUnit Test Patterns* (2007), the book that named test doubles.
 
 - **Here:**
-  - Its taxonomy of doubles, all hand-written ([test doubles](testing.md#test-doubles)):
-    - Stubs feed indirect inputs: `FixedClock`, or `refresh = { Either.Error(networkError) }`.
+  - Its taxonomy of doubles, all hand-written and named by role ([test doubles](testing.md#test-doubles)):
+    - Stubs feed indirect inputs: `StubCatalogRemoteDataSource`, `FixedClock`, or
+      `refresh = { Either.Error(networkError) }`.
     - Spies record indirect outputs: `onToggleFavorite = { id -> toggledIds.add(id) }`.
     - Fake objects are working in-memory versions: `FakeCatalogLocalDataSource` filters rows like the
       DAO does.
@@ -82,12 +83,10 @@ Gerard Meszaros, *xUnit Test Patterns* (2007), the book that named test doubles.
     set up front.
   - Four-phase tests, each with a fresh fixture built by creation methods with defaults
     (`createProductEntity(…)`, `viewModel(…)`).
-- **Where I depart:**
-  - No mock objects: nothing here needs behavior verification. It is the classicist side of Martin
-    Fowler's [*Mocks Aren't Stubs*](https://martinfowler.com/articles/mocksArentStubs.html), which
-    builds on this vocabulary.
-  - The names do not follow the taxonomy: every double class is a `Fake…`, including stubs such as
-    `FakeCatalogRemoteDataSource`.
+- **Where I depart:** no mock objects, because nothing here needs behavior verification. It is the
+  classicist side of Martin Fowler's
+  [*Mocks Aren't Stubs*](https://martinfowler.com/articles/mocksArentStubs.html), which builds on this
+  vocabulary.
 
 ## Fitness functions
 

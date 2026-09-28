@@ -3,7 +3,7 @@ package cl.gus.labs.fakestore.catalog.ui.detail
 import cl.gus.labs.fakestore.catalog.domain.model.Category
 import cl.gus.labs.fakestore.catalog.domain.model.Product
 import cl.gus.labs.fakestore.catalog.domain.model.Rating
-import cl.gus.labs.fakestore.catalog.ui.FakeNetworkMonitor
+import cl.gus.labs.fakestore.catalog.ui.StubNetworkMonitor
 import cl.gus.labs.fakestore.catalog.ui.mapper.toDetail
 import cl.gus.labs.fakestore.core.common.result.Either
 import cl.gus.labs.fakestore.core.testing.MainDispatcherExtension
@@ -100,7 +100,7 @@ class ProductDetailViewModelTest {
         fun blockingFailureWhenOffline() = runTest {
             val viewModel = viewModel(
                 refresh = { Either.Error(networkError) },
-                monitor = FakeNetworkMonitor(MutableStateFlow(false)),
+                monitor = StubNetworkMonitor(MutableStateFlow(false)),
             )
 
             keepUiStateHot(viewModel)
@@ -199,7 +199,7 @@ class ProductDetailViewModelTest {
         @DisplayName("refreshes again when the connection comes back after a failure")
         fun retriesWhenConnectionComesBack() = runTest {
             var refreshes = 0
-            val monitor = FakeNetworkMonitor(MutableStateFlow(false))
+            val monitor = StubNetworkMonitor(MutableStateFlow(false))
             val viewModel = viewModel(
                 refresh = {
                     refreshes++
@@ -224,7 +224,7 @@ class ProductDetailViewModelTest {
         favoriteIds: Set<ProductId> = emptySet(),
         refresh: suspend () -> Either<AppError, Unit> = { Either.Success(Unit) },
         onToggleFavorite: suspend (ProductId) -> Unit = {},
-        monitor: FakeNetworkMonitor = FakeNetworkMonitor(),
+        monitor: StubNetworkMonitor = StubNetworkMonitor(),
     ) = ProductDetailViewModel(
         productId = widget.id.value,
         observeProductDetail = { flowOf(product) },

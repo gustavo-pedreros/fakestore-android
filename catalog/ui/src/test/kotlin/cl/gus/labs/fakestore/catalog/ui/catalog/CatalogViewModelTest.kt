@@ -9,7 +9,7 @@ import cl.gus.labs.fakestore.catalog.domain.usecase.ObserveCatalog
 import cl.gus.labs.fakestore.catalog.domain.usecase.ObserveCategories
 import cl.gus.labs.fakestore.catalog.domain.usecase.ObserveLastSyncedAt
 import cl.gus.labs.fakestore.catalog.domain.usecase.RefreshCatalog
-import cl.gus.labs.fakestore.catalog.ui.FakeNetworkMonitor
+import cl.gus.labs.fakestore.catalog.ui.StubNetworkMonitor
 import cl.gus.labs.fakestore.catalog.ui.mapper.toCard
 import cl.gus.labs.fakestore.core.common.result.Either
 import cl.gus.labs.fakestore.core.testing.MainDispatcherExtension
@@ -82,7 +82,7 @@ class CatalogViewModelTest {
         fun blockingFailureWhenOffline() = runTest {
             val viewModel = viewModel(
                 refresh = { Either.Error(networkError) },
-                monitor = FakeNetworkMonitor(MutableStateFlow(false)),
+                monitor = StubNetworkMonitor(MutableStateFlow(false)),
             )
 
             keepUiStateHot(viewModel)
@@ -178,7 +178,7 @@ class CatalogViewModelTest {
         @DisplayName("refreshes again when the connection comes back after a failure")
         fun retriesWhenConnectionComesBack() = runTest {
             var refreshes = 0
-            val monitor = FakeNetworkMonitor(MutableStateFlow(false))
+            val monitor = StubNetworkMonitor(MutableStateFlow(false))
             val viewModel = viewModel(
                 refresh = {
                     refreshes++
@@ -267,7 +267,7 @@ class CatalogViewModelTest {
                 observeFavoriteIds = { favoriteIdsFlow },
                 refreshCatalog = { Either.Success(Unit) },
                 toggleFavorite = {},
-                networkMonitor = FakeNetworkMonitor(),
+                networkMonitor = StubNetworkMonitor(),
             )
 
             keepUiStateHot(viewModel)
@@ -308,7 +308,7 @@ class CatalogViewModelTest {
         favoriteIds: Set<ProductId> = emptySet(),
         refresh: suspend () -> Either<AppError, Unit> = { Either.Success(Unit) },
         onToggleFavorite: suspend (ProductId) -> Unit = {},
-        monitor: FakeNetworkMonitor = FakeNetworkMonitor(),
+        monitor: StubNetworkMonitor = StubNetworkMonitor(),
     ) = CatalogViewModel(
         observeCatalog = { category -> flowOf(products(category)) },
         observeCategories = ObserveCategories(repositoryOf(categories)),
