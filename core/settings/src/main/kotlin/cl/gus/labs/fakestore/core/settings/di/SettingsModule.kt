@@ -15,19 +15,14 @@ import javax.inject.Singleton
 
 private val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
+// Binds only the repository: the DataStore stays out of the graph, so nothing can skip the port.
 @Module
 @InstallIn(SingletonComponent::class)
-object SettingsModule {
-
-    @Provides
-    @Singleton
-    fun provideSettingsDataStore(
-        @ApplicationContext context: Context,
-    ): DataStore<Preferences> = context.settingsDataStore
+internal object SettingsModule {
 
     @Provides
     @Singleton
     fun provideSettingsRepository(
-        dataStore: DataStore<Preferences>,
-    ): SettingsRepository = DataStoreSettingsRepository(dataStore)
+        @ApplicationContext context: Context,
+    ): SettingsRepository = DataStoreSettingsRepository(context.settingsDataStore)
 }
