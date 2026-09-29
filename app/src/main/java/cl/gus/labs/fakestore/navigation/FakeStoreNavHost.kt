@@ -13,6 +13,7 @@ import cl.gus.labs.fakestore.catalog.ui.navigation.CatalogKey
 import cl.gus.labs.fakestore.catalog.ui.navigation.ProductDetailKey
 import cl.gus.labs.fakestore.catalog.ui.navigation.catalogEntries
 import cl.gus.labs.fakestore.catalog.ui.navigation.catalogNavKeys
+import cl.gus.labs.fakestore.core.designsystem.model.ThemeModeUiModel
 import cl.gus.labs.fakestore.favorites.ui.navigation.FavoritesKey
 import cl.gus.labs.fakestore.favorites.ui.navigation.favoritesEntries
 import cl.gus.labs.fakestore.favorites.ui.navigation.favoritesNavKeys
@@ -29,7 +30,11 @@ private val NavKeyConfiguration = SavedStateConfiguration {
 }
 
 @Composable
-fun FakeStoreNavHost(modifier: Modifier = Modifier) {
+fun FakeStoreNavHost(
+    themeMode: ThemeModeUiModel,
+    onThemeToggleClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val backStack = rememberNavBackStack(NavKeyConfiguration, CatalogKey)
 
     NavDisplay(
@@ -45,6 +50,8 @@ fun FakeStoreNavHost(modifier: Modifier = Modifier) {
                 onProductClick = { productId -> backStack.add(ProductDetailKey(productId)) },
                 onBackClick = { backStack.removeLastOrNull() },
                 onFavoritesClick = { backStack.add(FavoritesKey) },
+                themeMode = themeMode,
+                onThemeToggleClick = onThemeToggleClick,
             )
             favoritesEntries(
                 onProductClick = { productId -> backStack.add(ProductDetailKey(productId)) },
