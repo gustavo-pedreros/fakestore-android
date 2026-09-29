@@ -9,6 +9,10 @@
     <string name="fs_action_share">Compartir</string>
     <string name="fs_category_all">Todos</string>
 
+    <string name="fs_theme_state_auto">Automático</string>
+    <string name="fs_theme_state_light">Claro</string>
+    <string name="fs_theme_state_dark">Oscuro</string>
+
     <plurals name="fs_rating_content_description">
         <item quantity="one">%1$s de 5 estrellas, %2$d valoración</item>
         <item quantity="other">%1$s de 5 estrellas, %2$d valoraciones</item>
