@@ -14,6 +14,8 @@ differently. The reasoning behind each departure lives in [decisions](decisions.
   - Its rule "a feature's `impl` depends only on another feature's `api`" is this repo's "a `ui` uses
     only the other context's `domain`" ([dependency rules](architecture.md#dependency-rules)).
   - Docs the build generates: its module graph in each README, the [UI gallery](ui-gallery.md) here.
+  - The theme as app-wide state over DataStore, read by an activity ViewModel that holds the splash
+    screen until it loads ([decision 10](decisions.md#10-the-theme-is-app-shell-state-kept-in-datastore)).
 - **Where I depart:**
   - Modules group by bounded context, each with `ui`, `domain` and `data`; there, by kind (`core`,
     `feature`).
@@ -24,6 +26,8 @@ differently. The reasoning behind each departure lives in [decisions](decisions.
   - No catalog app for the design system, at least for now: there, `app-nia-catalog` runs every
     component; here, the [UI gallery](ui-gallery.md) shows their screenshots.
   - No benchmarks or Baseline Profiles yet ([roadmap](roadmap.md#later)).
+  - Preferences DataStore for one enum, and the theme toggle in the list's top bar; there, Proto
+    DataStore and a settings dialog.
 
 ## Google's guide to app architecture
 

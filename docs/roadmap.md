@@ -24,7 +24,6 @@ hardening and the larger designs. Each item links to its issue once one exists.
   screenshots.
 - **Localization.** English by default with `values-es`; price and rating formatted by locale.
 - **State.** Keep the category filter across process death, and restore edge-to-edge.
-- **Theme toggle.** Wire the moon slot the top bar already has.
 - **Screenshots recorded in CI**, with the diffs on the pull request.
 - **Static analysis.** ktlint and detekt with baselines, and Lint with warnings as errors.
 

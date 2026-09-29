@@ -19,7 +19,7 @@ makes it compile, and the diff then shows it. One part is absolute: `*:domain` a
 
 ## Module graph
 
-![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core.](diagrams/01-module-graph.png)
+![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core, where :core:settings keeps the theme mode for :app.](diagrams/01-module-graph.png)
 
 The dashed edges are the only cross-context dependencies, and both start at a `ui`: the catalog needs
 favorite IDs to draw its hearts, and the favorites screen needs `Product` to draw its cards. No
@@ -37,6 +37,7 @@ and those edges carry no production code.
 | 3 | `*:ui` depends on `*:domain`, never on `*:data` | Build files. Nothing fails if one adds the edge |
 | 4 | Contexts integrate in presentation: a `ui` may use the other context's `domain`; `domain` and `data` never reach another context | Build files. Each `data` using only its own DAO is a convention: every DAO in [`:core:database`](../core/database/src/main/kotlin/cl/gus/labs/fakestore/core/database/dao/) is public |
 | 5 | `:shared:kernel` holds only what both contexts speak | Review. Today: [`ProductId` and `AppError`](../shared/kernel/src/main/kotlin/cl/gus/labs/fakestore/shared/kernel/) |
+| 6 | `:core:settings` is app-shell state: only `:app` depends on it, and a screen gets the theme mode as a value and a callback | Build files. Nothing fails if a context adds the edge |
 
 No test enforces these rules yet. Architecture tests are on the [roadmap](roadmap.md#now).
 
@@ -94,7 +95,7 @@ each feature registers its own entries with typed `@Serializable` keys
 
 | Module | Type | Responsibility |
 |---|---|---|
-| `:app` | Android app | Composition root: Hilt graph, back stack, theme |
+| `:app` | Android app | Composition root: Hilt graph, back stack, theme and splash screen |
 | `:catalog:domain` | Kotlin/JVM | `Product`, `Category`, `Rating`, `CatalogRepository`, use cases |
 | `:catalog:data` | Android lib | Retrofit and Room behind `CatalogRepositoryImpl`, the ACL |
 | `:catalog:ui` | Compose lib | Catalog and detail screens, ViewModels, navigation entries |
@@ -107,6 +108,7 @@ each feature registers its own entries with typed `@Serializable` keys
 | `:core:database` | Android lib | The single Room database: entities, DAOs, migrations, exported schemas |
 | `:core:designsystem` | Compose lib | Theme, tokens, atoms, molecules and organisms |
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
+| `:core:settings` | Android lib | `SettingsRepository`: the theme mode in Preferences DataStore |
 | `:core:testing` | Kotlin/JVM | `MainDispatcherExtension` and the shared test dependencies |
 
 ## Convention plugins

@@ -37,8 +37,8 @@ The list screen as specified, in both themes, next to the build:
   </tr>
 </table>
 
-The spec's moon icon is a runtime theme toggle. It is not wired yet (the app follows the system
-theme); the boards stay as drawn.
+The spec's moon icon became a three-state toggle: automatic, light and dark, each with its own icon and
+state description. `:app` keeps the mode in `:core:settings`; the boards stay as drawn.
 
 ## Boards
 
