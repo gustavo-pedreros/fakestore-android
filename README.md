@@ -43,7 +43,7 @@ the single source of truth, and a build that enforces the dependency rules.
 - **Contexts meet only in presentation:** a `ui` may use the other context's `domain`; nothing below
   crosses.
 
-![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core.](docs/diagrams/01-module-graph.png)
+![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core, where :core:settings keeps the theme mode for :app.](docs/diagrams/01-module-graph.png)
 
 ## Testing at a glance
 
@@ -62,7 +62,7 @@ Coverage on `main` · domain ![domain coverage](https://codecov.io/gh/gustavo-pe
 | UI | Jetpack Compose, Material 3, Navigation 3 |
 | DI | Hilt with KSP |
 | Network | Retrofit, OkHttp, kotlinx.serialization |
-| Persistence | Room, with exported schemas |
+| Persistence | Room, with exported schemas; DataStore for preferences |
 | Images | Coil |
 | Tests | JUnit 5, Turbine, MockWebServer, Robolectric, Roborazzi |
 | Build and CI | Convention plugins, version catalog, Kover, Codecov, GitHub Actions |

@@ -46,6 +46,7 @@ component_management:
         - "core/network/**"
         - "core/database/**"
         - "core/connectivity/**"
+        - "core/settings/**"
         - "core/common/**"
 
 comment:

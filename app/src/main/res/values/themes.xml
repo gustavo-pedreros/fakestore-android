@@ -4,4 +4,12 @@
     <style name="Theme.Fakestore" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/fs_window_background</item>
     </style>
+
+    <!-- Held by MainActivity until the stored theme loads. -->
+    <style name="Theme.Fakestore.Starting" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenBackground">@color/fs_window_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/fs_splash_icon_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.Fakestore</item>
+    </style>
 </resources>

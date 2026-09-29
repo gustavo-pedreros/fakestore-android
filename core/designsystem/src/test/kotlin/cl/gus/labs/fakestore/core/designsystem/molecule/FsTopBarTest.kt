@@ -1,9 +1,16 @@
 package cl.gus.labs.fakestore.core.designsystem.molecule
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import cl.gus.labs.fakestore.core.designsystem.model.ThemeModeUiModel
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziActivity
@@ -64,6 +71,25 @@ class FsTopBarTest {
         }
         composeRule.onNodeWithContentDescription("Cambiar tema").performClick()
         assertTrue(clicked)
+    }
+
+    @Test
+    fun `list bar's theme toggle states the mode it shows`() {
+        var mode by mutableStateOf(ThemeModeUiModel.System)
+        composeRule.setContent {
+            FakeStoreTheme {
+                FsListTopBar(onFavoritesClick = {}, themeMode = mode, onThemeToggleClick = {})
+            }
+        }
+        mapOf(
+            ThemeModeUiModel.System to "Automático",
+            ThemeModeUiModel.Light to "Claro",
+            ThemeModeUiModel.Dark to "Oscuro",
+        ).forEach { (shown, state) ->
+            mode = shown
+            composeRule.onNodeWithContentDescription("Cambiar tema")
+                .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, state))
+        }
     }
 
     @Test

@@ -7,6 +7,7 @@ minSdk = "26"
 targetSdk = "37"
 
 coreKtx = "1.19.0"
+coreSplashscreen = "1.2.0"
 lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
 composeBom = "2026.08.00"
@@ -28,6 +29,7 @@ androidxHilt = "1.4.0"
 javaxInject = "1"
 ksp = "2.3.9"
 room = "2.8.4"
+datastore = "1.2.1"
 robolectric = "4.16.1"
 roborazzi = "1.75.0"
 composablePreviewScanner = "0.9.3"
@@ -45,6 +47,7 @@ roborazzi-gradle-plugin = { group = "io.github.takahirom.roborazzi", name = "rob
 
 # AndroidX core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
@@ -114,6 +117,7 @@ javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "j
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [bundles]
 compose-library = [

@@ -73,3 +73,16 @@ is marked as such, not deleted.
 - **Paid.** The join happens in memory, in each ViewModel.
 - **Otherwise.** Once the catalog is paginated, the in-memory join stops being free; that is the
   trigger to revisit, not table size.
+
+## 10. The theme is app-shell state, kept in DataStore
+
+- **Gained.** One owner: `:app` reads the stored mode, applies it and handles the toggle. The catalog
+  only hosts the button, and no context knows the preference exists. Each toggle reads and writes in
+  one DataStore transaction, so two fast taps cannot lose a step (as in decision 7). The adapter is
+  tested against the real DataStore on the JVM.
+- **Paid.** The splash and the window background are XML resources that follow the system theme, so a
+  cold start shows the system's colors for an instant when the stored mode differs. One more module
+  and a splash-screen dependency.
+- **Otherwise.** With a minimum SDK of 31, the platform's per-app night mode applies the choice to the
+  whole configuration, splash included. With many preferences, a typed DataStore over
+  kotlinx.serialization.

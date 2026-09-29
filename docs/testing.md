@@ -16,7 +16,9 @@ architecture tests and instrumented tests.
 | Network | OkHttp, Retrofit and JSON wiring; the empty-body converter; the error ACL | JUnit 5, MockWebServer | ✅ |
 | Persistence | DAO behavior, including the favorite toggle transaction | Robolectric | ✅ |
 | Connectivity | The `ConnectivityManager` callback flow: several networks, captive portals, unregistration | Robolectric, Turbine | ✅ |
+| Settings | The DataStore adapter on a real file: defaults, unknown values, read and write failures, updates in one transaction | JUnit 5 | ✅ |
 | Presentation | Every ViewModel state, with virtual time | JUnit 5, Turbine, `kotlinx-coroutines-test` | ✅ |
+| App shell | The theme state, the splash condition and the toggle, two fast taps included | JUnit 5 | ✅ |
 | Screens | Every preview of the feature screens, light and dark | Robolectric, Roborazzi | ✅ |
 | Design system | Every preview, light and dark | Robolectric, Roborazzi, ComposablePreviewScanner | ✅ |
 | Architecture | The [dependency rules](architecture.md#dependency-rules) as tests | — | 📋 [Now](roadmap.md#now) |
@@ -33,7 +35,8 @@ Robolectric and Compose's test rules are JUnit 4; they run through the vintage e
   hand-written classes named by role: a `Stub…` returns what the test sets, a `Fake…` works in memory.
 - **Robolectric only where the framework is under test:** `:core:database`, `:core:connectivity` and
   the screenshot modules. Each `data` module talks to a `LocalDataSource` interface, not a DAO, so its
-  tests are plain JVM. Everything downstream of `NetworkMonitor` uses
+  tests are plain JVM. DataStore needs no Robolectric: `:core:settings` tests the real one on a
+  temporary file. Everything downstream of `NetworkMonitor` uses
   [`StubNetworkMonitor`](../catalog/ui/src/test/kotlin/cl/gus/labs/fakestore/catalog/ui/StubNetworkMonitor.kt).
 - **Dispatchers.** `ConnectivityNetworkMonitor` takes its dispatcher through `@IoDispatcher`, so its tests
   pass an `UnconfinedTestDispatcher` on the `runTest` scheduler and the callback assertions cannot race.
