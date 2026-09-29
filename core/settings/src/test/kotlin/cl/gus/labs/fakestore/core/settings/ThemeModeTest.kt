@@ -8,18 +8,10 @@ import org.junit.jupiter.api.Test
 class ThemeModeTest {
 
     @Test
-    @DisplayName("next() walks system to light to dark")
-    fun nextWalksForward() {
+    @DisplayName("next() walks system, light, dark and back to system")
+    fun nextWalksTheCycle() {
         assertEquals(ThemeMode.LIGHT, ThemeMode.SYSTEM.next())
         assertEquals(ThemeMode.DARK, ThemeMode.LIGHT.next())
         assertEquals(ThemeMode.SYSTEM, ThemeMode.DARK.next())
-    }
-
-    @Test
-    @DisplayName("three steps return to the starting mode")
-    fun cycleClosesInThreeSteps() {
-        ThemeMode.entries.forEach { start ->
-            assertEquals(start, start.next().next().next())
-        }
     }
 }
