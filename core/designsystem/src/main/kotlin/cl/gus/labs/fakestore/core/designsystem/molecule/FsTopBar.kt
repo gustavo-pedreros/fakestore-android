@@ -30,12 +30,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import cl.gus.labs.fakestore.core.designsystem.R
 import cl.gus.labs.fakestore.core.designsystem.atom.FsDivider
 import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
+import cl.gus.labs.fakestore.core.designsystem.model.ThemeModeUiModel
 import cl.gus.labs.fakestore.core.designsystem.theme.FakeStoreTheme
 
 private val BarHeight = 60.dp
@@ -49,6 +52,7 @@ private const val WordmarkLabel = "FakeStore"
 fun FsListTopBar(
     onFavoritesClick: () -> Unit,
     modifier: Modifier = Modifier,
+    themeMode: ThemeModeUiModel = ThemeModeUiModel.System,
     onThemeToggleClick: (() -> Unit)? = null,
 ) {
     TopBarSurface(modifier = modifier) {
@@ -78,9 +82,10 @@ fun FsListTopBar(
                 )
                 if (onThemeToggleClick != null) {
                     TopBarAction(
-                        icon = FsIcons.Moon,
+                        icon = themeMode.icon,
                         contentDescription = stringResource(R.string.fs_action_theme),
                         onClick = onThemeToggleClick,
+                        state = themeMode.stateLabel,
                     )
                 }
             }
@@ -174,17 +179,35 @@ private fun TopBarSurface(
     }
 }
 
+private val ThemeModeUiModel.icon: Painter
+    @Composable get() = when (this) {
+        ThemeModeUiModel.System -> FsIcons.ThemeAuto
+        ThemeModeUiModel.Light -> FsIcons.Sun
+        ThemeModeUiModel.Dark -> FsIcons.Moon
+    }
+
+private val ThemeModeUiModel.stateLabel: String
+    @Composable get() = stringResource(
+        when (this) {
+            ThemeModeUiModel.System -> R.string.fs_theme_state_auto
+            ThemeModeUiModel.Light -> R.string.fs_theme_state_light
+            ThemeModeUiModel.Dark -> R.string.fs_theme_state_dark
+        },
+    )
+
 @Composable
 private fun TopBarAction(
     icon: Painter,
     contentDescription: String,
     onClick: () -> Unit,
+    state: String? = null,
 ) {
     Box(
         modifier = Modifier
             .size(ActionSize)
             .clip(CircleShape)
-            .clickable(role = Role.Button, onClick = onClick),
+            .clickable(role = Role.Button, onClick = onClick)
+            .semantics { if (state != null) stateDescription = state },
         contentAlignment = Alignment.Center,
     ) {
         Icon(
@@ -206,7 +229,9 @@ private fun PreviewFsTopBar() {
                 verticalArrangement = Arrangement.spacedBy(FakeStoreTheme.spacing.lg),
             ) {
                 FsListTopBar(onFavoritesClick = {})
-                FsListTopBar(onFavoritesClick = {}, onThemeToggleClick = {})
+                ThemeModeUiModel.entries.forEach { mode ->
+                    FsListTopBar(onFavoritesClick = {}, themeMode = mode, onThemeToggleClick = {})
+                }
                 FsDetailTopBar(
                     title = "Fjallraven Foldsack No. 1",
                     titleVisible = true,
