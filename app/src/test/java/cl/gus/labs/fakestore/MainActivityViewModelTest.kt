@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,6 +23,13 @@ class MainActivityViewModelTest {
         val viewModel = MainActivityViewModel(FakeSettingsRepository(initial = null))
 
         assertEquals(MainActivityUiState.Loading, viewModel.uiState.value)
+    }
+
+    @Test
+    @DisplayName("keeps the splash screen only while Loading")
+    fun splashOnlyWhileLoading() {
+        assertTrue(MainActivityUiState.Loading.shouldKeepSplashScreen())
+        assertFalse(MainActivityUiState.Ready(ThemeMode.SYSTEM).shouldKeepSplashScreen())
     }
 
     @Test
