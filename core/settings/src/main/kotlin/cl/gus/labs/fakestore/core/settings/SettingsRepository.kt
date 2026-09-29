@@ -4,5 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
     val themeMode: Flow<ThemeMode>
-    suspend fun setThemeMode(mode: ThemeMode)
+
+    /** Reads and writes in one transaction, so two quick updates cannot overwrite each other. */
+    suspend fun updateThemeMode(transform: (ThemeMode) -> ThemeMode)
 }

@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import cl.gus.labs.fakestore.core.settings.ThemeMode
 import java.io.File
@@ -12,6 +13,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -65,7 +68,7 @@ class DataStoreSettingsRepositoryTest {
         @Test
         @DisplayName("falls back to SYSTEM when the preferences file cannot be read")
         fun unreadableFileFallsBack() = scope.runTest {
-            val repository = DataStoreSettingsRepository(StubPreferencesDataStore(IOException("corrupted")))
+            val repository = DataStoreSettingsRepository(StubPreferencesDataStore(readFailure = IOException("corrupted")))
 
             assertEquals(ThemeMode.SYSTEM, repository.themeMode.first())
         }
@@ -73,7 +76,7 @@ class DataStoreSettingsRepositoryTest {
         @Test
         @DisplayName("lets a read failure that is not IO propagate")
         fun nonIoReadFailurePropagates() = scope.runTest {
-            val repository = DataStoreSettingsRepository(StubPreferencesDataStore(IllegalStateException("boom")))
+            val repository = DataStoreSettingsRepository(StubPreferencesDataStore(readFailure = IllegalStateException("boom")))
 
             val thrown = runCatching { repository.themeMode.first() }.exceptionOrNull()
 
@@ -82,8 +85,8 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Nested
-    @DisplayName("writing")
-    inner class Writing {
+    @DisplayName("updating")
+    inner class Updating {
 
         @ParameterizedTest(name = "{0}")
         @DisplayName("reads back the mode it stored")
@@ -91,20 +94,33 @@ class DataStoreSettingsRepositoryTest {
         fun readsBackTheStoredMode(mode: ThemeMode) = scope.runTest {
             val repository = DataStoreSettingsRepository(fileDataStore())
 
-            repository.setThemeMode(mode)
+            repository.updateThemeMode { mode }
 
             assertEquals(mode, repository.themeMode.first())
         }
 
         @Test
-        @DisplayName("a later write overwrites the previous one")
-        fun laterWriteOverwrites() = scope.runTest {
+        @DisplayName("hands the transform the stored mode")
+        fun transformReceivesTheStoredMode() = scope.runTest {
+            val repository = DataStoreSettingsRepository(fileDataStore())
+            repository.updateThemeMode { ThemeMode.LIGHT }
+
+            repository.updateThemeMode(ThemeMode::next)
+
+            assertEquals(ThemeMode.DARK, repository.themeMode.first())
+        }
+
+        @Test
+        @DisplayName("applies two updates in flight one after the other")
+        fun concurrentUpdatesBothApply() = scope.runTest {
             val repository = DataStoreSettingsRepository(fileDataStore())
 
-            repository.setThemeMode(ThemeMode.DARK)
-            repository.setThemeMode(ThemeMode.LIGHT)
+            listOf(
+                launch { repository.updateThemeMode(ThemeMode::next) },
+                launch { repository.updateThemeMode(ThemeMode::next) },
+            ).joinAll()
 
-            assertEquals(ThemeMode.LIGHT, repository.themeMode.first())
+            assertEquals(ThemeMode.DARK, repository.themeMode.first())
         }
 
         @Test
@@ -112,21 +128,45 @@ class DataStoreSettingsRepositoryTest {
         fun storesTheEnumName() = scope.runTest {
             val dataStore = fileDataStore()
 
-            DataStoreSettingsRepository(dataStore).setThemeMode(ThemeMode.DARK)
+            DataStoreSettingsRepository(dataStore).updateThemeMode { ThemeMode.DARK }
 
             assertEquals("DARK", dataStore.data.first()[THEME_MODE])
+        }
+
+        @Test
+        @DisplayName("keeps the stored mode when the write fails on IO")
+        fun ioWriteFailureKeepsTheMode() = scope.runTest {
+            val repository = DataStoreSettingsRepository(StubPreferencesDataStore(writeFailure = IOException("disk full")))
+
+            repository.updateThemeMode { ThemeMode.DARK }
+
+            assertEquals(ThemeMode.SYSTEM, repository.themeMode.first())
+        }
+
+        @Test
+        @DisplayName("lets a write failure that is not IO propagate")
+        fun nonIoWriteFailurePropagates() = scope.runTest {
+            val repository = DataStoreSettingsRepository(StubPreferencesDataStore(writeFailure = IllegalStateException("boom")))
+
+            val thrown = runCatching { repository.updateThemeMode { ThemeMode.DARK } }.exceptionOrNull()
+
+            assertInstanceOf(IllegalStateException::class.java, thrown)
         }
     }
 }
 
-// A saboteur: every read fails with the given error.
+// A saboteur: reads or writes fail with the given error; a read that does not fail finds nothing stored.
 private class StubPreferencesDataStore(
-    private val readFailure: Throwable,
+    private val readFailure: Throwable? = null,
+    private val writeFailure: Throwable? = null,
 ) : DataStore<Preferences> {
 
-    override val data: Flow<Preferences> = flow { throw readFailure }
+    override val data: Flow<Preferences> = flow {
+        readFailure?.let { throw it }
+        emit(emptyPreferences())
+    }
 
     override suspend fun updateData(
         transform: suspend (t: Preferences) -> Preferences,
-    ): Preferences = error("Reads fail before any write")
+    ): Preferences = throw writeFailure ?: IllegalStateException("No write failure configured")
 }

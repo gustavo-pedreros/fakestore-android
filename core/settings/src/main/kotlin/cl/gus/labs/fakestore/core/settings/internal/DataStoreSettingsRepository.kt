@@ -7,10 +7,10 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import cl.gus.labs.fakestore.core.settings.SettingsRepository
 import cl.gus.labs.fakestore.core.settings.ThemeMode
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 
 internal class DataStoreSettingsRepository(
     private val dataStore: DataStore<Preferences>,
@@ -22,8 +22,14 @@ internal class DataStoreSettingsRepository(
         }
         .map { preferences -> preferences[THEME_MODE].toThemeMode() }
 
-    override suspend fun setThemeMode(mode: ThemeMode) {
-        dataStore.edit { preferences -> preferences[THEME_MODE] = mode.name }
+    override suspend fun updateThemeMode(transform: (ThemeMode) -> ThemeMode) {
+        try {
+            dataStore.edit { preferences ->
+                preferences[THEME_MODE] = transform(preferences[THEME_MODE].toThemeMode()).name
+            }
+        } catch (e: IOException) {
+            // Same as a failed read: the stored mode stays, and the flow keeps showing it.
+        }
     }
 
     private fun String?.toThemeMode(): ThemeMode =
