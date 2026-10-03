@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Each context owns its keys</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #fafaf7; --ink: #0b0b0c; --muted: #5c5c56; --accent: #c62a1b;
+    --sans: 'Space Grotesk', system-ui, sans-serif; --serif: 'Instrument Serif', serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans); background: var(--paper); color: var(--ink);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  svg { width: 100%; min-width: 900px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="remote-config-ownership-title remote-config-ownership-desc">
+  <title id="remote-config-ownership-title">Each context owns its keys</title>
+  <desc id="remote-config-ownership-desc">Ownership of remote config keys in FakeStore: each context declares its keys in an internal object of its data module and publishes them as domain decisions; the catalog screen reads the favorites context's IsFavoritesEnabled decision, never its key; both data modules depend on the remote config API.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">DESIGNED, NOT BUILT · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">Each context owns its keys</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">keys stay internal to data · domain publishes decisions · another context reads the decision, never the key</text>
+
+  <!-- Zones -->
+  <rect x="280" y="176" width="232" height="328" rx="8" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.10)" stroke-width="0.8"/>
+  <rect x="292" y="180" width="164" height="16" rx="2" fill="#fafaf7"/>
+  <text x="300" y="192" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">BOUNDED CONTEXT · CATALOG</text>
+  <rect x="768" y="280" width="232" height="224" rx="8" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.10)" stroke-width="0.8"/>
+  <rect x="780" y="284" width="176" height="16" rx="2" fill="#fafaf7"/>
+  <text x="788" y="296" fill="rgba(11,11,12,0.45)" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">BOUNDED CONTEXT · FAVORITES</text>
+
+  <!-- Arrows -->
+  <line x1="396" y1="272" x2="396" y2="312" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="396" y1="416" x2="396" y2="376" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="884" y1="416" x2="884" y2="376" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 496,240 H 612 Q 620,240 620,248 V 336 Q 620,344 628,344 H 784" fill="none" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+  <rect x="644" y="320" width="124" height="16" rx="2" fill="#fafaf7"/>
+  <text x="706" y="332" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">reads the gate</text>
+  <path d="M 396,480 V 560 Q 396,568 404,568 H 540" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 884,480 V 560 Q 884,568 876,568 H 740" fill="none" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- Catalog -->
+  <rect x="296" y="208" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="296" y="208" width="200" height="64" rx="6" fill="rgba(92,92,86,0.10)" stroke="#8a8a82" stroke-width="1"/>
+  <rect x="308" y="216" width="24" height="16" rx="2" fill="none" stroke="#8a8a82" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="320" y="228" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">UI</text>
+  <text x="396" y="248" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">CatalogViewModel</text>
+  <text x="396" y="264" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:catalog:ui</text>
+
+  <rect x="296" y="312" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="296" y="312" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="308" y="320" width="48" height="16" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="332" y="332" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DOMAIN</text>
+  <text x="396" y="352" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Pinned, retry</text>
+  <text x="396" y="368" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:catalog:domain</text>
+
+  <rect x="296" y="416" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="296" y="416" width="200" height="64" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="308" y="424" width="36" height="16" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="326" y="436" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DATA</text>
+  <text x="396" y="456" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">CatalogRemoteConfig</text>
+  <text x="396" y="472" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:catalog:data · internal</text>
+
+  <!-- Favorites -->
+  <rect x="784" y="312" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="784" y="312" width="200" height="64" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <rect x="796" y="320" width="48" height="16" rx="2" fill="none" stroke="#c62a1b" stroke-opacity="0.45" stroke-width="0.8"/>
+  <text x="820" y="332" fill="#c62a1b" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DOMAIN</text>
+  <text x="884" y="352" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">IsFavoritesEnabled</text>
+  <text x="884" y="368" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:favorites:domain</text>
+
+  <rect x="784" y="416" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="784" y="416" width="200" height="64" rx="6" fill="rgba(11,11,12,0.05)" stroke="#5c5c56" stroke-width="1"/>
+  <rect x="796" y="424" width="36" height="16" rx="2" fill="none" stroke="#5c5c56" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="814" y="436" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">DATA</text>
+  <text x="884" y="456" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">FavoritesRemoteConfig</text>
+  <text x="884" y="472" fill="#5c5c56" font-size="10" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:favorites:data · internal</text>
+
+  <!-- :remoteconfig:api -->
+  <rect x="540" y="536" width="200" height="64" rx="6" fill="#fafaf7"/>
+  <rect x="540" y="536" width="200" height="64" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="552" y="544" width="28" height="16" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.40" stroke-width="0.8"/>
+  <text x="566" y="556" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">API</text>
+  <text x="640" y="576" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif" text-anchor="middle">Typed keys, one read</text>
+  <text x="640" y="592" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="middle">:remoteconfig:api</text>
+
+  <!-- Callouts -->
+  <text x="40" y="440" fill="#5c5c56" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">A key never leaves</text>
+  <text x="40" y="460" fill="#5c5c56" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">its data module.</text>
+  <text x="1032" y="340" fill="#5c5c56" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">The catalog reads a decision,</text>
+  <text x="1032" y="360" fill="#5c5c56" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">never the favorites key.</text>
+
+  <!-- Legend -->
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <line x1="120" y1="652" x2="144" y2="652" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="152" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">depends on</text>
+  <line x1="256" y1="652" x2="280" y2="652" stroke="#c62a1b" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+  <text x="288" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">a ui reads another context's decision</text>
+  <rect x="592" y="645" width="14" height="12" rx="2" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <text x="614" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">a decision the context publishes</text>
+</svg>
+</div>
+</body>
+</html>

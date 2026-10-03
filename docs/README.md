@@ -14,5 +14,6 @@ next to the code it describes.
 | [Roadmap](roadmap.md) | What comes now, next and later? |
 | [Influences](influences.md) | Where do the ideas come from, and where does this repo depart from them? |
 | [Own API and SDUI](proposals/sdui-and-own-api.md) | How would server-driven UI and a sync API fit offline-first? |
+| [Remote config](proposals/remote-config.md) | How do remote values reach each context without a central catalog? |
 
 Diagram sources and their PNGs live in [`diagrams/`](diagrams/).
