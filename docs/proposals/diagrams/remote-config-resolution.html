@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One read, three layers</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #fafaf7; --ink: #0b0b0c; --muted: #5c5c56; --accent: #c62a1b;
+    --sans: 'Space Grotesk', system-ui, sans-serif; --serif: 'Instrument Serif', serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans); background: var(--paper); color: var(--ink);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  svg { width: 100%; min-width: 900px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="remote-config-resolution-title remote-config-resolution-desc">
+  <title id="remote-config-resolution-title">One read, three layers</title>
+  <desc id="remote-config-resolution-desc">Resolution order of a remote config read: a debug override first, then the remote value, taken from the session snapshot for next-launch keys and from the latest fetch for immediate keys, and finally the default declared with the key; a value that does not parse as the key's type counts as absent, so a read never fails.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c5c56"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c62a1b"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3e5c76"/></marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafaf7"/>
+
+  <text x="40" y="60" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.18em">DESIGNED, NOT BUILT · FAKESTORE ANDROID</text>
+  <text x="40" y="108" fill="#0b0b0c" font-size="40" font-family="'Instrument Serif', serif" font-weight="400" letter-spacing="-0.01em">One read, three layers</text>
+  <text x="40" y="132" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" letter-spacing="0.02em">remoteConfig[key] tries each layer in order · a value that does not parse as the key's type counts as absent</text>
+
+  <line x1="88" y1="256" x2="88" y2="520" stroke="#5c5c56" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="52" y="244" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">RESOLVES</text>
+
+  <rect x="120" y="240" width="1080" height="88" rx="6" fill="#fafaf7"/>
+  <rect x="120" y="240" width="1080" height="88" rx="6" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="144" y="276" width="28" height="16" rx="2" fill="none" stroke="rgba(11,11,12,0.20)" stroke-width="0.8"/>
+  <text x="158" y="288" fill="#8a8a82" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">01</text>
+  <text x="200" y="290" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif">Override</text>
+  <text x="440" y="289" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">set on the device · debug builds only</text>
+  <text x="1176" y="289" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end">if absent or malformed  ↓</text>
+
+  <rect x="120" y="344" width="1080" height="88" rx="6" fill="#fafaf7"/>
+  <rect x="120" y="344" width="1080" height="88" rx="6" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <rect x="144" y="380" width="28" height="16" rx="2" fill="none" stroke="#0b0b0c" stroke-opacity="0.45" stroke-width="0.8"/>
+  <text x="158" y="392" fill="#0b0b0c" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">02</text>
+  <text x="200" y="394" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif">Remote value</text>
+  <text x="440" y="384" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">NextLaunch → the session snapshot</text>
+  <text x="440" y="404" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">Immediate → the latest fetch</text>
+  <text x="1176" y="393" fill="#8a8a82" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end">if absent or malformed  ↓</text>
+
+  <rect x="120" y="448" width="1080" height="88" rx="6" fill="#fafaf7"/>
+  <rect x="120" y="448" width="1080" height="88" rx="6" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <rect x="144" y="484" width="28" height="16" rx="2" fill="none" stroke="#c62a1b" stroke-opacity="0.45" stroke-width="0.8"/>
+  <text x="158" y="496" fill="#c62a1b" fill-opacity="0.85" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" text-anchor="middle" letter-spacing="0.10em">03</text>
+  <text x="200" y="498" fill="#0b0b0c" font-size="16" font-weight="600" font-family="'Space Grotesk', system-ui, sans-serif">Key default</text>
+  <text x="440" y="497" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">declared with the key, in the owner's data module</text>
+  <text x="1176" y="497" fill="#c62a1b" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace" text-anchor="end">a read never fails</text>
+
+  <line x1="40" y1="636" x2="1240" y2="636" stroke="rgba(11,11,12,0.12)" stroke-width="0.8"/>
+  <text x="40" y="656" fill="#5c5c56" font-size="8" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" letter-spacing="0.14em">LEGEND</text>
+  <rect x="148" y="645" width="14" height="12" rx="2" fill="rgba(11,11,12,0.02)" stroke="rgba(11,11,12,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="170" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">debug builds only</text>
+  <rect x="320" y="645" width="14" height="12" rx="2" fill="#ffffff" stroke="#0b0b0c" stroke-width="1"/>
+  <text x="342" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">may be empty, stale or malformed</text>
+  <rect x="604" y="645" width="14" height="12" rx="2" fill="rgba(198,42,27,0.08)" stroke="#c62a1b" stroke-width="1"/>
+  <text x="626" y="656" fill="#5c5c56" font-size="12" font-family="'JetBrains Mono', ui-monospace, monospace">the floor · always present, always parses</text>
+</svg>
+</div>
+</body>
+</html>

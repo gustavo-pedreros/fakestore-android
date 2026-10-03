@@ -39,6 +39,8 @@ hardening and the larger designs. Each item links to its issue once one exists.
   `:core:common`'s API ([dependency rules](architecture.md#dependency-rules)).
 - **Diagrams.** Render the PNGs automatically, and generate the module graph from the build.
 - **Own API and server-driven UI** ([proposal](proposals/sdui-and-own-api.md)).
+- **Remote config** with keys owned by each context, JSON first and Firebase second
+  ([proposal](proposals/remote-config.md)).
 - **Audit context.** An `:audit` context with a durable trail of domain events, as a generic subdomain
   any `data` module may use. It answers *what happened to my data?* once sync reconciles in the
   background.
