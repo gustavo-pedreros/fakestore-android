@@ -35,7 +35,7 @@ and those edges carry no production code.
 | 1 | `*:domain` is pure Kotlin/JVM: no Android, Retrofit, Room or Compose | Classpath. One leak: `javax.inject` reaches `:catalog:domain` through [`api(libs.javax.inject)`](../core/common/build.gradle.kts), unused there |
 | 2 | `*:data` implements its repository and binds its context's use cases; `*:domain` carries no DI annotation | Hilt validates the bindings at compile time. The annotation rule is review only |
 | 3 | `*:ui` depends on `*:domain`, never on `*:data` | Build files. Nothing fails if one adds the edge |
-| 4 | Contexts integrate in presentation: a `ui` may use the other context's `domain`; `domain` and `data` never reach another context | Build files. Each `data` using only its own DAO is a convention: every DAO in [`:core:database`](../core/database/src/main/kotlin/cl/gus/labs/fakestore/core/database/dao/) is public |
+| 4 | Contexts integrate in presentation: a `ui` may use the other context's `domain`; `domain` and `data` never reach another context | Build files. Each `data` using only its own DAO is a convention: every DAO in [`:core:storage:database`](../core/storage/database/src/main/kotlin/cl/gus/labs/fakestore/core/storage/database/dao/) is public |
 | 5 | `:shared:kernel` holds only what both contexts speak | Review. Today: [`ProductId` and `AppError`](../shared/kernel/src/main/kotlin/cl/gus/labs/fakestore/shared/kernel/) |
 
 No test enforces these rules yet. Architecture tests are on the [roadmap](roadmap.md#now).
@@ -104,7 +104,7 @@ each feature registers its own entries with typed `@Serializable` keys
 | `:shared:kernel` | Kotlin/JVM | Ubiquitous language shared by both contexts |
 | `:core:common` | Kotlin/JVM | `Either`, the `@IoDispatcher` qualifier |
 | `:core:network` | Android lib | Retrofit, OkHttp and kotlinx.serialization setup, `executeCall`, error ACL |
-| `:core:database` | Android lib | The single Room database: entities, DAOs, migrations, exported schemas |
+| `:core:storage:database` | Android lib | The single Room database: entities, DAOs, migrations, exported schemas |
 | `:core:designsystem` | Compose lib | Theme, tokens, atoms, molecules and organisms |
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
 | `:core:testing` | Kotlin/JVM | `MainDispatcherExtension` and the shared test dependencies |

@@ -1,9 +1,9 @@
 package cl.gus.labs.fakestore.favorites.data.datasource
 
 import app.cash.turbine.test
-import cl.gus.labs.fakestore.core.database.dao.FavoriteDao
-import cl.gus.labs.fakestore.core.database.entity.FavoriteEntity
-import cl.gus.labs.fakestore.core.database.entity.SyncState
+import cl.gus.labs.fakestore.core.storage.database.dao.FavoriteDao
+import cl.gus.labs.fakestore.core.storage.database.entity.FavoriteEntity
+import cl.gus.labs.fakestore.core.storage.database.entity.SyncState
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

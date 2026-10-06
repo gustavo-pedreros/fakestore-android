@@ -1,6 +1,6 @@
 package cl.gus.labs.fakestore.catalog.data.datasource
 
-import cl.gus.labs.fakestore.core.database.entity.ProductEntity
+import cl.gus.labs.fakestore.core.storage.database.entity.ProductEntity
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 

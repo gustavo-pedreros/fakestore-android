@@ -1,9 +1,9 @@
 package cl.gus.labs.fakestore.catalog.data.datasource
 
-import cl.gus.labs.fakestore.core.database.dao.ProductDao
-import cl.gus.labs.fakestore.core.database.dao.SyncMetadataDao
-import cl.gus.labs.fakestore.core.database.entity.ProductEntity
-import cl.gus.labs.fakestore.core.database.entity.SyncMetadataEntity
+import cl.gus.labs.fakestore.core.storage.database.dao.ProductDao
+import cl.gus.labs.fakestore.core.storage.database.dao.SyncMetadataDao
+import cl.gus.labs.fakestore.core.storage.database.entity.ProductEntity
+import cl.gus.labs.fakestore.core.storage.database.entity.SyncMetadataEntity
 import javax.inject.Inject
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow

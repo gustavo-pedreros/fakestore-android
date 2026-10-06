@@ -31,9 +31,9 @@ Robolectric and Compose's test rules are JUnit 4; they run through the vintage e
 - **No mocking library.** Most use cases are `fun interface`s, so a double is a lambda.
   `ObserveCategories` is a class, tested over a stub repository. The other doubles are small
   hand-written classes named by role: a `Stub…` returns what the test sets, a `Fake…` works in memory.
-- **Robolectric only where the framework is under test:** `:core:database`, `:core:connectivity` and
-  the screenshot modules. Each `data` module talks to a `LocalDataSource` interface, not a DAO, so its
-  tests are plain JVM. Everything downstream of `NetworkMonitor` uses
+- **Robolectric only where the framework is under test:** `:core:storage:database`,
+  `:core:connectivity` and the screenshot modules. Each `data` module talks to a `LocalDataSource`
+  interface, not a DAO, so its tests are plain JVM. Everything downstream of `NetworkMonitor` uses
   [`StubNetworkMonitor`](../catalog/ui/src/test/kotlin/cl/gus/labs/fakestore/catalog/ui/StubNetworkMonitor.kt).
 - **Dispatchers.** `ConnectivityNetworkMonitor` takes its dispatcher through `@IoDispatcher`, so its tests
   pass an `UnconfinedTestDispatcher` on the `runTest` scheduler and the callback assertions cannot race.
