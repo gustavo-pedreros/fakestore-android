@@ -1,6 +1,8 @@
 package cl.gus.labs.fakestore.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -13,6 +15,7 @@ import cl.gus.labs.fakestore.catalog.ui.navigation.CatalogKey
 import cl.gus.labs.fakestore.catalog.ui.navigation.ProductDetailKey
 import cl.gus.labs.fakestore.catalog.ui.navigation.catalogEntries
 import cl.gus.labs.fakestore.catalog.ui.navigation.catalogNavKeys
+import cl.gus.labs.fakestore.core.designsystem.model.ThemeModeUiModel
 import cl.gus.labs.fakestore.favorites.ui.navigation.FavoritesKey
 import cl.gus.labs.fakestore.favorites.ui.navigation.favoritesEntries
 import cl.gus.labs.fakestore.favorites.ui.navigation.favoritesNavKeys
@@ -29,8 +32,15 @@ private val NavKeyConfiguration = SavedStateConfiguration {
 }
 
 @Composable
-fun FakeStoreNavHost(modifier: Modifier = Modifier) {
+fun FakeStoreNavHost(
+    themeMode: ThemeModeUiModel,
+    onThemeToggleClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val backStack = rememberNavBackStack(NavKeyConfiguration, CatalogKey)
+    // Navigation 3 keeps each entry until the back stack changes; values that change are read through State.
+    val currentThemeMode by rememberUpdatedState(themeMode)
+    val currentOnThemeToggleClick by rememberUpdatedState(onThemeToggleClick)
 
     NavDisplay(
         backStack = backStack,
@@ -45,6 +55,8 @@ fun FakeStoreNavHost(modifier: Modifier = Modifier) {
                 onProductClick = { productId -> backStack.add(ProductDetailKey(productId)) },
                 onBackClick = { backStack.removeLastOrNull() },
                 onFavoritesClick = { backStack.add(FavoritesKey) },
+                themeMode = { currentThemeMode },
+                onThemeToggleClick = { currentOnThemeToggleClick() },
             )
             favoritesEntries(
                 onProductClick = { productId -> backStack.add(ProductDetailKey(productId)) },
