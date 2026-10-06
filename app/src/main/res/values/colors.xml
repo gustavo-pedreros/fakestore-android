@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="fs_window_background">#FAFAF7</color>
+    <!-- The launcher icon's background, so the icon reads on the light splash too. -->
+    <color name="fs_splash_icon_background">#0B0B0C</color>
 </resources>
