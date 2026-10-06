@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":favorites:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
+    implementation(project(":core:storage:keyvalue"))
 
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
