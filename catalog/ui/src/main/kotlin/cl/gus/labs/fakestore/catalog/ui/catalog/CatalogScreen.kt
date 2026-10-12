@@ -33,6 +33,7 @@ import cl.gus.labs.fakestore.core.designsystem.atom.FsButtonVariant
 import cl.gus.labs.fakestore.core.designsystem.icon.FsIcons
 import cl.gus.labs.fakestore.core.designsystem.model.FsUiState
 import cl.gus.labs.fakestore.core.designsystem.model.ProductCardUiModel
+import cl.gus.labs.fakestore.core.designsystem.model.ThemeModeUiModel
 import cl.gus.labs.fakestore.core.designsystem.molecule.CategoryFilterRow
 import cl.gus.labs.fakestore.core.designsystem.molecule.FsListTopBar
 import cl.gus.labs.fakestore.core.designsystem.molecule.FsStateBlock
@@ -48,6 +49,8 @@ import kotlin.time.Instant
 internal fun CatalogScreen(
     onProductClick: (Int) -> Unit,
     onFavoritesClick: () -> Unit,
+    themeMode: ThemeModeUiModel,
+    onThemeToggleClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CatalogViewModel = hiltViewModel(),
 ) {
@@ -66,6 +69,8 @@ internal fun CatalogScreen(
         snackbarHostState = snackbarHostState,
         onProductClick = onProductClick,
         onFavoritesClick = onFavoritesClick,
+        themeMode = themeMode,
+        onThemeToggleClick = onThemeToggleClick,
         onCategorySelect = viewModel::onCategorySelect,
         onFavoriteToggle = viewModel::onFavoriteToggle,
         onRefresh = viewModel::refresh,
@@ -80,6 +85,8 @@ internal fun CatalogScreen(
     snackbarHostState: SnackbarHostState,
     onProductClick: (Int) -> Unit,
     onFavoritesClick: () -> Unit,
+    themeMode: ThemeModeUiModel,
+    onThemeToggleClick: () -> Unit,
     onCategorySelect: (String?) -> Unit,
     onFavoriteToggle: (Int) -> Unit,
     onRefresh: () -> Unit,
@@ -88,7 +95,11 @@ internal fun CatalogScreen(
     val gridState = rememberLazyGridState()
 
     Column(modifier = modifier.fillMaxSize()) {
-        FsListTopBar(onFavoritesClick = onFavoritesClick)
+        FsListTopBar(
+            onFavoritesClick = onFavoritesClick,
+            themeMode = themeMode,
+            onThemeToggleClick = onThemeToggleClick,
+        )
         FsStatusBanner(
             visible = state.isStale,
             message = staleMessage(state.lastSyncedAt),
@@ -290,6 +301,8 @@ private fun CatalogScreenPreview(state: CatalogUiState) {
                 snackbarHostState = remember { SnackbarHostState() },
                 onProductClick = {},
                 onFavoritesClick = {},
+                themeMode = ThemeModeUiModel.System,
+                onThemeToggleClick = {},
                 onCategorySelect = {},
                 onFavoriteToggle = {},
                 onRefresh = {},

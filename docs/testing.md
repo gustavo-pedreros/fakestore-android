@@ -16,7 +16,9 @@ architecture tests and instrumented tests.
 | Network | OkHttp, Retrofit and JSON wiring; the empty-body converter; the error ACL | JUnit 5, MockWebServer | ✅ |
 | Persistence | DAO behavior, including the favorite toggle transaction | Robolectric | ✅ |
 | Connectivity | The `ConnectivityManager` callback flow: several networks, captive portals, unregistration | Robolectric, Turbine | ✅ |
+| Key-value storage | The DataStore adapter on a real file: each value type, transactions, concurrent updates, read and write failures, a corrupted file, one store per file | JUnit 5, Turbine | ✅ |
 | Presentation | Every ViewModel state, with virtual time | JUnit 5, Turbine, `kotlinx-coroutines-test` | ✅ |
+| App shell | The theme mode over a fake store, the splash condition and the toggle, two fast taps included | JUnit 5 | ✅ |
 | Screens | Every preview of the feature screens, light and dark | Robolectric, Roborazzi | ✅ |
 | Design system | Every preview, light and dark | Robolectric, Roborazzi, ComposablePreviewScanner | ✅ |
 | Architecture | The [dependency rules](architecture.md#dependency-rules) as tests | — | 📋 [Now](roadmap.md#now) |
@@ -31,10 +33,14 @@ Robolectric and Compose's test rules are JUnit 4; they run through the vintage e
 - **No mocking library.** Most use cases are `fun interface`s, so a double is a lambda.
   `ObserveCategories` is a class, tested over a stub repository. The other doubles are small
   hand-written classes named by role: a `Stub…` returns what the test sets, a `Fake…` works in memory.
-- **Robolectric only where the framework is under test:** `:core:database`, `:core:connectivity` and
-  the screenshot modules. Each `data` module talks to a `LocalDataSource` interface, not a DAO, so its
-  tests are plain JVM. Everything downstream of `NetworkMonitor` uses
+- **Robolectric only where the framework is under test:** `:core:storage:database`,
+  `:core:connectivity` and the screenshot modules. Each `data` module talks to a `LocalDataSource`
+  interface, not a DAO, so its tests are plain JVM. Everything downstream of `NetworkMonitor` uses
   [`StubNetworkMonitor`](../catalog/ui/src/test/kotlin/cl/gus/labs/fakestore/catalog/ui/StubNetworkMonitor.kt).
+- **DataStore needs no Robolectric:** `:core:storage:keyvalue` tests the real one on a temporary file,
+  and a learning test pins its check that one file has one store. On Windows those tests fail on a
+  second write: without Robolectric, DataStore replaces the file with `renameTo`, which Windows refuses.
+  CI and WSL run them.
 - **Dispatchers.** `ConnectivityNetworkMonitor` takes its dispatcher through `@IoDispatcher`, so its tests
   pass an `UnconfinedTestDispatcher` on the `runTest` scheduler and the callback assertions cannot race.
   `executeCall` takes a dispatcher too, but defaults to `Dispatchers.IO` and production code uses the

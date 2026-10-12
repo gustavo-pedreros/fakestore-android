@@ -9,7 +9,7 @@ depends on the cache, not on the network.
 ![Catalog data flow: the network writes to Room through the data layer, and the UI reads from Room through a Flow. A refresh triggered by the screen goes back to the data layer, never straight to the screen.](diagrams/02-single-source-of-truth.png)
 
 - The UI observes a `Flow` from Room
-  ([`ProductDao.kt`](../core/database/src/main/kotlin/cl/gus/labs/fakestore/core/database/dao/ProductDao.kt)).
+  ([`ProductDao.kt`](../core/storage/database/src/main/kotlin/cl/gus/labs/fakestore/core/storage/database/dao/ProductDao.kt)).
 - A refresh fetches, maps and writes to Room; it returns only success or an `AppError`
   ([`CatalogRepositoryImpl.kt`](../catalog/data/src/main/kotlin/cl/gus/labs/fakestore/catalog/data/CatalogRepositoryImpl.kt)).
 - There is no offline branch anywhere in the code. Offline, the read path keeps working and the write

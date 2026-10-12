@@ -73,3 +73,31 @@ is marked as such, not deleted.
 - **Paid.** The join happens in memory, in each ViewModel.
 - **Otherwise.** Once the catalog is paginated, the in-memory join stops being free; that is the
   trigger to revisit, not table size.
+
+## 10. Storage is grouped by model, behind an own port where the concept is small
+
+- **Gained.** `:core:storage` holds one module per data model: Room for rows, `keyvalue` for small
+  values. A key-value store is small and universal, so it sits behind a port this repo owns:
+  `KeyValueStore`, with typed keys. Its names survive a library change and map to other platforms
+  (`UserDefaults` on iOS), and DataStore stays off its consumers' classpath. Each owner opens its own
+  store, a file named after it, and keeps its keys private, so two owners cannot collide.
+- **Paid.** An own API: five value types and no codecs, so an owner maps its own format (the theme
+  stores the enum name). Changing a key's type needs a new name, because a value of another type reads
+  as null. Moving Room renamed its package and its schema folder.
+- **Otherwise.** Room and Retrofit stay handed over: their API is the value, and a port would copy it.
+  With several owners, a schema per store and runtime checks can come without an API change. A second
+  adapter, like Now in Android's `sync:work`, would split port and adapter into two modules. With KMP,
+  the port moves to `commonMain` as it is.
+
+## 11. The theme is app-shell state, kept in a key-value store
+
+- **Gained.** One owner: `:app` reads the stored mode, applies it and handles the toggle. The catalog
+  only hosts the button and gets the mode as a value; nothing depends on `:app`, so no context can
+  reach the preference. Each toggle reads and writes in one transaction, so two fast taps cannot lose
+  a step (as in decision 7).
+- **Paid.** The splash and the window background are XML resources that follow the system theme, so a
+  cold start shows the system's colors for an instant when the stored mode differs. A splash-screen
+  dependency.
+- **Otherwise.** With a minimum SDK of 31, the platform's per-app night mode applies the choice to the
+  whole configuration, splash included. With a settings screen, a preferences module that owns its
+  store.

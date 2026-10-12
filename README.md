@@ -27,7 +27,7 @@ the single source of truth, and a build that enforces the dependency rules.
 |---|---|---|
 | Bounded contexts as module groups | [`catalog/`](catalog/), [`favorites/`](favorites/), [`shared/kernel/`](shared/kernel/) | [Architecture](docs/architecture.md#contexts-and-layers) |
 | Dependency rule by classpath: `domain` is pure Kotlin/JVM | [`JvmLibraryConventionPlugin.kt`](build-logic/convention/src/main/kotlin/cl/gus/labs/fakestore/convention/JvmLibraryConventionPlugin.kt) | [Architecture](docs/architecture.md#dependency-rules) |
-| Offline-first with Room as the single source of truth | [`CatalogRepositoryImpl.kt`](catalog/data/src/main/kotlin/cl/gus/labs/fakestore/catalog/data/CatalogRepositoryImpl.kt), [`ProductDao.kt`](core/database/src/main/kotlin/cl/gus/labs/fakestore/core/database/dao/ProductDao.kt) | [Offline-first](docs/offline-first.md) |
+| Offline-first with Room as the single source of truth | [`CatalogRepositoryImpl.kt`](catalog/data/src/main/kotlin/cl/gus/labs/fakestore/catalog/data/CatalogRepositoryImpl.kt), [`ProductDao.kt`](core/storage/database/src/main/kotlin/cl/gus/labs/fakestore/core/storage/database/dao/ProductDao.kt) | [Offline-first](docs/offline-first.md) |
 | The cache decides the error; retry on reconnect | [`CatalogViewModel.kt`](catalog/ui/src/main/kotlin/cl/gus/labs/fakestore/catalog/ui/catalog/CatalogViewModel.kt), [`ConnectivityNetworkMonitor.kt`](core/connectivity/src/main/kotlin/cl/gus/labs/fakestore/core/connectivity/ConnectivityNetworkMonitor.kt) | [Offline-first](docs/offline-first.md#the-cache-decides-whether-an-error-blocks) |
 | Atomic design as a module | [`core/designsystem/`](core/designsystem/) | [Design system](docs/design-system.md) |
 | Navigation 3 with entries owned by each feature | [`CatalogNavigation.kt`](catalog/ui/src/main/kotlin/cl/gus/labs/fakestore/catalog/ui/navigation/CatalogNavigation.kt), [`FakeStoreNavHost.kt`](app/src/main/java/cl/gus/labs/fakestore/navigation/FakeStoreNavHost.kt) | [Architecture](docs/architecture.md#navigation) |
@@ -43,7 +43,7 @@ the single source of truth, and a build that enforces the dependency rules.
 - **Contexts meet only in presentation:** a `ui` may use the other context's `domain`; nothing below
   crosses.
 
-![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core.](docs/diagrams/01-module-graph.png)
+![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core, where :core:storage holds Room for the data modules and a key-value store for :app.](docs/diagrams/01-module-graph.png)
 
 ## Testing at a glance
 
@@ -62,7 +62,7 @@ Coverage on `main` · domain ![domain coverage](https://codecov.io/gh/gustavo-pe
 | UI | Jetpack Compose, Material 3, Navigation 3 |
 | DI | Hilt with KSP |
 | Network | Retrofit, OkHttp, kotlinx.serialization |
-| Persistence | Room, with exported schemas |
+| Persistence | Room, with exported schemas; DataStore for small values |
 | Images | Coil |
 | Tests | JUnit 5, Turbine, MockWebServer, Robolectric, Roborazzi |
 | Build and CI | Convention plugins, version catalog, Kover, Codecov, GitHub Actions |
@@ -77,8 +77,9 @@ Requires JDK 21 and an Android SDK with its licenses accepted, through `ANDROID_
 ./gradlew :app:installDebug
 ```
 
-On Windows, use `gradlew.bat`. Every green CI run also publishes the debug APK, `fakestore-debug-apk`,
-on the [workflow page](https://github.com/gustavo-pedreros/fakestore-android/actions/workflows/build.yml).
+On Windows, use `gradlew.bat`, though the DataStore tests pass only on Linux or WSL
+([testing](docs/testing.md#test-doubles)). Every green CI run also publishes the debug APK,
+`fakestore-debug-apk`, on the [workflow page](https://github.com/gustavo-pedreros/fakestore-android/actions/workflows/build.yml).
 The first launch needs a network connection: there is no mock backend.
 
 ## Docs

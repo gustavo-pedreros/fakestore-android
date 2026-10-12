@@ -34,6 +34,12 @@ object FsIcons {
     val Star: Painter
         @Composable get() = painterResource(R.drawable.ic_fs_star)
 
+    val Sun: Painter
+        @Composable get() = painterResource(R.drawable.ic_fs_sun)
+
+    val ThemeAuto: Painter
+        @Composable get() = painterResource(R.drawable.ic_fs_theme_auto)
+
     val WifiOff: Painter
         @Composable get() = painterResource(R.drawable.ic_fs_wifi_off)
 }

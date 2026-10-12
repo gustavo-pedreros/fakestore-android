@@ -14,9 +14,18 @@ differently. The reasoning behind each departure lives in [decisions](decisions.
   - Its rule "a feature's `impl` depends only on another feature's `api`" is this repo's "a `ui` uses
     only the other context's `domain`" ([dependency rules](architecture.md#dependency-rules)).
   - Docs the build generates: its module graph in each README, the [UI gallery](ui-gallery.md) here.
+  - The theme as app-wide state, read by an activity ViewModel that holds the splash screen until it
+    loads ([decision 11](decisions.md#11-the-theme-is-app-shell-state-kept-in-a-key-value-store)).
 - **Where I depart:**
   - Modules group by bounded context, each with `ui`, `domain` and `data`; there, by kind (`core`,
     `feature`).
+  - Storage by model, with typed keys and one store per owner
+    ([decision 10](decisions.md#10-storage-is-grouped-by-model-behind-an-own-port-where-the-concept-is-small));
+    there, `core:datastore` keeps one Proto `UserPreferences` for the whole app, set from a settings
+    dialog.
+  - One module per capability, port and adapter together, as in `:core:connectivity`; there,
+    `core:data` gathers the repositories with `NetworkMonitor` and `TimeZoneMonitor`, and only
+    `SyncManager` has its adapter elsewhere, in `sync:work`.
   - `domain` is mandatory and pure Kotlin/JVM, and ViewModels reach data only through use cases;
     there, ViewModels also read repositories directly.
   - Coverage with Kover and a Codecov ratchet; there, JaCoCo.
@@ -39,7 +48,9 @@ Robert C. Martin, *Clean Architecture* (2017).
 
 - **Here:** the dependency rule, `ui → domain ← data`, enforced by the classpath rather than by review
   ([contexts and layers](architecture.md#contexts-and-layers)). Use cases are each context's boundary,
-  and neither Retrofit nor Room reaches a `domain`.
+  and neither Retrofit nor Room reaches a `domain`. Small, universal concepts sit behind ports this
+  repo owns, `NetworkMonitor` and `KeyValueStore`, so a library change stays inside one module
+  ([decision 10](decisions.md#10-storage-is-grouped-by-model-behind-an-own-port-where-the-concept-is-small)).
 - **Where I depart:** both contexts share one Room database, with separate DAOs
   ([decision 4](decisions.md#4-one-room-database-separate-daos)).
 
@@ -101,7 +112,7 @@ Neal Ford, Rebecca Parsons and Patrick Kua, *Building Evolutionary Architectures
   - Codecov's ratchet fails when coverage drops against the base branch ([coverage](testing.md#coverage)).
   - lychee fails on a broken link between docs, and a line budget keeps the README a landing page.
 - **Where I depart:**
-  - Dependency rules 2 to 5 still rely on build files or review; architecture tests are on the
+  - Dependency rules 2 to 6 still rely on build files or review; architecture tests are on the
     [roadmap](roadmap.md#now).
   - Only structure, pixels and docs are guarded. Runtime properties such as startup time get no
     fitness function until benchmarks arrive ([roadmap](roadmap.md#later)).

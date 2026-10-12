@@ -10,7 +10,7 @@ android {
 
 dependencies {
     implementation(project(":favorites:domain"))
-    implementation(project(":core:database"))
+    implementation(project(":core:storage:database"))
 
     testImplementation(libs.turbine)
 }

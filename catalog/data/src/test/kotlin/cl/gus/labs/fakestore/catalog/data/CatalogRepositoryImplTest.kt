@@ -8,7 +8,7 @@ import cl.gus.labs.fakestore.catalog.domain.model.Category
 import cl.gus.labs.fakestore.catalog.domain.model.Product
 import cl.gus.labs.fakestore.catalog.domain.model.Rating
 import cl.gus.labs.fakestore.core.common.result.Either
-import cl.gus.labs.fakestore.core.database.entity.ProductEntity
+import cl.gus.labs.fakestore.core.storage.database.entity.ProductEntity
 import cl.gus.labs.fakestore.core.testing.FixedClock
 import cl.gus.labs.fakestore.shared.kernel.AppError
 import cl.gus.labs.fakestore.shared.kernel.ProductId
