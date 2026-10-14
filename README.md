@@ -77,8 +77,7 @@ Requires JDK 21 and an Android SDK with its licenses accepted, through `ANDROID_
 ./gradlew :app:installDebug
 ```
 
-On Windows, use `gradlew.bat`, though the DataStore tests pass only on Linux or WSL
-([testing](docs/testing.md#test-doubles)). Every green CI run also publishes the debug APK,
+On Windows, use `gradlew.bat`. Every green CI run also publishes the debug APK,
 `fakestore-debug-apk`, on the [workflow page](https://github.com/gustavo-pedreros/fakestore-android/actions/workflows/build.yml).
 The first launch needs a network connection: there is no mock backend.
 
