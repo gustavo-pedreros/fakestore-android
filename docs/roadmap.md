@@ -5,8 +5,7 @@ hardening and the larger designs. Each item links to its issue once one exists.
 
 ## Now
 
-- **Docs.** Topic docs, new diagrams (context map, testing by layer, a vertical slice), the README as a
-  landing page, influences, and a UI gallery generated from the screenshot baselines.
+- **Docs.** A diagram of one vertical slice, from the screen through the domain to Room and the API.
 - **Continuous delivery.** R8 with keep rules, signing through secrets, a release per tag with the APK
   on GitHub Releases, a changelog, and a `versionCode` derived from the tag or the run.
 - **Architecture tests.** Module rules through a module-graph assertion in `check`; code rules with
