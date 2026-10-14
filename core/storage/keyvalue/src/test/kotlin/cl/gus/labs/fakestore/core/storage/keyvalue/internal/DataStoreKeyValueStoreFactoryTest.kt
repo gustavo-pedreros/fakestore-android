@@ -7,32 +7,32 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertInstanceOf
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.io.TempDir
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Rule
+import org.junit.Test
+import org.junit.rules.TemporaryFolder
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 private val TokenKey = stringKey("token")
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@DisplayName("DataStoreKeyValueStoreFactory")
+@RunWith(RobolectricTestRunner::class)
 class DataStoreKeyValueStoreFactoryTest {
 
-    @TempDir
-    lateinit var tmpDir: File
+    @get:Rule
+    val tmpDir = TemporaryFolder()
 
     private val scope = TestScope(UnconfinedTestDispatcher())
 
     private fun TestScope.factory() = DataStoreKeyValueStoreFactory(backgroundScope) { name ->
-        File(tmpDir, "$name.preferences_pb")
+        File(tmpDir.root, "$name.preferences_pb")
     }
 
     @Test
-    @DisplayName("keeps each name in its own file")
-    fun keepsNamesApart() = scope.runTest {
+    fun `create keeps each name in its own file`() = scope.runTest {
         val factory = factory()
         val app = factory.create("app")
         val auth = factory.create("auth")
@@ -42,14 +42,13 @@ class DataStoreKeyValueStoreFactoryTest {
 
         assertEquals("a", app.observe(TokenKey).first())
         assertEquals("b", auth.observe(TokenKey).first())
-        assertTrue(File(tmpDir, "app.preferences_pb").isFile)
-        assertTrue(File(tmpDir, "auth.preferences_pb").isFile)
+        assertTrue(File(tmpDir.root, "app.preferences_pb").isFile)
+        assertTrue(File(tmpDir.root, "auth.preferences_pb").isFile)
     }
 
     @Test
-    @DisplayName("replaces a corrupted file, which can then be written")
-    fun replacesACorruptedFile() = scope.runTest {
-        File(tmpDir, "app.preferences_pb").writeText("not a proto")
+    fun `create replaces a corrupted file, which can then be written`() = scope.runTest {
+        File(tmpDir.root, "app.preferences_pb").writeText("not a proto")
         val store = factory().create("app")
 
         assertNull(store.observe(TokenKey).first())
@@ -60,14 +59,13 @@ class DataStoreKeyValueStoreFactoryTest {
 
     // Learning test: one owner per store leans on this DataStore check.
     @Test
-    @DisplayName("fails the first use of a second store on the same name")
-    fun secondStoreOnTheSameNameFails() = scope.runTest {
+    fun `a second store on the same name fails on first use`() = scope.runTest {
         val factory = factory()
         factory.create("app").observe(TokenKey).first()
 
         val thrown = runCatching { factory.create("app").observe(TokenKey).first() }.exceptionOrNull()
 
-        assertInstanceOf(IllegalStateException::class.java, thrown)
-        assertTrue(thrown?.message.orEmpty().contains("multiple DataStores"), thrown?.message)
+        assertTrue("$thrown", thrown is IllegalStateException)
+        assertTrue(thrown?.message, thrown?.message.orEmpty().contains("multiple DataStores"))
     }
 }
