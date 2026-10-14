@@ -26,7 +26,11 @@ architecture tests and instrumented tests.
 | API contract | A scheduled smoke test that decodes the real API | — | 📋 [Next](roadmap.md#next) |
 | Accessibility | Accessibility checks on the screenshots | — | 📋 [Next](roadmap.md#next) |
 
-Robolectric and Compose's test rules are JUnit 4; they run through the vintage engine next to JUnit 5.
+Robolectric and Compose's test rules are JUnit 4; `fakestore.android.robolectric` runs them through the
+vintage engine next to JUnit 5. Every Robolectric test runs at `robolectricSdk` from the version catalog,
+through [`RobolectricDefaults`](../core/testing/src/main/kotlin/cl/gus/labs/fakestore/core/testing/RobolectricDefaults.kt).
+Without the plugin a Robolectric test fails, instead of running at Robolectric's oldest SDK, 23, below
+`minSdk`.
 
 ## Test doubles
 
@@ -38,9 +42,8 @@ Robolectric and Compose's test rules are JUnit 4; they run through the vintage e
   interface, not a DAO, so its tests are plain JVM. Everything downstream of `NetworkMonitor` uses
   [`StubNetworkMonitor`](../catalog/ui/src/test/kotlin/cl/gus/labs/fakestore/catalog/ui/StubNetworkMonitor.kt).
 - **DataStore on Robolectric:** `:core:storage:keyvalue` tests the real one on a temporary file, and a
-  learning test pins its check that one file has one store. Its `robolectric.properties` pins SDK 36.
-  Robolectric's default here is 23, where DataStore replaces the file with `renameTo`, which Windows
-  refuses.
+  learning test pins its check that one file has one store. From SDK 26, as on a device, DataStore
+  replaces the file with `Files.move`; below, with `renameTo`, which Windows refuses.
 - **Dispatchers.** `ConnectivityNetworkMonitor` takes its dispatcher through `@IoDispatcher`, so its tests
   pass an `UnconfinedTestDispatcher` on the `runTest` scheduler and the callback assertions cannot race.
   `executeCall` takes a dispatcher too, but defaults to `Dispatchers.IO` and production code uses the
@@ -56,8 +59,9 @@ Kover sees the run.
 
 - **Where.** `:core:designsystem`, `:catalog:ui` and `:favorites:ui`. Each has a `PreviewScreenshotTest`
   that finds its previews with ComposablePreviewScanner, and baselines under `src/test/screenshots/`.
-- **Pinned rendering.** SDK and screen size come from `src/test/resources/robolectric.properties`. The
-  test JVM runs in UTC, so dates render the same on every machine.
+- **Pinned rendering.** The SDK comes from `robolectricSdk`, and the screen size from
+  `src/test/resources/robolectric.properties`. The test JVM runs in UTC, so dates render the same on
+  every machine.
 - **When they compare.** Only with a Roborazzi mode on. A plain `./gradlew build` skips them; CI adds
   `-Proborazzi.test.verify=true` and uploads the `*_actual.png` and `*_compare.png` diffs when one
   fails.

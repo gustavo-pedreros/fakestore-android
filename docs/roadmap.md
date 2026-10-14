@@ -32,8 +32,7 @@ hardening and the larger designs. Each item links to its issue once one exists.
 - **Observability.** Debug tooling (Timber, StrictMode, LeakCanary), the cause kept in
   `AppError.Unknown`, and crash reporting.
 - **Security.** Real backup rules or `allowBackup=false`, and no cleartext traffic.
-- **Build hygiene.** Robolectric setup in a convention plugin, the configuration cache in CI, test
-  reports on pull requests, `.gitattributes`.
+- **Build hygiene.** The configuration cache in CI, test reports on pull requests, `.gitattributes`.
 - **Code and docs aligned.** Inject the dispatcher into `executeCall`, and keep `javax.inject` out of
   `:core:common`'s API ([dependency rules](architecture.md#dependency-rules)).
 - **Diagrams.** Render the PNGs automatically, and generate the module graph from the build.
