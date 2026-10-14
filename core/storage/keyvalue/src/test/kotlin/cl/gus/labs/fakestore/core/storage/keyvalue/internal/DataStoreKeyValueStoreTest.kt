@@ -46,7 +46,7 @@ class DataStoreKeyValueStoreTest {
 
     private val scope = TestScope(UnconfinedTestDispatcher())
 
-    // On SDK 26+ (robolectric.properties) DataStore replaces the file as on a device, Windows included.
+    // On SDK 26+ (fakestore.android.robolectric) DataStore replaces the file as on a device, Windows included.
     private fun TestScope.fileStore() = DataStoreKeyValueStore(
         PreferenceDataStoreFactory.create(scope = backgroundScope) {
             File(tmpDir.root, "test.preferences_pb")

@@ -124,7 +124,8 @@ A module's `build.gradle.kts` is a plugin list and its dependencies. The shared 
 | `fakestore.android.library` | AGP library with the shared Kotlin/Android settings, and Kover |
 | `fakestore.android.application` | AGP application with the shared Kotlin/Android settings, `targetSdk`, and Kover |
 | `fakestore.android.compose` | The Compose compiler; opt-in compiler reports with `-PcomposeCompilerReports` |
-| `fakestore.android.compose.testing` | Robolectric and Roborazzi screenshot tests on the JVM ([testing](testing.md#screenshots)) |
+| `fakestore.android.robolectric` | Robolectric through JUnit 4's vintage engine, at the catalog's `robolectricSdk` ([testing](testing.md#strategy-by-layer)) |
+| `fakestore.android.compose.testing` | Roborazzi screenshot tests on the JVM, over `fakestore.android.robolectric` ([testing](testing.md#screenshots)) |
 | `fakestore.android.hilt` | KSP and Hilt |
 | `fakestore.android.room` | KSP and Room, with schemas exported to `schemas/` |
 | `fakestore.testing` | JUnit 5, the shared test libraries and `:core:testing` |
