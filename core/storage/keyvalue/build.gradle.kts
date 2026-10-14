@@ -2,6 +2,7 @@ plugins {
     id("fakestore.android.library")
     id("fakestore.android.hilt")
     id("fakestore.testing")
+    id("fakestore.android.robolectric")
 }
 
 android {
@@ -13,8 +14,5 @@ dependencies {
     implementation(project(":core:common"))
     implementation(libs.androidx.datastore.preferences)
 
-    testImplementation(libs.junit4)
-    testImplementation(libs.robolectric)
     testImplementation(libs.turbine)
-    testRuntimeOnly(libs.junit.vintage.engine)
 }

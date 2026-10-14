@@ -17,15 +17,15 @@ import org.gradle.kotlin.dsl.withType
  * Roborazzi records and compares the images. It all runs in `testDebugUnitTest`, so it needs no
  * device and Kover measures it.
  *
- * Robolectric, Compose's test rules and Roborazzi are JUnit 4, so the vintage engine goes next to the
- * JUnit 5 setup of `fakestore.testing`, which this plugin applies.
+ * Compose's test rules and Roborazzi are JUnit 4 like Robolectric, so this plugin applies
+ * `fakestore.android.robolectric`, which brings the vintage engine and the SDK.
  *
  * Roborazzi captures nothing unless a mode is on (`-Proborazzi.test.verify=true`, or one of its
  * `record`/`verify`/`compare` tasks): a plain `test` run passes over every screenshot.
  */
 class AndroidComposeTestingConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
-        pluginManager.apply(TestingConventionPlugin::class.java)
+        pluginManager.apply(AndroidRobolectricConventionPlugin::class.java)
         pluginManager.apply("io.github.takahirom.roborazzi")
 
         pluginManager.withPlugin("com.android.application") {
@@ -52,12 +52,9 @@ class AndroidComposeTestingConventionPlugin : Plugin<Project> {
         }
 
         dependencies {
-            add("testImplementation", libs.library("junit4"))
-            add("testImplementation", libs.library("robolectric"))
             add("testImplementation", platform(libs.library("androidx-compose-bom")))
             add("testImplementation", libs.library("androidx-compose-ui-test-junit4"))
             add("testImplementation", libs.bundle("test-screenshot"))
-            add("testRuntimeOnly", libs.library("junit-vintage-engine"))
             add("debugImplementation", libs.library("androidx-compose-ui-test-manifest"))
         }
     }

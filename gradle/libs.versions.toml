@@ -5,6 +5,8 @@ jvmTarget = "21"
 compileSdk = "37"
 minSdk = "26"
 targetSdk = "37"
+# The newest SDK Robolectric supports; at least minSdk.
+robolectricSdk = "36"
 
 coreKtx = "1.19.0"
 coreSplashscreen = "1.2.0"
@@ -86,6 +88,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+robolectric-annotations = { group = "org.robolectric", name = "annotations", version.ref = "robolectric" }
+robolectric-pluginapi = { group = "org.robolectric", name = "pluginapi", version.ref = "robolectric" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Screenshot tests

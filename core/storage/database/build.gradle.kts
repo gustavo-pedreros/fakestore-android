@@ -3,14 +3,9 @@ plugins {
     id("fakestore.android.room")
     id("fakestore.android.hilt")
     id("fakestore.testing")
+    id("fakestore.android.robolectric")
 }
 
 android {
     namespace = "cl.gus.labs.fakestore.core.storage.database"
-}
-
-dependencies {
-    testImplementation(libs.junit4)
-    testImplementation(libs.robolectric)
-    testRuntimeOnly(libs.junit.vintage.engine)
 }

@@ -42,6 +42,10 @@ gradlePlugin {
             id = "fakestore.android.compose.testing"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidComposeTestingConventionPlugin"
         }
+        register("androidRobolectric") {
+            id = "fakestore.android.robolectric"
+            implementationClass = "cl.gus.labs.fakestore.convention.AndroidRobolectricConventionPlugin"
+        }
         register("androidHilt") {
             id = "fakestore.android.hilt"
             implementationClass = "cl.gus.labs.fakestore.convention.AndroidHiltConventionPlugin"
