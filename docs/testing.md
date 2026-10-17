@@ -16,7 +16,9 @@ architecture tests and instrumented tests.
 | Network | OkHttp, Retrofit and JSON wiring; the empty-body converter; the error ACL | JUnit 5, MockWebServer | ✅ |
 | Persistence | DAO behavior, including the favorite toggle transaction | Robolectric | ✅ |
 | Connectivity | The `ConnectivityManager` callback flow: several networks, captive portals, unregistration | Robolectric, Turbine | ✅ |
+| Key-value storage | The DataStore adapter on a real file: each value type, transactions, concurrent updates, read and write failures, a corrupted file, one store per file | Robolectric, Turbine | ✅ |
 | Presentation | Every ViewModel state, with virtual time | JUnit 5, Turbine, `kotlinx-coroutines-test` | ✅ |
+| App shell | The theme mode over a fake store, the splash condition and the toggle, two fast taps included | JUnit 5 | ✅ |
 | Screens | Every preview of the feature screens, light and dark | Robolectric, Roborazzi | ✅ |
 | Design system | Every preview, light and dark | Robolectric, Roborazzi, ComposablePreviewScanner | ✅ |
 | Architecture | The [dependency rules](architecture.md#dependency-rules) as tests | — | 📋 [Now](roadmap.md#now) |
@@ -24,17 +26,24 @@ architecture tests and instrumented tests.
 | API contract | A scheduled smoke test that decodes the real API | — | 📋 [Next](roadmap.md#next) |
 | Accessibility | Accessibility checks on the screenshots | — | 📋 [Next](roadmap.md#next) |
 
-Robolectric and Compose's test rules are JUnit 4; they run through the vintage engine next to JUnit 5.
+Robolectric and Compose's test rules are JUnit 4; `fakestore.android.robolectric` runs them through the
+vintage engine next to JUnit 5. Every Robolectric test runs at `robolectricSdk` from the version catalog,
+through [`RobolectricDefaults`](../core/testing/src/main/kotlin/cl/gus/labs/fakestore/core/testing/RobolectricDefaults.kt).
+Without the plugin a Robolectric test fails, instead of running at Robolectric's oldest SDK, 23, below
+`minSdk`.
 
 ## Test doubles
 
 - **No mocking library.** Most use cases are `fun interface`s, so a double is a lambda.
-  `ObserveCategories` is a class, tested over a fake repository. Fakes with state are small
-  hand-written classes.
-- **Robolectric only where the framework is under test:** `:core:database`, `:core:connectivity` and
-  the screenshot modules. Each `data` module talks to a `LocalDataSource` interface, not a DAO, so its
-  tests are plain JVM. Everything downstream of `NetworkMonitor` uses
-  [`FakeNetworkMonitor`](../catalog/ui/src/test/kotlin/cl/gus/labs/fakestore/catalog/ui/FakeNetworkMonitor.kt).
+  `ObserveCategories` is a class, tested over a stub repository. The other doubles are small
+  hand-written classes named by role: a `Stub…` returns what the test sets, a `Fake…` works in memory.
+- **Robolectric only where the framework is under test:** `:core:storage:*`,
+  `:core:connectivity` and the screenshot modules. Each `data` module talks to a `LocalDataSource`
+  interface, not a DAO, so its tests are plain JVM. Everything downstream of `NetworkMonitor` uses
+  [`StubNetworkMonitor`](../catalog/ui/src/test/kotlin/cl/gus/labs/fakestore/catalog/ui/StubNetworkMonitor.kt).
+- **DataStore on Robolectric:** `:core:storage:keyvalue` tests the real one on a temporary file, and a
+  learning test pins its check that one file has one store. From SDK 26, as on a device, DataStore
+  replaces the file with `Files.move`; below, with `renameTo`, which Windows refuses.
 - **Dispatchers.** `ConnectivityNetworkMonitor` takes its dispatcher through `@IoDispatcher`, so its tests
   pass an `UnconfinedTestDispatcher` on the `runTest` scheduler and the callback assertions cannot race.
   `executeCall` takes a dispatcher too, but defaults to `Dispatchers.IO` and production code uses the
@@ -50,8 +59,9 @@ Kover sees the run.
 
 - **Where.** `:core:designsystem`, `:catalog:ui` and `:favorites:ui`. Each has a `PreviewScreenshotTest`
   that finds its previews with ComposablePreviewScanner, and baselines under `src/test/screenshots/`.
-- **Pinned rendering.** SDK and screen size come from `src/test/resources/robolectric.properties`. The
-  test JVM runs in UTC, so dates render the same on every machine.
+- **Pinned rendering.** The SDK comes from `robolectricSdk`, and the screen size from
+  `src/test/resources/robolectric.properties`. The test JVM runs in UTC, so dates render the same on
+  every machine.
 - **When they compare.** Only with a Roborazzi mode on. A plain `./gradlew build` skips them; CI adds
   `-Proborazzi.test.verify=true` and uploads the `*_actual.png` and `*_compare.png` diffs when one
   fails.

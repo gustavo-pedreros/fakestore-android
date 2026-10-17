@@ -11,8 +11,8 @@ android {
 
 dependencies {
     implementation(project(":catalog:domain"))
-    implementation(project(":core:database"))
     implementation(project(":core:network"))
+    implementation(project(":core:storage:database"))
 
     implementation(platform(libs.retrofit.bom))
     implementation(libs.retrofit)

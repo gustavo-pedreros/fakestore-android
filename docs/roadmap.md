@@ -5,8 +5,7 @@ hardening and the larger designs. Each item links to its issue once one exists.
 
 ## Now
 
-- **Docs.** Topic docs, new diagrams (context map, testing by layer, a vertical slice), the README as a
-  landing page, influences, and a UI gallery generated from the screenshot baselines.
+- **Docs.** A diagram of one vertical slice, from the screen through the domain to Room and the API.
 - **Continuous delivery.** R8 with keep rules, signing through secrets, a release per tag with the APK
   on GitHub Releases, a changelog, and a `versionCode` derived from the tag or the run.
 - **Architecture tests.** Module rules through a module-graph assertion in `check`; code rules with
@@ -24,7 +23,6 @@ hardening and the larger designs. Each item links to its issue once one exists.
   screenshots.
 - **Localization.** English by default with `values-es`; price and rating formatted by locale.
 - **State.** Keep the category filter across process death, and restore edge-to-edge.
-- **Theme toggle.** Wire the moon slot the top bar already has.
 - **Screenshots recorded in CI**, with the diffs on the pull request.
 - **Static analysis.** ktlint and detekt with baselines, and Lint with warnings as errors.
 
@@ -34,8 +32,7 @@ hardening and the larger designs. Each item links to its issue once one exists.
 - **Observability.** Debug tooling (Timber, StrictMode, LeakCanary), the cause kept in
   `AppError.Unknown`, and crash reporting.
 - **Security.** Real backup rules or `allowBackup=false`, and no cleartext traffic.
-- **Build hygiene.** Robolectric setup in a convention plugin, the configuration cache in CI, test
-  reports on pull requests, `.gitattributes`.
+- **Build hygiene.** The configuration cache in CI, test reports on pull requests, `.gitattributes`.
 - **Code and docs aligned.** Inject the dispatcher into `executeCall`, and keep `javax.inject` out of
   `:core:common`'s API ([dependency rules](architecture.md#dependency-rules)).
 - **Diagrams.** Render the PNGs automatically, and generate the module graph from the build.

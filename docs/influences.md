@@ -14,9 +14,18 @@ differently. The reasoning behind each departure lives in [decisions](decisions.
   - Its rule "a feature's `impl` depends only on another feature's `api`" is this repo's "a `ui` uses
     only the other context's `domain`" ([dependency rules](architecture.md#dependency-rules)).
   - Docs the build generates: its module graph in each README, the [UI gallery](ui-gallery.md) here.
+  - The theme as app-wide state, read by an activity ViewModel that holds the splash screen until it
+    loads ([decision 11](decisions.md#11-the-theme-is-app-shell-state-kept-in-a-key-value-store)).
 - **Where I depart:**
   - Modules group by bounded context, each with `ui`, `domain` and `data`; there, by kind (`core`,
     `feature`).
+  - Storage by model, with typed keys and one store per owner
+    ([decision 10](decisions.md#10-storage-is-grouped-by-model-behind-an-own-port-where-the-concept-is-small));
+    there, `core:datastore` keeps one Proto `UserPreferences` for the whole app, set from a settings
+    dialog.
+  - One module per capability, port and adapter together, as in `:core:connectivity`; there,
+    `core:data` gathers the repositories with `NetworkMonitor` and `TimeZoneMonitor`, and only
+    `SyncManager` has its adapter elsewhere, in `sync:work`.
   - `domain` is mandatory and pure Kotlin/JVM, and ViewModels reach data only through use cases;
     there, ViewModels also read repositories directly.
   - Coverage with Kover and a Codecov ratchet; there, JaCoCo.
@@ -39,7 +48,9 @@ Robert C. Martin, *Clean Architecture* (2017).
 
 - **Here:** the dependency rule, `ui → domain ← data`, enforced by the classpath rather than by review
   ([contexts and layers](architecture.md#contexts-and-layers)). Use cases are each context's boundary,
-  and neither Retrofit nor Room reaches a `domain`.
+  and neither Retrofit nor Room reaches a `domain`. Small, universal concepts sit behind ports this
+  repo owns, `NetworkMonitor` and `KeyValueStore`, so a library change stays inside one module
+  ([decision 10](decisions.md#10-storage-is-grouped-by-model-behind-an-own-port-where-the-concept-is-small)).
 - **Where I depart:** both contexts share one Room database, with separate DAOs
   ([decision 4](decisions.md#4-one-room-database-separate-daos)).
 
@@ -52,3 +63,56 @@ Eric Evans, *Domain-Driven Design* (2003).
   that meet only in presentation ([context map](architecture.md#context-map)). A published language
   (`:shared:contract`) and a generic subdomain (`:audit`) are planned.
 - **Where I depart:** the tactical patterns stay light: no aggregates or domain events yet.
+
+## Atomic Design
+
+Brad Frost, [*Atomic Design*](https://atomicdesign.bradfrost.com/) (2016).
+
+- **Here:** atoms, molecules and organisms live in `:core:designsystem`; templates and pages live in each
+  feature ([atomic design, translated](design-system.md#atomic-design-translated)). The classpath keeps
+  the cut: the design system depends on no `domain`, so an atom cannot import `Product`.
+- **Where I depart:**
+  - The book offers a mental model; here each layer has a rule that decides where a file goes, because
+    Android adds modules, ViewModels and navigation.
+  - A template is the stateless `…Screen`; a page is its stateful overload, the only code that touches
+    `hiltViewModel()` and navigation. In the book, a page is a template filled with real content.
+  - Colors, type, shapes and spacing are theme tokens beneath the atoms, the gallery's [Foundations](ui-gallery.md#foundations);
+    Frost's original post counts color palettes and fonts as atoms.
+
+## xUnit Test Patterns
+
+Gerard Meszaros, *xUnit Test Patterns* (2007), the book that named test doubles.
+
+- **Here:**
+  - Its taxonomy of doubles, all hand-written and named by role ([test doubles](testing.md#test-doubles)):
+    - Stubs feed indirect inputs: `StubCatalogRemoteDataSource`, `FixedClock`, or
+      `refresh = { Either.Error(networkError) }`.
+    - Spies record indirect outputs: `onToggleFavorite = { id -> toggledIds.add(id) }`.
+    - Fake objects are working in-memory versions: `FakeCatalogLocalDataSource` filters rows like the
+      DAO does.
+  - State verification: a test asserts what a fake or a spy holds after the call, never expectations
+    set up front.
+  - Four-phase tests, each with a fresh fixture built by creation methods with defaults
+    (`createProductEntity(…)`, `viewModel(…)`).
+- **Where I depart:** no mock objects, because nothing here needs behavior verification. It is the
+  classicist side of Martin Fowler's
+  [*Mocks Aren't Stubs*](https://martinfowler.com/articles/mocksArentStubs.html), which builds on this
+  vocabulary.
+
+## Fitness functions
+
+Neal Ford, Rebecca Parsons and Patrick Kua, *Building Evolutionary Architectures* (2017).
+
+- **Here:** checks that fail the build when a property erodes, instead of trusting review:
+  - The classpath keeps `domain` pure ([rule 1](architecture.md#dependency-rules)).
+  - `PreviewNamingTest` keeps every preview named `Preview<Name>`, so Kover's filter cannot hide
+    production code again ([screenshots](testing.md#screenshots)).
+  - Roborazzi fails when a screen no longer matches its baseline, and `uiGalleryCheck` when the
+    [UI gallery](ui-gallery.md) no longer matches the baselines.
+  - Codecov's ratchet fails when coverage drops against the base branch ([coverage](testing.md#coverage)).
+  - lychee fails on a broken link between docs, and a line budget keeps the README a landing page.
+- **Where I depart:**
+  - Dependency rules 2 to 6 still rely on build files or review; architecture tests are on the
+    [roadmap](roadmap.md#now).
+  - Only structure, pixels and docs are guarded. Runtime properties such as startup time get no
+    fitness function until benchmarks arrive ([roadmap](roadmap.md#later)).

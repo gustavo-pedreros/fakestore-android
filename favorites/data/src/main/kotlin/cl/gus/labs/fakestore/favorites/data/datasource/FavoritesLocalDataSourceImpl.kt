@@ -1,8 +1,8 @@
 package cl.gus.labs.fakestore.favorites.data.datasource
 
-import cl.gus.labs.fakestore.core.database.dao.FavoriteDao
-import cl.gus.labs.fakestore.core.database.entity.FavoriteEntity
-import cl.gus.labs.fakestore.core.database.entity.SyncState
+import cl.gus.labs.fakestore.core.storage.database.dao.FavoriteDao
+import cl.gus.labs.fakestore.core.storage.database.entity.FavoriteEntity
+import cl.gus.labs.fakestore.core.storage.database.entity.SyncState
 import javax.inject.Inject
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow

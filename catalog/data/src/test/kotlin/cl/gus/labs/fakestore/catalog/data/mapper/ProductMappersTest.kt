@@ -5,7 +5,7 @@ import cl.gus.labs.fakestore.catalog.data.dto.RatingDto
 import cl.gus.labs.fakestore.catalog.domain.model.Category
 import cl.gus.labs.fakestore.catalog.domain.model.Product
 import cl.gus.labs.fakestore.catalog.domain.model.Rating
-import cl.gus.labs.fakestore.core.database.entity.ProductEntity
+import cl.gus.labs.fakestore.core.storage.database.entity.ProductEntity
 import cl.gus.labs.fakestore.shared.kernel.ProductId
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName

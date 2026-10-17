@@ -19,7 +19,7 @@ makes it compile, and the diff then shows it. One part is absolute: `*:domain` a
 
 ## Module graph
 
-![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core.](diagrams/01-module-graph.png)
+![Module graph: :app wires the catalog and favorites contexts, each with ui, domain and data modules. ui and data depend on their own domain, each ui also depends on the other context's domain, and both contexts use a shared technical core, where :core:storage holds Room for the data modules and a key-value store for :app.](diagrams/01-module-graph.png)
 
 The dashed edges are the only cross-context dependencies, and both start at a `ui`: the catalog needs
 favorite IDs to draw its hearts, and the favorites screen needs `Product` to draw its cards. No
@@ -35,8 +35,9 @@ and those edges carry no production code.
 | 1 | `*:domain` is pure Kotlin/JVM: no Android, Retrofit, Room or Compose | Classpath. One leak: `javax.inject` reaches `:catalog:domain` through [`api(libs.javax.inject)`](../core/common/build.gradle.kts), unused there |
 | 2 | `*:data` implements its repository and binds its context's use cases; `*:domain` carries no DI annotation | Hilt validates the bindings at compile time. The annotation rule is review only |
 | 3 | `*:ui` depends on `*:domain`, never on `*:data` | Build files. Nothing fails if one adds the edge |
-| 4 | Contexts integrate in presentation: a `ui` may use the other context's `domain`; `domain` and `data` never reach another context | Build files. Each `data` using only its own DAO is a convention: every DAO in [`:core:database`](../core/database/src/main/kotlin/cl/gus/labs/fakestore/core/database/dao/) is public |
+| 4 | Contexts integrate in presentation: a `ui` may use the other context's `domain`; `domain` and `data` never reach another context | Build files. Each `data` using only its own DAO is a convention: every DAO in [`:core:storage:database`](../core/storage/database/src/main/kotlin/cl/gus/labs/fakestore/core/storage/database/dao/) is public |
 | 5 | `:shared:kernel` holds only what both contexts speak | Review. Today: [`ProductId` and `AppError`](../shared/kernel/src/main/kotlin/cl/gus/labs/fakestore/shared/kernel/) |
+| 6 | `:core:storage:*` is reached only from `data` modules and `:app`; each key-value store has one owner, and its keys stay private to it | Build files and review. Two stores on one file fail on first use: DataStore checks it |
 
 No test enforces these rules yet. Architecture tests are on the [roadmap](roadmap.md#now).
 
@@ -88,13 +89,15 @@ Navigation 3. `:app` owns the back stack in
 each feature registers its own entries with typed `@Serializable` keys
 ([`CatalogNavigation.kt`](../catalog/ui/src/main/kotlin/cl/gus/labs/fakestore/catalog/ui/navigation/CatalogNavigation.kt),
 [`FavoritesNavigation.kt`](../favorites/ui/src/main/kotlin/cl/gus/labs/fakestore/favorites/ui/navigation/FavoritesNavigation.kt)).
-`:app` never learns which screens a feature has.
+`:app` never learns which screens a feature has. Navigation 3 keeps each entry until the back stack
+changes, so the host passes a value that changes, like the theme mode, as a read over `State`
+(`() -> T`), not as a snapshot.
 
 ## Modules
 
 | Module | Type | Responsibility |
 |---|---|---|
-| `:app` | Android app | Composition root: Hilt graph, back stack, theme |
+| `:app` | Android app | Composition root: Hilt graph, back stack, theme and splash screen |
 | `:catalog:domain` | Kotlin/JVM | `Product`, `Category`, `Rating`, `CatalogRepository`, use cases |
 | `:catalog:data` | Android lib | Retrofit and Room behind `CatalogRepositoryImpl`, the ACL |
 | `:catalog:ui` | Compose lib | Catalog and detail screens, ViewModels, navigation entries |
@@ -104,7 +107,8 @@ each feature registers its own entries with typed `@Serializable` keys
 | `:shared:kernel` | Kotlin/JVM | Ubiquitous language shared by both contexts |
 | `:core:common` | Kotlin/JVM | `Either`, the `@IoDispatcher` qualifier |
 | `:core:network` | Android lib | Retrofit, OkHttp and kotlinx.serialization setup, `executeCall`, error ACL |
-| `:core:database` | Android lib | The single Room database: entities, DAOs, migrations, exported schemas |
+| `:core:storage:database` | Android lib | The single Room database: entities, DAOs, migrations, exported schemas |
+| `:core:storage:keyvalue` | Android lib | Typed small values, one store per owner: `KeyValueStore` over Preferences DataStore |
 | `:core:designsystem` | Compose lib | Theme, tokens, atoms, molecules and organisms |
 | `:core:connectivity` | Android lib | `NetworkMonitor`: `ConnectivityManager` as a `Flow<Boolean>` |
 | `:core:testing` | Kotlin/JVM | `MainDispatcherExtension` and the shared test dependencies |
@@ -120,7 +124,8 @@ A module's `build.gradle.kts` is a plugin list and its dependencies. The shared 
 | `fakestore.android.library` | AGP library with the shared Kotlin/Android settings, and Kover |
 | `fakestore.android.application` | AGP application with the shared Kotlin/Android settings, `targetSdk`, and Kover |
 | `fakestore.android.compose` | The Compose compiler; opt-in compiler reports with `-PcomposeCompilerReports` |
-| `fakestore.android.compose.testing` | Robolectric and Roborazzi screenshot tests on the JVM ([testing](testing.md#screenshots)) |
+| `fakestore.android.robolectric` | Robolectric through JUnit 4's vintage engine, at the catalog's `robolectricSdk` ([testing](testing.md#strategy-by-layer)) |
+| `fakestore.android.compose.testing` | Roborazzi screenshot tests on the JVM, over `fakestore.android.robolectric` ([testing](testing.md#screenshots)) |
 | `fakestore.android.hilt` | KSP and Hilt |
 | `fakestore.android.room` | KSP and Room, with schemas exported to `schemas/` |
 | `fakestore.testing` | JUnit 5, the shared test libraries and `:core:testing` |

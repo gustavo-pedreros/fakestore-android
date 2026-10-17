@@ -8,7 +8,7 @@ import cl.gus.labs.fakestore.catalog.domain.model.Category
 import cl.gus.labs.fakestore.catalog.domain.model.Product
 import cl.gus.labs.fakestore.catalog.domain.model.Rating
 import cl.gus.labs.fakestore.core.common.result.Either
-import cl.gus.labs.fakestore.core.database.entity.ProductEntity
+import cl.gus.labs.fakestore.core.storage.database.entity.ProductEntity
 import cl.gus.labs.fakestore.core.testing.FixedClock
 import cl.gus.labs.fakestore.shared.kernel.AppError
 import cl.gus.labs.fakestore.shared.kernel.ProductId
@@ -89,7 +89,7 @@ class CatalogRepositoryImplTest {
             )
             val local = FakeCatalogLocalDataSource()
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Success(listOf(dto))),
+                remote = StubCatalogRemoteDataSource(Either.Success(listOf(dto))),
                 local = local,
                 clock = fixedClock,
             )
@@ -120,7 +120,7 @@ class CatalogRepositoryImplTest {
             )
             val error = AppError.Network(message = "offline")
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Error(error)),
+                remote = StubCatalogRemoteDataSource(Either.Error(error)),
                 local = local,
                 clock = fixedClock,
             )
@@ -142,7 +142,7 @@ class CatalogRepositoryImplTest {
         fun mapsToDomainAndForwardsCategory() = runTest {
             val local = FakeCatalogLocalDataSource(initialProducts = listOf(createProductEntity()))
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Success(emptyList())),
+                remote = StubCatalogRemoteDataSource(Either.Success(emptyList())),
                 local = local,
                 clock = fixedClock,
             )
@@ -176,7 +176,7 @@ class CatalogRepositoryImplTest {
                 )
             )
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Success(emptyList())),
+                remote = StubCatalogRemoteDataSource(Either.Success(emptyList())),
                 local = local,
                 clock = fixedClock,
             )
@@ -203,7 +203,7 @@ class CatalogRepositoryImplTest {
                 initialProducts = listOf(productEntity)
             )
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Success(emptyList())),
+                remote = StubCatalogRemoteDataSource(Either.Success(emptyList())),
                 local = local,
                 clock = fixedClock,
             )
@@ -227,7 +227,7 @@ class CatalogRepositoryImplTest {
         fun mapsNullToNull() = runTest {
             val local = FakeCatalogLocalDataSource()
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Success(emptyList())),
+                remote = StubCatalogRemoteDataSource(Either.Success(emptyList())),
                 local = local,
                 clock = fixedClock,
             )
@@ -247,7 +247,7 @@ class CatalogRepositoryImplTest {
                 initialLastSyncedAt = fixedInstant,
             )
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Success(emptyList())),
+                remote = StubCatalogRemoteDataSource(Either.Success(emptyList())),
                 local = local,
                 clock = fixedClock,
             )
@@ -262,7 +262,7 @@ class CatalogRepositoryImplTest {
         fun emitsNullWhenNoSync() = runTest {
             val local = FakeCatalogLocalDataSource()
             val repository = CatalogRepositoryImpl(
-                remote = FakeCatalogRemoteDataSource(Either.Success(emptyList())),
+                remote = StubCatalogRemoteDataSource(Either.Success(emptyList())),
                 local = local,
                 clock = fixedClock,
             )
@@ -274,7 +274,7 @@ class CatalogRepositoryImplTest {
     }
 }
 
-private class FakeCatalogRemoteDataSource(
+private class StubCatalogRemoteDataSource(
     private val result: Either<AppError, List<ProductDto>>,
 ) : CatalogRemoteDataSource {
     override suspend fun fetchCatalog(): Either<AppError, List<ProductDto>> = result
